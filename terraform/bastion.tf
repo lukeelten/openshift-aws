@@ -1,6 +1,7 @@
 resource "aws_instance" "bastion" {
-  ami           = "${data.aws_ami.centos.id}"
-  instance_type = "${var.node-types.bastion}"
+  #ami           = "${data.aws_ami.centos.id}"
+  ami = "ami-3d1e7352"
+  instance_type = "${var.node-types["bastion"]}"
   key_name = "${var.key}"
 
   vpc_security_group_ids = ["${aws_security_group.bastion-sg.id}"]
