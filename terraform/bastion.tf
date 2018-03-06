@@ -1,6 +1,8 @@
+
+/*
 resource "aws_instance" "bastion" {
   #ami           = "${data.aws_ami.centos.id}"
-  ami = "ami-3d1e7352"
+  ami = "${data.aws_ami.ubuntu_server.id}"
   instance_type = "${var.node-types["bastion"]}"
   key_name = "${var.key}"
 
@@ -20,3 +22,4 @@ output "bastion-dns" {
 output "bastion-ip" {
   value = "${aws_instance.bastion.public_ip}"
 }
+*/

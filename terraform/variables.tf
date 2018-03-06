@@ -14,9 +14,14 @@ variable "key" {
 variable "node-types" {
   type = "map"
   default = {
+    #"bastion" = "t2.micro"
+    #"infrastructure" = "t2.large"
+    #"application" = "t2.large"
+    #"master" = "m4.xlarge"
     "bastion" = "t2.micro"
-    "infrastructure" = "t2.large"
-    "application" = "t2.large"
-    "master" = "m4.xlarge"
+    "infrastructure" = "t2.medium"
+    "application" = "t2.medium"
+    "master" = "m4.large"
+    # m5 = 10x faster network
   }
 }

@@ -32,3 +32,8 @@ variable "instance_sg" {
   type = "list"
   description = "List of Security Group IDs"
 }
+
+variable "root_size" {
+  type = "string"
+  default = "10"
+}

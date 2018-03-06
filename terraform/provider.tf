@@ -22,7 +22,7 @@ data "aws_ami" "centos" {
   owners = ["679593333241"] # CentOS official
 }
 
-/*data "aws_ami" "fedora" {
+data "aws_ami" "fedora_atomic" {
   most_recent = true
 
   filter {
@@ -35,10 +35,19 @@ data "aws_ami" "centos" {
     values = ["hvm"]
   }
 
-  owners = ["125523088429"] # Fedora official
-  name_regex = "^Fedora-Atomic-\\d-\\d{8}\\..*x86_64-eu-central-1-HVM"
-} */
+  filter {
+    name = "image-id"
+    values = ["ami-3d1e7352"]
+  }
 
-# data "aws_ami" "fedora_atomic" {
-#  image_id = "ami-3d1e7352"
-# }
+  owners = ["125523088429"] # Fedora official
+}
+
+data "aws_ami" "ubuntu_server" {
+  most_recent = true
+
+  filter {
+    name = "image-id"
+    values = ["ami-5055cd3f"]
+  }
+}
