@@ -17,6 +17,19 @@ resource "aws_instance" "node" {
   }
 }
 
+resource "aws_launch_configuration" "node-lc" {
+  name          = "${var.instance_name} - Launch Configuration"
+  image_id      = "${var.instance_ami}"
+  instance_type = "${var.instance_type}"
+  security_groups = ["${var.instance_sg}"]
+  key_name = "${var.instance_key}"
+
+  root_block_device {
+    volume_size = "${var.root_size}"
+    volume_type = "standard"
+  }
+}
+
 output "node-id" {
   value = "${aws_instance.node.id}"
 }

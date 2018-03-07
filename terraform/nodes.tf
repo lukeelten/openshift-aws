@@ -10,6 +10,7 @@ module "application_node1" {
   project = "${var.project}"
 }
 
+
 module "application_node2" {
   source = "node"
 
@@ -46,6 +47,7 @@ module "master_node1" {
   project = "${var.project}"
 }
 
+
 module "master_node2" {
   source = "node"
 
@@ -57,6 +59,7 @@ module "master_node2" {
   instance_subnet = "${aws_subnet.subnet-public-2.id}"
   project = "${var.project}"
 }
+
 
 module "infrastructure_node1" {
   source = "node"
@@ -70,6 +73,7 @@ module "infrastructure_node1" {
   project = "${var.project}"
 }
 
+
 module "infrastructure_node2" {
   source = "node"
 
@@ -79,5 +83,17 @@ module "infrastructure_node2" {
   instance_name = "Infrastructure Node 2"
   instance_sg = ["${aws_security_group.infra-sg.id}", "${aws_security_group.allow-all-sg.id}"]
   instance_subnet = "${aws_subnet.subnet-public-2.id}"
+  project = "${var.project}"
+}
+
+module "infrastructure_node3" {
+  source = "node"
+
+  instance_type = "${var.node-types["infrastructure"]}"
+  instance_ami = "${data.aws_ami.fedora_atomic.id}"
+  instance_key = "${var.key}"
+  instance_name = "Infrastructure Node 3"
+  instance_sg = ["${aws_security_group.infra-sg.id}", "${aws_security_group.allow-all-sg.id}"]
+  instance_subnet = "${aws_subnet.subnet-public-3.id}"
   project = "${var.project}"
 }
