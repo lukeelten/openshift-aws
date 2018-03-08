@@ -1,4 +1,5 @@
 
+/*
 resource "aws_lb" "master-lb" {
   name = "master-lb"
   load_balancer_type = "network"
@@ -41,3 +42,4 @@ resource "aws_lb_listener" "master-lb-listener" {
     type             = "forward"
   }
 }
+*/

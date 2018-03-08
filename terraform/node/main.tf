@@ -6,6 +6,8 @@ resource "aws_instance" "node" {
   vpc_security_group_ids = ["${var.instance_sg}"]
   subnet_id = "${var.instance_subnet}"
 
+  user_data = "${file("node/init.sh")}"
+
   root_block_device {
     volume_type = "standard"
     volume_size = "${var.root_size}"
@@ -17,17 +19,8 @@ resource "aws_instance" "node" {
   }
 }
 
-resource "aws_launch_configuration" "node-lc" {
-  name          = "${var.instance_name} - Launch Configuration"
-  image_id      = "${var.instance_ami}"
-  instance_type = "${var.instance_type}"
-  security_groups = ["${var.instance_sg}"]
-  key_name = "${var.instance_key}"
+resource "aws_launch_configuration" "lc" {
 
-  root_block_device {
-    volume_size = "${var.root_size}"
-    volume_type = "standard"
-  }
 }
 
 output "node-id" {
