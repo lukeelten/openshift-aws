@@ -1,19 +1,10 @@
-*.lock*
-openshift-process/aws
-openshift-process/openshift-process
+.idea
 
-# Created by https://www.gitignore.io/api/go
 
-### Terraform ###
-# Compiled files
-*.tfstate
-*.tfstate.backup
+# Created by https://www.gitignore.io/api/go,linux,ansible,terraform,intellij+iml
 
-# Module directory
-.terraform/
-
-### Terraform Patch ###
-*.tfvars
+### Ansible ###
+*.retry
 
 ### Go ###
 # Binaries for programs and plugins
@@ -31,7 +22,7 @@ openshift-process/openshift-process
 # Project-local glide cache, RE: https://github.com/Masterminds/glide/issues/736
 .glide/
 
-### Intellij ###
+### Intellij+iml ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
@@ -85,16 +76,13 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
-### Intellij Patch ###
-# Comment Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-215987721
+### Intellij+iml Patch ###
+# Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-249601023
 
- *.iml
-# modules.xml
-# .idea/misc.xml
-# *.ipr
-
-# Sonarlint plugin
-.idea/sonarlint
+*.iml
+modules.xml
+.idea/misc.xml
+*.ipr
 
 ### Linux ###
 *~
@@ -111,5 +99,15 @@ fabric.properties
 # .nfs files are created when an open file is removed but is still being accessed
 .nfs*
 
+### Terraform ###
+# Compiled files
+*.tfstate
+*.tfstate.backup
 
-# End of https://www.gitignore.io/api/linux,intellij
+# Module directory
+.terraform/
+
+### Terraform Patch ###
+*.tfvars
+
+# End of https://www.gitignore.io/api/go,linux,ansible,terraform,intellij+iml
