@@ -1,5 +1,6 @@
 .idea
-
+openshift-process
+aws
 
 # Created by https://www.gitignore.io/api/go,linux,ansible,terraform,intellij+iml
 

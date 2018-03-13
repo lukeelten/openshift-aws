@@ -6,7 +6,7 @@ type Settings struct {
 	NumMasters uint
 	NumInfra uint
 	NumApplications uint
-	Containerized bool
+	TerraformDir string
 }
 
 var ActiveSettings Settings
@@ -16,16 +16,17 @@ type flags struct {
 	infra *uint
 	app *uint
 	containerized *bool
+	terraform *string
 }
 
 var cmdFlags flags
 
 func initFlags() {
-	cmdFlags.masters = flag.Uint("master-nodes", 1, "Number of master nodes")
-	cmdFlags.infra = flag.Uint("infra-nodes", 1, "Number of infrastructure nodes")
-	cmdFlags.app = flag.Uint("app-nodes", 1, "Number of application nodes")
-	cmdFlags.containerized = flag.Bool("containerized", false, "Run openshift containerized")
-
+	cmdFlags.masters = flag.Uint("master-nodes", 2, "Number of master nodes")
+	cmdFlags.infra = flag.Uint("infra-nodes", 2, "Number of infrastructure nodes")
+	cmdFlags.app = flag.Uint("app-nodes", 3, "Number of application nodes")
+//	cmdFlags.containerized = flag.Bool("containerized", false, "Run openshift containerized")
+	cmdFlags.terraform = flag.String("terraform", "../terraform", "Directory of terraform files")
 }
 
 func ParseFlags() {
@@ -40,7 +41,7 @@ func getSettings() Settings {
 	settings.NumMasters = *cmdFlags.masters
 	settings.NumInfra = *cmdFlags.infra
 	settings.NumApplications = *cmdFlags.app
-	settings.Containerized = *cmdFlags.containerized
+	settings.TerraformDir = *cmdFlags.terraform
 
 	return settings
 }

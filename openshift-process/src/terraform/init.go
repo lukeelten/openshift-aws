@@ -1,16 +1,21 @@
 package terraform
 
+
 type TerraformState struct {
-	init bool
-
-
+	inited bool
+	Dir string
 }
 
 var State TerraformState
 
 
-func InitTerraform(wd string) {
+func InitTerraform(dir string) {
+	if State.inited {
+		return
+	}
 
 
 
 }
+
+

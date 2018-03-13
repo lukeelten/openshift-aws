@@ -1,13 +1,30 @@
 package main
 
 import (
-	"aws"
+	"settings"
+	"os"
+	"fmt"
 	"ansible"
+	"aws"
+	"terraform"
 )
 
 const INVENTORY = "myinventory"
 
 func main() {
+	settings.ParseFlags()
+
+	wd, err := os.Getwd()
+	if err != nil {
+		panic(err)
+		return
+	}
+
+	fullPath := wd + "/" + settings.ActiveSettings.TerraformDir
+
+	terraform.InitTerraform(fullPath)
+	// TODO: terraform operations
+
 	aws.InitAws()
 
 	inventory := ansible.GenerateOpenshiftInventory(INVENTORY)
