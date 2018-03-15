@@ -1,6 +1,7 @@
 .idea
 openshift-process
 aws
+pkg
 
 # Created by https://www.gitignore.io/api/go,linux,ansible,terraform,intellij+iml
 
