@@ -12,24 +12,24 @@ openshift_release=v3.7.0
 openshift_image_tag=v3.7.0
 openshift_router_selector='router=true'
 openshift_registry_selector='registry=true'
-openshift_master_default_subdomain=18.197.138.54.xip.io
-openshift_master_cluster_hostname=ec2-18-197-13-104.eu-central-1.compute.amazonaws.com
-openshift_master_cluster_public_hostname=ec2-18-197-13-104.eu-central-1.compute.amazonaws.com
-openshift_disable_check=docker_image_availability,docker_storage,memory_availability
+openshift_master_default_subdomain=18.197.25.23.xip.io
+openshift_master_cluster_hostname=ec2-52-59-1-236.eu-central-1.compute.amazonaws.com
+openshift_master_cluster_public_hostname=ec2-52-59-1-236.eu-central-1.compute.amazonaws.com
+openshift_disable_check=docker_image_availability,docker_storage,memory_availability,package_version
 openshift_enable_service_catalog=false
 openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
 openshift_master_htpasswd_users={'admin': '$apr1$zgSjCrLt$1KSuj66CggeWSv.D.BXOA1', 'user': '$apr1$.gw8w9i1$ln9bfTRiD6OwuNTG5LvW50'}
 
 [masters]
-18.197.13.104 openshift_ip=10.10.3.149 openshift_hostname=ip-10-10-3-149.eu-central-1.compute.internal openshift_public_ip=18.197.13.104 openshift_public_hostname=ec2-18-197-13-104.eu-central-1.compute.amazonaws.com
+52.59.1.236 openshift_ip=10.10.1.155 openshift_hostname=ip-10-10-1-155.eu-central-1.compute.internal openshift_public_ip=52.59.1.236 openshift_public_hostname=ec2-52-59-1-236.eu-central-1.compute.amazonaws.com
 
 [etcd]
-18.197.13.104
+52.59.1.236
 
 [nodes]
-18.197.13.104 openshift_schedulable=false openshift_ip=10.10.3.149 openshift_hostname=ip-10-10-3-149.eu-central-1.compute.internal openshift_public_ip=18.197.13.104 openshift_public_hostname=ec2-18-197-13-104.eu-central-1.compute.amazonaws.com
-18.197.138.54 openshift_node_labels="{'router':'true','registry':'true'}" openshift_ip=10.10.3.243 openshift_hostname=ip-10-10-3-243.eu-central-1.compute.internal
-18.195.164.199 openshift_ip=10.10.3.147 openshift_hostname=ip-10-10-3-147.eu-central-1.compute.internal
-35.156.222.68 openshift_ip=10.10.1.51 openshift_hostname=ip-10-10-1-51.eu-central-1.compute.internal
-52.58.198.71 openshift_ip=10.10.1.243 openshift_hostname=ip-10-10-1-243.eu-central-1.compute.internal
+52.59.1.236 openshift_schedulable=false openshift_ip=10.10.1.155 openshift_hostname=ip-10-10-1-155.eu-central-1.compute.internal openshift_public_ip=52.59.1.236 openshift_public_hostname=ec2-52-59-1-236.eu-central-1.compute.amazonaws.com
+18.197.25.23 openshift_node_labels="{'router':'true','registry':'true'}" openshift_ip=10.10.1.94 openshift_hostname=ip-10-10-1-94.eu-central-1.compute.internal
+18.196.116.128 openshift_ip=10.10.3.212 openshift_hostname=ip-10-10-3-212.eu-central-1.compute.internal
+18.197.43.195 openshift_ip=10.10.1.118 openshift_hostname=ip-10-10-1-118.eu-central-1.compute.internal
+52.29.124.143 openshift_ip=10.10.1.5 openshift_hostname=ip-10-10-1-5.eu-central-1.compute.internal
 

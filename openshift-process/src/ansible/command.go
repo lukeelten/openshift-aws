@@ -1,9 +1,6 @@
 package ansible
 
 import (
-	"os/exec"
-	"os"
-	"io/ioutil"
 	"util"
 )
 
