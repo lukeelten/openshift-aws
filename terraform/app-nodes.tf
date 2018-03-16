@@ -8,7 +8,7 @@ resource "aws_launch_configuration" "application-lc" {
   security_groups = ["${aws_security_group.nodes-sg.id}", "${aws_security_group.allow-all-sg.id}"]
 
   root_block_device {
-    volume_type = "standard"
+    volume_type = "gp2"
     volume_size = 25
   }
 
@@ -25,7 +25,7 @@ resource "aws_autoscaling_group" "application-scaling" {
   max_size             = 3
 
   //  load_balancers       = ["${aws_elb.test-lb.id}"]
-  vpc_zone_identifier  = ["${aws_subnet.subnet-public-1.id}", "${aws_subnet.subnet-public-1.id}", "${aws_subnet.subnet-public-3.id}"]
+  vpc_zone_identifier  = ["${aws_subnet.subnet-public-1.id}", "${aws_subnet.subnet-public-2.id}", "${aws_subnet.subnet-public-3.id}"]
 
   lifecycle {
     create_before_destroy = true

@@ -8,7 +8,7 @@ resource "aws_launch_configuration" "infra-lc" {
   security_groups = ["${aws_security_group.infra-sg.id}", "${aws_security_group.allow-all-sg.id}"]
 
   root_block_device {
-    volume_type = "standard"
+    volume_type = "gp2"
     volume_size = 25
   }
 
@@ -23,7 +23,7 @@ resource "aws_autoscaling_group" "infrastructure-scaling" {
   min_size             = 1
   max_size             = 1
   //  load_balancers       = ["${aws_elb.test-lb.id}"]
-  vpc_zone_identifier  = ["${aws_subnet.subnet-public-1.id}", "${aws_subnet.subnet-public-1.id}", "${aws_subnet.subnet-public-3.id}"]
+  vpc_zone_identifier  = ["${aws_subnet.subnet-public-1.id}", "${aws_subnet.subnet-public-2.id}", "${aws_subnet.subnet-public-3.id}"]
   target_group_arns = ["${aws_lb_target_group.router-lb-tg1.arn}", "${aws_lb_target_group.router-lb-tg2.arn}"]
 
   lifecycle {

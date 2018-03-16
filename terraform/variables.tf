@@ -8,7 +8,8 @@ variable "project" {
 # EC2 key to use
 variable "key" {
   type = "string"
-  default = "tobias@Codecentric"
+  //default = "tobias@Codecentric"
+  default = "tobias@Home"
 }
 
 variable "node-types" {
@@ -20,8 +21,10 @@ variable "node-types" {
     #"master" = "m4.xlarge"
     "bastion" = "t2.micro"
     "infrastructure" = "t2.medium"
+    //"infrastructure" = "m5.large"
     "application" = "t2.medium"
     "master" = "m4.large"
+    //"master" = "m5.large"
     # m5 = 10x faster network
   }
 }

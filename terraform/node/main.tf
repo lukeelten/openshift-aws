@@ -9,7 +9,7 @@ resource "aws_instance" "node" {
   user_data = "${file("node/init.sh")}"
 
   root_block_device {
-    volume_type = "standard"
+    volume_type = "gp2"
     volume_size = "${var.root_size}"
   }
 
