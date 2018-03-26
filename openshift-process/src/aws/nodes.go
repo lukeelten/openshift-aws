@@ -36,6 +36,11 @@ func AppNodes() []NodeInfo {
 	return loadNodesOfType("app")
 }
 
+func BastionNode() NodeInfo {
+	bastion := loadNodesOfType("bastion")
+	return bastion[0]
+}
+
 func loadNodesOfType(type_ string) []NodeInfo {
 	params := &ec2.DescribeInstancesInput{
 		Filters: []*ec2.Filter{
@@ -86,12 +91,16 @@ func extractNodes(result *ec2.DescribeInstancesOutput) []NodeInfo {
 func extractNodeInfo(current *ec2.Instance) NodeInfo {
 	var node NodeInfo
 
-	network := current.NetworkInterfaces[0]
+	node.InternalIp = *current.PrivateIpAddress
+	node.InternalDns = *current.PrivateDnsName
 
-	node.InternalIp = *network.PrivateIpAddress
-	node.InternalDns = *network.PrivateDnsName
-	node.ExternalIp = *network.Association.PublicIp
-	node.ExternalDns = *network.Association.PublicDnsName
+	if current.PublicIpAddress != nil {
+		node.ExternalIp = *current.PublicIpAddress
+	}
+
+	if current.PublicDnsName != nil {
+		node.ExternalDns = *current.PublicDnsName
+	}
 
 	return node
 }

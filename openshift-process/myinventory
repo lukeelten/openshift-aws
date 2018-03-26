@@ -7,30 +7,32 @@ etcd
 ansible_user=centos
 ansible_become=true
 deployment_type=origin
-ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+ansible_ssh_common_args='-F ssh.cfg'
 openshift_release=v3.7.1
 openshift_image_tag=v3.7.1
 openshift_router_selector='router=true'
 openshift_registry_selector='registry=true'
-openshift_master_default_subdomain=18.197.95.181.xip.io
+openshift_master_default_subdomain=35.156.122.116.xip.io
 openshift_clock_enable=true
-openshift_master_cluster_hostname=ec2-35-156-51-252.eu-central-1.compute.amazonaws.com
-openshift_master_cluster_public_hostname=ec2-35-156-51-252.eu-central-1.compute.amazonaws.com
-openshift_disable_check=docker_image_availability,docker_storage,memory_availability,package_version
+openshift_use_dnsmasq=true
+os_firewall_use_firewalld=true
+openshift_master_cluster_hostname=ec2-18-197-122-149.eu-central-1.compute.amazonaws.com
+openshift_master_cluster_public_hostname=ec2-18-197-122-149.eu-central-1.compute.amazonaws.com
+openshift_disable_check=docker_storage,memory_availability,package_version
 openshift_enable_service_catalog=false
 openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
 openshift_master_htpasswd_users={'admin': '$apr1$zgSjCrLt$1KSuj66CggeWSv.D.BXOA1', 'user': '$apr1$.gw8w9i1$ln9bfTRiD6OwuNTG5LvW50'}
 
 [masters]
-35.156.51.252 openshift_ip=10.10.1.93 openshift_hostname=ip-10-10-1-93.eu-central-1.compute.internal openshift_public_ip=35.156.51.252 openshift_public_hostname=ec2-35-156-51-252.eu-central-1.compute.amazonaws.com
+10.10.1.149 openshift_ip=10.10.1.149 openshift_hostname=ip-10-10-1-149.eu-central-1.compute.internal openshift_public_ip=18.197.122.149 openshift_public_hostname=ec2-18-197-122-149.eu-central-1.compute.amazonaws.com
 
 [etcd]
-35.156.51.252
+10.10.1.149
 
 [nodes]
-35.156.51.252 openshift_schedulable=false openshift_ip=10.10.1.93 openshift_hostname=ip-10-10-1-93.eu-central-1.compute.internal openshift_public_ip=35.156.51.252 openshift_public_hostname=ec2-35-156-51-252.eu-central-1.compute.amazonaws.com
-18.197.95.181 openshift_node_labels="{'router':'true','registry':'true'}" openshift_ip=10.10.3.144 openshift_hostname=ip-10-10-3-144.eu-central-1.compute.internal
-18.195.180.230 openshift_ip=10.10.3.58 openshift_hostname=ip-10-10-3-58.eu-central-1.compute.internal
-18.195.219.99 openshift_ip=10.10.1.77 openshift_hostname=ip-10-10-1-77.eu-central-1.compute.internal
-18.195.132.145 openshift_ip=10.10.2.242 openshift_hostname=ip-10-10-2-242.eu-central-1.compute.internal
+10.10.1.149 openshift_schedulable=false openshift_ip=10.10.1.149 openshift_hostname=ip-10-10-1-149.eu-central-1.compute.internal openshift_public_ip=18.197.122.149 openshift_public_hostname=ec2-18-197-122-149.eu-central-1.compute.amazonaws.com
+10.10.1.165 openshift_node_labels="{'router':'true','registry':'true'}" openshift_ip=10.10.1.165 openshift_hostname=ip-10-10-1-165.eu-central-1.compute.internal openshift_public_ip=35.156.122.116 openshift_public_hostname=ec2-35-156-122-116.eu-central-1.compute.amazonaws.com
+10.10.4.16 openshift_ip=10.10.4.16 openshift_hostname=ip-10-10-4-16.eu-central-1.compute.internal
+10.10.4.18 openshift_ip=10.10.4.18 openshift_hostname=ip-10-10-4-18.eu-central-1.compute.internal
+10.10.4.99 openshift_ip=10.10.4.99 openshift_hostname=ip-10-10-4-99.eu-central-1.compute.internal
 
