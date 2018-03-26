@@ -5,6 +5,7 @@ data "aws_availability_zones" "frankfurt" {}
 data "aws_ami" "centos" {
   most_recent = true
 
+
   filter {
     name   = "name"
     values = ["CentOS Linux 7 x86_64 HVM EBS *"]
@@ -14,6 +15,13 @@ data "aws_ami" "centos" {
     name   = "virtualization-type"
     values = ["hvm"]
   }
+
+  /*
+  filter {
+    name = "image-id"
+    values = ["ami-8632626d"]
+  }
+  */
 
   owners = ["679593333241"] # CentOS official
 }

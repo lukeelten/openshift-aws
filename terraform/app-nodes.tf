@@ -24,7 +24,6 @@ resource "aws_autoscaling_group" "application-scaling" {
   min_size             = 3
   max_size             = 3
 
-  //  load_balancers       = ["${aws_elb.test-lb.id}"]
   vpc_zone_identifier  = ["${aws_subnet.subnet-public-1.id}", "${aws_subnet.subnet-public-2.id}", "${aws_subnet.subnet-public-3.id}"]
 
   lifecycle {
@@ -44,7 +43,7 @@ resource "aws_autoscaling_group" "application-scaling" {
   }
 
   tag {
-    key = "Type"
+    key = "Project"
     value = "${var.project}"
     propagate_at_launch = true
   }

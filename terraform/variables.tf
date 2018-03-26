@@ -8,8 +8,8 @@ variable "project" {
 # EC2 key to use
 variable "key" {
   type = "string"
-  //default = "tobias@Codecentric"
-  default = "tobias@Home"
+  default = "tobias@Codecentric"
+  //default = "tobias@Home"
 }
 
 variable "node-types" {
