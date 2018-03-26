@@ -19,11 +19,13 @@ func GenerateOpenshiftInventory(filename string) *Inventory {
 
 	var vars []string
 	vars = append(vars, "ansible_user=centos", "ansible_become=true", "deployment_type=origin", "ansible_ssh_common_args='-o StrictHostKeyChecking=no'")
-	vars = append(vars, "openshift_release=v3.7.0", "openshift_image_tag=v3.7.0")
+	vars = append(vars, "openshift_release=v3.7.1", "openshift_image_tag=v3.7.1")
 	vars = append(vars, "openshift_router_selector='router=true'", "openshift_registry_selector='registry=true'")
 	vars = append(vars, "openshift_master_default_subdomain=" + defaultSubdomain)
+	vars = append(vars, "openshift_clock_enable=true")
+	vars = append(vars, "os_firewall_use_firewalld=true")
 	vars = append(vars, "openshift_master_cluster_hostname=" + clusterHostname, "openshift_master_cluster_public_hostname=" + clusterHostname)
-	vars = append(vars, "openshift_disable_check=docker_image_availability,docker_storage,memory_availability", "openshift_enable_service_catalog=false")
+	vars = append(vars, "openshift_disable_check=docker_image_availability,docker_storage,memory_availability,package_version", "openshift_enable_service_catalog=false")
 	vars = append(vars, "openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]")
 	vars = append(vars, "openshift_master_htpasswd_users={'admin': '$apr1$zgSjCrLt$1KSuj66CggeWSv.D.BXOA1', 'user': '$apr1$.gw8w9i1$ln9bfTRiD6OwuNTG5LvW50'}")
 
