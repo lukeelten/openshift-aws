@@ -1,12 +1,12 @@
 resource "aws_instance" "infra-node" {
   depends_on      = ["aws_internet_gateway.igw"]
-  name            = "${var.project}-infra-lc"
+
   ami = "${data.aws_ami.centos.id}"
   instance_type   = "${var.node-types["infrastructure"]}"
   key_name        = "${var.key}"
   user_data       = "${file("scripts/init.sh")}"
   security_groups = ["${aws_security_group.infra-sg.id}", "${aws_security_group.allow-all-sg.id}"]
-  subnet_id = "${aws_subnet.subnet-public-1}"
+  subnet_id = "${aws_subnet.subnet-public-1.id}"
 
   root_block_device {
     volume_type = "gp2"

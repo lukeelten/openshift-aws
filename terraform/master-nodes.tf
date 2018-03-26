@@ -1,12 +1,13 @@
 resource "aws_instance" "master-node" {
   depends_on      = ["aws_internet_gateway.igw"]
-  name            = "${var.project}-master-lc"
-  ami        = "${data.aws_ami.centos.id}"
+
+  ami             = "${data.aws_ami.centos.id}"
   instance_type   = "${var.node-types["master"]}"
   key_name        = "${var.key}"
   user_data       = "${file("scripts/init.sh")}"
+
   security_groups = ["${aws_security_group.master-sg.id}", "${aws_security_group.etcd-sg.id}", "${aws_security_group.allow-all-sg.id}"]
-  subnet_id = "${aws_subnet.subnet-public-1}"
+  subnet_id = "${aws_subnet.subnet-public-1.id}"
 
   root_block_device {
     volume_type = "gp2"
