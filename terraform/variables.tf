@@ -19,12 +19,10 @@ variable "node-types" {
     #"infrastructure" = "t2.large"
     #"application" = "t2.large"
     #"master" = "m4.xlarge"
-    "bastion" = "t2.micro"
+    "bastion" = "t2.nano"
     "infrastructure" = "t2.medium"
-    //"infrastructure" = "m5.large"
     "application" = "t2.medium"
     "master" = "m4.large"
-    //"master" = "m5.large"
     # m5 = 10x faster network
   }
 }

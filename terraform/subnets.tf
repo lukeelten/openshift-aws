@@ -11,6 +11,7 @@ resource "aws_subnet" "subnet-public-1" {
   }
 }
 
+/*
 resource "aws_subnet" "subnet-public-2" {
   vpc_id            = "${aws_vpc.vpc.id}"
   availability_zone = "${data.aws_availability_zones.frankfurt.names[1]}"
@@ -36,12 +37,14 @@ resource "aws_subnet" "subnet-public-3" {
     Project = "${var.project}"
   }
 }
+*/
 
 resource "aws_route_table_association" "public-1-to-rt" {
   subnet_id      = "${aws_subnet.subnet-public-1.id}"
   route_table_id = "${aws_route_table.public-rt.id}"
 }
 
+/*
 resource "aws_route_table_association" "public-2-to-rt" {
   subnet_id      = "${aws_subnet.subnet-public-2.id}"
   route_table_id = "${aws_route_table.public-rt.id}"
@@ -51,6 +54,7 @@ resource "aws_route_table_association" "public-3-to-rt" {
   subnet_id      = "${aws_subnet.subnet-public-3.id}"
   route_table_id = "${aws_route_table.public-rt.id}"
 }
+*/
 
 resource "aws_subnet" "subnet-private-1" {
   vpc_id            = "${aws_vpc.vpc.id}"
@@ -65,6 +69,7 @@ resource "aws_subnet" "subnet-private-1" {
   }
 }
 
+/*
 resource "aws_subnet" "subnet-private-2" {
   vpc_id            = "${aws_vpc.vpc.id}"
   availability_zone = "${data.aws_availability_zones.frankfurt.names[1]}"
@@ -90,12 +95,14 @@ resource "aws_subnet" "subnet-private-3" {
     Project = "${var.project}"
   }
 }
+*/
 
 resource "aws_route_table_association" "private-1-to-rt" {
   subnet_id      = "${aws_subnet.subnet-private-1.id}"
   route_table_id = "${aws_vpc.vpc.main_route_table_id}"
 }
 
+/*
 resource "aws_route_table_association" "private-2-to-rt" {
   subnet_id      = "${aws_subnet.subnet-private-2.id}"
   route_table_id = "${aws_vpc.vpc.main_route_table_id}"
@@ -105,3 +112,4 @@ resource "aws_route_table_association" "private-3-to-rt" {
   subnet_id      = "${aws_subnet.subnet-private-3.id}"
   route_table_id = "${aws_vpc.vpc.main_route_table_id}"
 }
+*/

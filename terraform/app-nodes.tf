@@ -5,7 +5,7 @@ resource "aws_launch_configuration" "application-lc" {
   instance_type   = "${var.node-types["application"]}"
   key_name        = "${var.key}"
   user_data       = "${file("scripts/init.sh")}"
-  security_groups = ["${aws_security_group.nodes-sg.id}", "${aws_security_group.allow-all-sg.id}"]
+  security_groups = ["${aws_security_group.nodes-sg.id}", "${aws_security_group.allow-internal.id}"]
 
   root_block_device {
     volume_type = "gp2"
@@ -18,6 +18,7 @@ resource "aws_launch_configuration" "application-lc" {
 }
 
 resource "aws_autoscaling_group" "application-scaling" {
+  depends_on = ["aws_nat_gateway.private-nat", "aws_route.private_route"]
   name                 = "${var.project}-application-scaling-group"
   launch_configuration = "${aws_launch_configuration.application-lc.name}"
 

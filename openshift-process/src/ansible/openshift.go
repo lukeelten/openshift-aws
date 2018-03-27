@@ -12,18 +12,23 @@ func GenerateOpenshiftInventory(filename string) *Inventory {
 	apps := aws.AppNodes()
 	bastion := aws.BastionNode()
 
-	defaultSubdomain := infra[0].ExternalIp + ".xip.io"
-	clusterHostname := masters[0].ExternalDns
+	defaultSubdomain := "apps.cc-openshift.de"
+	clusterHostname := "master.cc-openshift.de"
 
 	sshConfig := settings.NewSshConfig("ssh.cfg")
 	bastionConfig := settings.NewHostConfig(bastion.ExternalDns)
+	bastionConfig.AddVar("Hostname", bastion.ExternalDns)
+	bastionConfig.AddVar("User", "centos")
+	bastionConfig.AddVar("ControlMaster", "auto")
+	bastionConfig.AddVar("ControlPersist", "5m")
+	bastionConfig.AddVar("ControlPath", "~/.ssh/ansible-%r@%h:%p")
 	bastionConfig.AddVar("StrictHostKeyChecking", "no")
 	bastionConfig.AddVar("ProxyCommand", "none")
 	bastionConfig.AddVar("ForwardAgent", "yes")
 	sshConfig.AddHost(bastionConfig)
 
 	nodeConfig := settings.NewHostConfig("10.10.*")
-	nodeConfig.AddVar("ProxyCommand", "ssh -W %h:%p centos@" + bastion.ExternalDns)
+	nodeConfig.AddVar("ProxyCommand", "ssh -o StrictHostKeyChecking=no -W %h:%p centos@" + bastion.ExternalDns)
 	nodeConfig.AddVar("StrictHostKeyChecking", "no")
 	sshConfig.AddHost(nodeConfig)
 	sshConfig.Write()
@@ -33,7 +38,7 @@ func GenerateOpenshiftInventory(filename string) *Inventory {
 
 	var vars []string
 	vars = append(vars, "ansible_user=centos", "ansible_become=true", "deployment_type=origin")
-	vars = append(vars, "ansible_ssh_common_args='-F ssh.cfg'")
+	vars = append(vars, "ansible_ssh_common_args='-F ssh.cfg -o StrictHostKeyChecking=no -o ControlMaster=auto -o ControlPersist=30m'")
 	vars = append(vars, "openshift_release=v3.7.1", "openshift_image_tag=v3.7.1")
 	vars = append(vars, "openshift_router_selector='router=true'", "openshift_registry_selector='registry=true'")
 	vars = append(vars, "openshift_master_default_subdomain=" + defaultSubdomain)
@@ -45,8 +50,8 @@ func GenerateOpenshiftInventory(filename string) *Inventory {
 
 	inventory.AddSection("OSEv3:vars", vars)
 
-	nodesSection := generateNodeLines(masters, "openshift_schedulable=false", true)
-	nodesSection = append(nodesSection, generateNodeLines(infra, "openshift_node_labels=\"{'router':'true','registry':'true'}\"", true)...)
+	nodesSection := generateNodeLines(masters, "openshift_schedulable=false", false)
+	nodesSection = append(nodesSection, generateNodeLines(infra, "openshift_node_labels=\"{'router':'true','registry':'true'}\"", false)...)
 	nodesSection = append(nodesSection, generateNodeLines(apps, "", false)...)
 
 
