@@ -1,26 +1,28 @@
-resource "aws_route53_zone" "openshift-zone" {
-  name = "cc-openshift.de"
-
+data "aws_route53_zone" "existing-zone" {
+  name = "${var.zone}"
 }
 
 resource "aws_route53_record" "router-record" {
-  zone_id = "${aws_route53_zone.openshift-zone.zone_id}"
-  name    = "*.apps.cc-openshift.de"
-  type    = "CNAME"
-  ttl     = "60"
+  zone_id = "${data.aws_route53_zone.existing-zone.zone_id}"
+  name    = "*.apps.${data.aws_route53_zone.existing-zone.name}"
 
-  records = [
-    "${aws_lb.router-lb.dns_name}"
-  ]
+  type = "A"
+
+  alias {
+    name = "${aws_lb.router-lb.dns_name}"
+    evaluate_target_health = false
+    zone_id = "${aws_lb.router-lb.zone_id}"
+  }
 }
 
 resource "aws_route53_record" "master-record" {
-  zone_id = "${aws_route53_zone.openshift-zone.zone_id}"
-  name    = "master.cc-openshift.de"
-  type    = "CNAME"
-  ttl     = "60"
+  zone_id = "${data.aws_route53_zone.existing-zone.zone_id}"
+  name    = "master.${data.aws_route53_zone.existing-zone.name}"
+  type = "A"
 
-  records = [
-    "${aws_lb.master-lb.dns_name}"
-  ]
+  alias {
+    name = "${aws_lb.master-lb.dns_name}"
+    evaluate_target_health = false
+    zone_id = "${aws_lb.master-lb.zone_id}"
+  }
 }

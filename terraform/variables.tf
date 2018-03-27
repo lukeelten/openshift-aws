@@ -26,3 +26,8 @@ variable "node-types" {
     # m5 = 10x faster network
   }
 }
+
+variable "zone" {
+  type = "string"
+  default = "cc-openshift.de"
+}
