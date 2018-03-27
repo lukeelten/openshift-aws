@@ -55,7 +55,7 @@ func GenerateOpenshiftInventory(filename string) *Inventory {
 	nodesSection = append(nodesSection, generateNodeLines(apps, "", false)...)
 
 
-	inventory.AddSection("masters", generateNodeLines(masters, "", true))
+	inventory.AddSection("masters", generateNodeLines(masters, "", false))
 	inventory.AddSection("etcd", extractNodeIps(masters, false))
 	inventory.AddSection("nodes", nodesSection)
 
