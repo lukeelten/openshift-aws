@@ -10,13 +10,13 @@ deployment_type=origin
 ansible_ssh_common_args='-F ssh.cfg -o StrictHostKeyChecking=no -o ControlMaster=auto -o ControlPersist=30m'
 openshift_release=v3.7.1
 openshift_image_tag=v3.7.1
-openshift_router_selector='router=true'
-openshift_registry_selector='registry=true'
+openshift_router_selector='region=infra'
+openshift_registry_selector='region=infra'
 openshift_master_default_subdomain=apps.cc-openshift.de
 openshift_clock_enable=true
 openshift_use_dnsmasq=true
 os_firewall_use_firewalld=true
-openshift_master_cluster_hostname=master.cc-openshift.de
+openshift_master_cluster_hostname=api-internal-lb-f3f81baa7e07a555.elb.eu-central-1.amazonaws.com
 openshift_master_cluster_public_hostname=master.cc-openshift.de
 openshift_disable_check=docker_storage,memory_availability,package_version
 openshift_enable_service_catalog=false
@@ -24,19 +24,19 @@ openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 
 openshift_master_htpasswd_users={'admin': '$apr1$zgSjCrLt$1KSuj66CggeWSv.D.BXOA1', 'user': '$apr1$.gw8w9i1$ln9bfTRiD6OwuNTG5LvW50'}
 
 [masters]
-10.10.4.222 openshift_ip=10.10.4.222 openshift_hostname=ip-10-10-4-222.eu-central-1.compute.internal openshift_public_ip= openshift_public_hostname=
-10.10.4.125 openshift_ip=10.10.4.125 openshift_hostname=ip-10-10-4-125.eu-central-1.compute.internal openshift_public_ip= openshift_public_hostname=
+10.10.4.213 openshift_schedulable=false openshift_node_labels="{'region':'primary','zone':'eu-central-1a'}" openshift_ip=10.10.4.213 openshift_hostname=ip-10-10-4-213.eu-central-1.compute.internal
+10.10.4.53 openshift_schedulable=false openshift_node_labels="{'region':'primary','zone':'eu-central-1a'}" openshift_ip=10.10.4.53 openshift_hostname=ip-10-10-4-53.eu-central-1.compute.internal
 
 [etcd]
-10.10.4.222
-10.10.4.125
+10.10.4.213
+10.10.4.53
 
 [nodes]
-10.10.4.222 openshift_schedulable=false openshift_ip=10.10.4.222 openshift_hostname=ip-10-10-4-222.eu-central-1.compute.internal
-10.10.4.125 openshift_schedulable=false openshift_ip=10.10.4.125 openshift_hostname=ip-10-10-4-125.eu-central-1.compute.internal
-10.10.4.192 openshift_node_labels="{'router':'true','registry':'true'}" openshift_ip=10.10.4.192 openshift_hostname=ip-10-10-4-192.eu-central-1.compute.internal
-10.10.4.149 openshift_node_labels="{'router':'true','registry':'true'}" openshift_ip=10.10.4.149 openshift_hostname=ip-10-10-4-149.eu-central-1.compute.internal
-10.10.4.103 openshift_ip=10.10.4.103 openshift_hostname=ip-10-10-4-103.eu-central-1.compute.internal
-10.10.4.86 openshift_ip=10.10.4.86 openshift_hostname=ip-10-10-4-86.eu-central-1.compute.internal
-10.10.4.30 openshift_ip=10.10.4.30 openshift_hostname=ip-10-10-4-30.eu-central-1.compute.internal
+10.10.4.213 openshift_schedulable=false openshift_node_labels="{'region':'primary','zone':'eu-central-1a'}" openshift_ip=10.10.4.213 openshift_hostname=ip-10-10-4-213.eu-central-1.compute.internal
+10.10.4.53 openshift_schedulable=false openshift_node_labels="{'region':'primary','zone':'eu-central-1a'}" openshift_ip=10.10.4.53 openshift_hostname=ip-10-10-4-53.eu-central-1.compute.internal
+10.10.4.160 openshift_schedulable=true openshift_node_labels="{'region':'infra','zone':'eu-central-1a'}" openshift_ip=10.10.4.160 openshift_hostname=ip-10-10-4-160.eu-central-1.compute.internal
+10.10.4.147 openshift_schedulable=true openshift_node_labels="{'region':'infra','zone':'eu-central-1a'}" openshift_ip=10.10.4.147 openshift_hostname=ip-10-10-4-147.eu-central-1.compute.internal
+10.10.4.249 openshift_schedulable=true openshift_node_labels="{'region':'primary','zone':'eu-central-1a'}" openshift_ip=10.10.4.249 openshift_hostname=ip-10-10-4-249.eu-central-1.compute.internal
+10.10.4.136 openshift_schedulable=true openshift_node_labels="{'region':'primary','zone':'eu-central-1a'}" openshift_ip=10.10.4.136 openshift_hostname=ip-10-10-4-136.eu-central-1.compute.internal
+10.10.4.80 openshift_schedulable=true openshift_node_labels="{'region':'primary','zone':'eu-central-1a'}" openshift_ip=10.10.4.80 openshift_hostname=ip-10-10-4-80.eu-central-1.compute.internal
 

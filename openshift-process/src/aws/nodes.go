@@ -16,6 +16,7 @@ type NodeInfo struct {
 	InternalDns string
 	ExternalIp  string
 	ExternalDns string
+	Zone string
 }
 
 func InitAws() {
@@ -103,6 +104,10 @@ func extractNodeInfo(current *ec2.Instance) NodeInfo {
 
 	if current.PublicDnsName != nil {
 		node.ExternalDns = *current.PublicDnsName
+	}
+
+	if current.Placement != nil {
+		node.Zone = *current.Placement.AvailabilityZone
 	}
 
 	return node
