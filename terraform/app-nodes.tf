@@ -22,8 +22,8 @@ resource "aws_autoscaling_group" "application-scaling" {
   name                 = "${var.project}-application-scaling-group"
   launch_configuration = "${aws_launch_configuration.application-lc.name}"
 
-  min_size             = 3
-  max_size             = 3
+  min_size             = "${var.counts["app"]}"
+  max_size             = "${var.counts["app"]}"
 
   vpc_zone_identifier  = ["${aws_subnet.subnet-private-1.id}"]
 

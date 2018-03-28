@@ -21,9 +21,27 @@ resource "aws_lb_target_group" "master-lb-tg1" {
   vpc_id   = "${aws_vpc.vpc.id}"
 }
 
-resource "aws_lb_listener" "master-lb-listener" {
+resource "aws_lb_target_group" "master-lb-tg2" {
+  name     = "master-lb-tg2"
+  port     = 443
+  protocol = "TCP"
+  vpc_id   = "${aws_vpc.vpc.id}"
+}
+
+resource "aws_lb_listener" "master-lb-listener1" {
   load_balancer_arn = "${aws_lb.master-lb.arn}"
   port              = "8443"
+  protocol          = "TCP"
+
+  default_action {
+    target_group_arn = "${aws_lb_target_group.master-lb-tg1.arn}"
+    type             = "forward"
+  }
+}
+
+resource "aws_lb_listener" "master-lb-listener2" {
+  load_balancer_arn = "${aws_lb.master-lb.arn}"
+  port              = "443"
   protocol          = "TCP"
 
   default_action {

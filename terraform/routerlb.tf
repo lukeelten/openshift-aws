@@ -2,7 +2,6 @@
 resource "aws_lb" "router-lb" {
   name = "router-lb"
   load_balancer_type = "network"
-  //security_groups = ["${aws_security_group.router-elb-sg.id}"]
 
   subnets = ["${aws_subnet.subnet-public-1.id}"]
 

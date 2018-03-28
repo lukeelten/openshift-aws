@@ -31,3 +31,12 @@ variable "zone" {
   type = "string"
   default = "cc-openshift.de"
 }
+
+variable "counts" {
+  type = "map"
+  default = {
+    "master" = 2
+    "infra" = 2
+    "app" = 3
+  }
+}

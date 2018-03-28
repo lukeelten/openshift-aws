@@ -2,9 +2,14 @@ data "aws_route53_zone" "existing-zone" {
   name = "${var.zone}"
 }
 
+data "aws_acm_certificate" "router-certificate" {
+  domain   = "*.apps.${var.zone}"
+  most_recent = true
+}
+
 resource "aws_route53_record" "router-record" {
   zone_id = "${data.aws_route53_zone.existing-zone.zone_id}"
-  name    = "*.apps.${data.aws_route53_zone.existing-zone.name}"
+  name    = "*.apps.${var.zone}"
 
   type = "A"
 
@@ -26,3 +31,4 @@ resource "aws_route53_record" "master-record" {
     zone_id = "${aws_lb.master-lb.zone_id}"
   }
 }
+
