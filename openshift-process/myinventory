@@ -12,31 +12,32 @@ openshift_release=v3.7.1
 openshift_image_tag=v3.7.1
 openshift_router_selector='region=infra'
 openshift_registry_selector='region=infra'
-openshift_master_default_subdomain=apps.cc-openshift.de
+openshift_master_cluster_method=native
+openshift_master_default_subdomain='apps.cc-openshift.de'
 openshift_clock_enable=true
 openshift_use_dnsmasq=true
 os_firewall_use_firewalld=true
-openshift_master_cluster_hostname=api-internal-lb-f3f81baa7e07a555.elb.eu-central-1.amazonaws.com
-openshift_master_cluster_public_hostname=master.cc-openshift.de
+openshift_master_cluster_hostname='internal-api.cc-openshift.de'
+openshift_master_cluster_public_hostname='master.cc-openshift.de'
 openshift_disable_check=docker_storage,memory_availability,package_version
-openshift_enable_service_catalog=false
+#openshift_enable_service_catalog=false
 openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
 openshift_master_htpasswd_users={'admin': '$apr1$zgSjCrLt$1KSuj66CggeWSv.D.BXOA1', 'user': '$apr1$.gw8w9i1$ln9bfTRiD6OwuNTG5LvW50'}
 
 [masters]
-10.10.4.213 openshift_schedulable=false openshift_node_labels="{'region':'primary','zone':'eu-central-1a'}" openshift_ip=10.10.4.213 openshift_hostname=ip-10-10-4-213.eu-central-1.compute.internal
-10.10.4.53 openshift_schedulable=false openshift_node_labels="{'region':'primary','zone':'eu-central-1a'}" openshift_ip=10.10.4.53 openshift_hostname=ip-10-10-4-53.eu-central-1.compute.internal
+10.10.4.55 openshift_schedulable=false openshift_node_labels="{'region':'primary','zone':'eu-central-1a'}" openshift_ip=10.10.4.55 openshift_hostname=ip-10-10-4-55.eu-central-1.compute.internal
+10.10.4.221 openshift_schedulable=false openshift_node_labels="{'region':'primary','zone':'eu-central-1a'}" openshift_ip=10.10.4.221 openshift_hostname=ip-10-10-4-221.eu-central-1.compute.internal
 
 [etcd]
-10.10.4.213
-10.10.4.53
+10.10.4.55
+10.10.4.221
 
 [nodes]
-10.10.4.213 openshift_schedulable=false openshift_node_labels="{'region':'primary','zone':'eu-central-1a'}" openshift_ip=10.10.4.213 openshift_hostname=ip-10-10-4-213.eu-central-1.compute.internal
-10.10.4.53 openshift_schedulable=false openshift_node_labels="{'region':'primary','zone':'eu-central-1a'}" openshift_ip=10.10.4.53 openshift_hostname=ip-10-10-4-53.eu-central-1.compute.internal
-10.10.4.160 openshift_schedulable=true openshift_node_labels="{'region':'infra','zone':'eu-central-1a'}" openshift_ip=10.10.4.160 openshift_hostname=ip-10-10-4-160.eu-central-1.compute.internal
-10.10.4.147 openshift_schedulable=true openshift_node_labels="{'region':'infra','zone':'eu-central-1a'}" openshift_ip=10.10.4.147 openshift_hostname=ip-10-10-4-147.eu-central-1.compute.internal
-10.10.4.249 openshift_schedulable=true openshift_node_labels="{'region':'primary','zone':'eu-central-1a'}" openshift_ip=10.10.4.249 openshift_hostname=ip-10-10-4-249.eu-central-1.compute.internal
-10.10.4.136 openshift_schedulable=true openshift_node_labels="{'region':'primary','zone':'eu-central-1a'}" openshift_ip=10.10.4.136 openshift_hostname=ip-10-10-4-136.eu-central-1.compute.internal
-10.10.4.80 openshift_schedulable=true openshift_node_labels="{'region':'primary','zone':'eu-central-1a'}" openshift_ip=10.10.4.80 openshift_hostname=ip-10-10-4-80.eu-central-1.compute.internal
+10.10.4.55 openshift_schedulable=false openshift_node_labels="{'region':'primary','zone':'eu-central-1a'}" openshift_ip=10.10.4.55 openshift_hostname=ip-10-10-4-55.eu-central-1.compute.internal
+10.10.4.221 openshift_schedulable=false openshift_node_labels="{'region':'primary','zone':'eu-central-1a'}" openshift_ip=10.10.4.221 openshift_hostname=ip-10-10-4-221.eu-central-1.compute.internal
+10.10.4.46 openshift_schedulable=true openshift_node_labels="{'region':'infra','zone':'eu-central-1a'}" openshift_ip=10.10.4.46 openshift_hostname=ip-10-10-4-46.eu-central-1.compute.internal
+10.10.4.49 openshift_schedulable=true openshift_node_labels="{'region':'infra','zone':'eu-central-1a'}" openshift_ip=10.10.4.49 openshift_hostname=ip-10-10-4-49.eu-central-1.compute.internal
+10.10.4.171 openshift_schedulable=true openshift_node_labels="{'region':'primary','zone':'eu-central-1a'}" openshift_ip=10.10.4.171 openshift_hostname=ip-10-10-4-171.eu-central-1.compute.internal
+10.10.4.240 openshift_schedulable=true openshift_node_labels="{'region':'primary','zone':'eu-central-1a'}" openshift_ip=10.10.4.240 openshift_hostname=ip-10-10-4-240.eu-central-1.compute.internal
+10.10.4.189 openshift_schedulable=true openshift_node_labels="{'region':'primary','zone':'eu-central-1a'}" openshift_ip=10.10.4.189 openshift_hostname=ip-10-10-4-189.eu-central-1.compute.internal
 

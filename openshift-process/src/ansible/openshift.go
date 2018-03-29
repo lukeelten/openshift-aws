@@ -11,11 +11,11 @@ func GenerateOpenshiftInventory(filename string) *Inventory {
 	apps := aws.AppNodes()
 	bastion := aws.BastionNode()
 
-	apiLb := aws.GetInternalLB()
+	//apiLb := aws.GetInternalLB()
 
 	defaultSubdomain := "apps.cc-openshift.de"
 	externalMasterHostname := "master.cc-openshift.de"
-	internalMasterHostname := apiLb.Dns
+	internalMasterHostname := "internal-api.cc-openshift.de"
 
 	sshConfig := settings.NewSshConfig("ssh.cfg")
 	bastionConfig := settings.NewHostConfig(bastion.ExternalDns)
@@ -43,10 +43,11 @@ func GenerateOpenshiftInventory(filename string) *Inventory {
 	vars = append(vars, "ansible_ssh_common_args='-F ssh.cfg -o StrictHostKeyChecking=no -o ControlMaster=auto -o ControlPersist=30m'")
 	vars = append(vars, "openshift_release=v3.7.1", "openshift_image_tag=v3.7.1")
 	vars = append(vars, "openshift_router_selector='region=infra'", "openshift_registry_selector='region=infra'")
-	vars = append(vars, "openshift_master_default_subdomain=" + defaultSubdomain)
+	vars = append(vars, "openshift_master_cluster_method=native")
+	vars = append(vars, "openshift_master_default_subdomain='" + defaultSubdomain + "'")
 	vars = append(vars, "openshift_clock_enable=true", "openshift_use_dnsmasq=true", "os_firewall_use_firewalld=true")
-	vars = append(vars, "openshift_master_cluster_hostname=" + internalMasterHostname, "openshift_master_cluster_public_hostname=" + externalMasterHostname)
-	vars = append(vars, "openshift_disable_check=docker_storage,memory_availability,package_version", "openshift_enable_service_catalog=false")
+	vars = append(vars, "openshift_master_cluster_hostname='" + internalMasterHostname + "'", "openshift_master_cluster_public_hostname='" + externalMasterHostname + "'")
+	vars = append(vars, "openshift_disable_check=docker_storage,memory_availability,package_version", "#openshift_enable_service_catalog=false")
 	vars = append(vars, "openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]")
 	vars = append(vars, "openshift_master_htpasswd_users={'admin': '$apr1$zgSjCrLt$1KSuj66CggeWSv.D.BXOA1', 'user': '$apr1$.gw8w9i1$ln9bfTRiD6OwuNTG5LvW50'}")
 
