@@ -43,6 +43,7 @@ resource "aws_lb_target_group_attachment" "master-to-master-lb2" {
   count = "${var.counts["master"]}"
 }
 
+/*
 resource "aws_lb_target_group_attachment" "master-to-internal-lb" {
   target_group_arn = "${aws_lb_target_group.internal-lb-tg1.arn}"
   target_id        = "${aws_instance.master-node.*.id[count.index]}"
@@ -50,3 +51,4 @@ resource "aws_lb_target_group_attachment" "master-to-internal-lb" {
 
   count = "${var.counts["master"]}"
 }
+*/
