@@ -42,6 +42,10 @@ func AppNodes() []NodeInfo {
 
 func BastionNode() NodeInfo {
 	bastion := loadNodesOfType("bastion")
+	if len(bastion) < 1 {
+		panic("No bastion host found")
+	}
+
 	return bastion[0]
 }
 

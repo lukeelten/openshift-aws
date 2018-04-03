@@ -5,7 +5,6 @@ import (
 	"os"
 	"ansible"
 	"aws"
-	"terraform"
 )
 
 const INVENTORY = "myinventory"
@@ -19,21 +18,19 @@ func main() {
 		return
 	}
 
-	fullPath := wd + "/" + settings.ActiveSettings.TerraformDir
-
-	terraform.InitTerraform(fullPath)
-	// TODO: terraform operations
-
 	aws.InitAws()
 
 	inventory := ansible.GenerateOpenshiftInventory(INVENTORY)
 	inventory.Write()
 
+	installerPath := wd + "/../openshift-ansible"
 
-	playbook := ansible.OpenPlaybook("/home/lukeelten/Projekte/codecentric/repo/openshift-ansible/playbooks/prerequisites.yml")
+	ansible.CheckReadiness(INVENTORY)
+
+	playbook := ansible.OpenPlaybook(installerPath + "/playbooks/prerequisites.yml")
 	playbook.Run(INVENTORY)
 
-	playbook = ansible.OpenPlaybook("/home/lukeelten/Projekte/codecentric/repo/openshift-ansible/playbooks/deploy_cluster.yml")
+	playbook = ansible.OpenPlaybook(installerPath + "/playbooks/deploy_cluster.yml")
 	playbook.Run(INVENTORY)
 
 	ansible.ExecuteRemote(INVENTORY, "masters", "/bin/oadm policy add-cluster-role-to-user cluster-admin admin")

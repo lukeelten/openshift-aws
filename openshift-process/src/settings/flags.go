@@ -3,30 +3,22 @@ package settings
 import "flag"
 
 type Settings struct {
-	NumMasters uint
-	NumInfra uint
-	NumApplications uint
-	TerraformDir string
+	Debug bool
+	ActivateTSB bool
 }
 
 var ActiveSettings Settings
 
 type flags struct {
-	masters *uint
-	infra *uint
-	app *uint
-	containerized *bool
-	terraform *string
+	debug *bool
+	tsb *bool
 }
 
 var cmdFlags flags
 
 func initFlags() {
-	cmdFlags.masters = flag.Uint("master-nodes", 2, "Number of master nodes")
-	cmdFlags.infra = flag.Uint("infra-nodes", 2, "Number of infrastructure nodes")
-	cmdFlags.app = flag.Uint("app-nodes", 3, "Number of application nodes")
-//	cmdFlags.containerized = flag.Bool("containerized", false, "Run openshift containerized")
-	cmdFlags.terraform = flag.String("terraform", "../terraform", "Directory of terraform files")
+	cmdFlags.debug = flag.Bool("debug", false, "Debug mode enables extended output")
+	cmdFlags.tsb = flag.Bool("tsb", false, "Enable Template Service broker")
 }
 
 func ParseFlags() {
@@ -37,11 +29,8 @@ func ParseFlags() {
 
 func getSettings() Settings {
 	settings := Settings{}
-
-	settings.NumMasters = *cmdFlags.masters
-	settings.NumInfra = *cmdFlags.infra
-	settings.NumApplications = *cmdFlags.app
-	settings.TerraformDir = *cmdFlags.terraform
+	settings.Debug = *cmdFlags.debug
+	settings.ActivateTSB = *cmdFlags.tsb
 
 	return settings
 }

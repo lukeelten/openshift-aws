@@ -46,8 +46,13 @@ func GenerateOpenshiftInventory(filename string) *Inventory {
 	vars = append(vars, "openshift_master_cluster_method=native")
 	vars = append(vars, "openshift_master_default_subdomain='" + defaultSubdomain + "'")
 	vars = append(vars, "openshift_clock_enable=true", "openshift_use_dnsmasq=true", "os_firewall_use_firewalld=true")
+
+	if !settings.ActiveSettings.ActivateTSB {
+		vars = append(vars, "openshift_enable_service_catalog=false")
+	}
+
 	vars = append(vars, "openshift_master_cluster_hostname='" + internalMasterHostname + "'", "openshift_master_cluster_public_hostname='" + externalMasterHostname + "'")
-	vars = append(vars, "openshift_disable_check=docker_storage,memory_availability,package_version", "openshift_enable_service_catalog=false")
+	vars = append(vars, "openshift_disable_check=docker_storage,memory_availability,package_version")
 	vars = append(vars, "openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]")
 	vars = append(vars, "openshift_master_htpasswd_users={'admin': '$apr1$zgSjCrLt$1KSuj66CggeWSv.D.BXOA1', 'user': '$apr1$.gw8w9i1$ln9bfTRiD6OwuNTG5LvW50'}")
 

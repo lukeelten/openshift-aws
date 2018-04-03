@@ -2,6 +2,7 @@ package ansible
 
 import (
 	"util"
+	"settings"
 )
 
 type Playbook struct {
@@ -14,11 +15,19 @@ func OpenPlaybook(filename string) *Playbook {
 }
 
 func (playbook *Playbook) Run(inventory string) {
-	util.Execute("ansible-playbook", "-i", inventory, playbook.filename)
+	if settings.ActiveSettings.Debug {
+		util.Execute("ansible-playbook", "-vvv", "-i", inventory, playbook.filename)
+	} else {
+		util.Execute("ansible-playbook", "-i", inventory, playbook.filename)
+	}
 }
 
 func ExecuteRemote (inventory string, nodes string, command string) {
-	util.Execute("ansible", "-i", inventory, nodes, "-a", command)
+	if settings.ActiveSettings.Debug {
+		util.Execute("ansible", "-vvv", "-i", inventory, nodes, "-a", command)
+	} else {
+		util.Execute("ansible", "-i", inventory, nodes, "-a", command)
+	}
 }
 
 func CheckReadiness (inventory string) bool {
