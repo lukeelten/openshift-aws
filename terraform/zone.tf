@@ -10,7 +10,6 @@ data "aws_acm_certificate" "router-certificate" {
 resource "aws_route53_record" "router-record" {
   zone_id = "${data.aws_route53_zone.existing-zone.zone_id}"
   name    = "*.apps.${var.zone}"
-
   type = "A"
 
   alias {
