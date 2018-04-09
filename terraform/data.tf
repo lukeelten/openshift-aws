@@ -18,3 +18,8 @@ data "aws_ami" "centos" {
 
   owners = ["679593333241"] # CentOS official
 }
+
+// AmazonElasticFileSystemReadOnlyAccess policy used for EFS
+data "aws_iam_policy" "efs-read-policy" {
+  arn = "arn:aws:iam::aws:policy/AmazonElasticFileSystemReadOnlyAccess"
+}

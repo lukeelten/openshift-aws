@@ -138,7 +138,13 @@ resource "aws_security_group" "infra-sg" {
       to_port          = 22
       protocol         = "tcp"
       cidr_blocks      = ["${aws_vpc.vpc.cidr_block}"]
-    }
+    },
+    {
+      from_port        = 2049
+      to_port          = 2049
+      protocol         = "tcp"
+      cidr_blocks      = ["${aws_vpc.vpc.cidr_block}"]
+    },
   ]
 
   egress {
@@ -243,7 +249,19 @@ resource "aws_security_group" "allow-internal" {
       to_port          = -1
       protocol         = "icmp"
       cidr_blocks      = ["0.0.0.0/0"]
-    }
+    },
+    {
+      from_port        = 2049
+      to_port          = 2049
+      protocol         = "TCP"
+      cidr_blocks      = ["0.0.0.0/0"]
+    },
+    {
+      from_port        = 111
+      to_port          = 111
+      protocol         = "TCP"
+      cidr_blocks      = ["0.0.0.0/0"]
+    },
   ]
 
   egress {
@@ -255,6 +273,39 @@ resource "aws_security_group" "allow-internal" {
 
   tags {
     Name = "${var.project} - Allow All"
+    Project = "${var.project}"
+  }
+}
+
+resource "aws_security_group" "storage-sg" {
+  description = "${var.project} Storage Security Group"
+  name        = "${var.project}-storage-sg"
+  vpc_id      = "${aws_vpc.vpc.id}"
+
+  ingress = [
+    {
+      from_port        = 2049
+      to_port          = 2049
+      protocol         = "TCP"
+      cidr_blocks      = ["0.0.0.0/0"]
+    },
+    {
+      from_port        = 111
+      to_port          = 111
+      protocol         = "TCP"
+      cidr_blocks      = ["0.0.0.0/0"]
+    },
+  ]
+
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+
+  tags {
+    Name = "${var.project} - Storage Security Group"
     Project = "${var.project}"
   }
 }

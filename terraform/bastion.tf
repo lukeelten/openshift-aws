@@ -23,11 +23,3 @@ resource "aws_instance" "bastion" {
     Type = "bastion"
   }
 }
-
-output "bastion-dns" {
-  value = "${aws_instance.bastion.public_dns}"
-}
-
-output "bastion-ip" {
-  value = "${aws_instance.bastion.public_ip}"
-}

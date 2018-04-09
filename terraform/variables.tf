@@ -2,7 +2,13 @@
 variable "project" {
   type = "string"
   # Provide default for validation
-  default = "Sprint0"
+  default = "Sprint1"
+}
+
+variable "project_id" {
+  type = "string"
+  default = "sprint1"
+  description = "Project Id contains only lowercase alphanumerical characters."
 }
 
 # EC2 key to use
