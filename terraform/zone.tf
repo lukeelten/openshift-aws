@@ -31,6 +31,15 @@ resource "aws_route53_record" "master-record" {
   }
 }
 
+resource "aws_route53_record" "bastion-record" {
+  zone_id = "${data.aws_route53_zone.existing-zone.zone_id}"
+  name    = "bastion.${data.aws_route53_zone.existing-zone.name}"
+  type = "A"
+
+  ttl = 300
+  records = ["${aws_instance.bastion.public_ip}"]
+}
+
 resource "aws_route53_record" "internal-api-record" {
   zone_id = "${data.aws_route53_zone.existing-zone.zone_id}"
   name    = "internal-api.${data.aws_route53_zone.existing-zone.name}"

@@ -23,6 +23,7 @@ resource "aws_instance" "infra-node" {
     Type = "infra"
     Name = "${var.project} - Infrastructure Node ${count.index + 1}"
     Project = "${var.project}"
+    ProjectId = "${var.project_id}"
   }
 }
 

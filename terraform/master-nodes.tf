@@ -24,6 +24,7 @@ resource "aws_instance" "master-node" {
     Type = "master"
     Name = "${var.project} - Master Node ${count.index + 1}"
     Project = "${var.project}"
+    ProjectId = "${var.project_id}"
   }
 }
 

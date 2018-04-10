@@ -21,5 +21,6 @@ resource "aws_instance" "bastion" {
     Name = "${var.project} - Bastion"
     Project = "${var.project}"
     Type = "bastion"
+    ProjectId = "${var.project_id}"
   }
 }

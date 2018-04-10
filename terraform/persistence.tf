@@ -6,6 +6,8 @@ resource "aws_efs_file_system" "persistence-storage" {
   tags {
     Name = "${var.project} - Persistent Storage"
     Project = "${var.project}"
+    ProjectId = "${var.project_id}"
+    Type = "persistence"
   }
 }
 

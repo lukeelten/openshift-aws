@@ -11,6 +11,7 @@ resource "aws_lb" "master-lb" {
     Name = "${var.project} - Master Load Balancer"
     Project = "${var.project}"
     Type = "master"
+    ProjectId = "${var.project_id}"
   }
 }
 

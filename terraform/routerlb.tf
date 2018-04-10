@@ -9,6 +9,7 @@ resource "aws_lb" "router-lb" {
     Name = "${var.project} - Router Load Balancer"
     Project = "${var.project}"
     Type = "infra"
+    ProjectId = "${var.project_id}"
   }
 }
 

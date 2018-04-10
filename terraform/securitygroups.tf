@@ -272,7 +272,7 @@ resource "aws_security_group" "allow-internal" {
   }
 
   tags {
-    Name = "${var.project} - Allow All"
+    Name = "${var.project} - Allow Internal Traffic"
     Project = "${var.project}"
   }
 }
