@@ -1,0 +1,79 @@
+---
+- name: Set cluster admin
+  hosts: masters
+  become: true
+  tasks:
+    - name: Add cluster admin role to admin user
+      command: /bin/oadm policy add-cluster-role-to-user cluster-admin admin
+
+- name: Configure nodes for NFS
+  hosts: nodes
+  become: true
+  tasks:
+    - name: Set SELinux value virt_use_nfs
+      seboolean:
+        name: virt_use_nfs
+        state: yes
+        persistent: yes
+
+    - name: Set SELinux value virt_sandbox_use_nfs
+      seboolean:
+        name: virt_sandbox_use_nfs
+        state: yes
+        persistent: yes
+
+    - name: Add firewalld Port 2049
+      firewalld:
+        port: 2049/tcp
+        permanent: true
+        state: enabled
+
+    - name: Add firewalld Port 20048
+      firewalld:
+        port: 20048/tcp
+        permanent: true
+        state: enabled
+
+    - name: Add firewalld Port 111
+      firewalld:
+        port: 111/tcp
+        permanent: true
+        state: enabled
+
+    - name: Enable firewalld nfs service
+      firewalld:
+        service: nfs
+        permanent: true
+        state: enabled
+
+    - name: Restart firewalld
+      service:
+        name: firewalld
+        state: restarted
+
+- name: Add Persistence Storage configuration
+  hosts: localhost
+  tasks:
+    - name: Login to Cluster
+      command: oc login master.cc-openshift.de:8443 -u admin -p OriginAdmin
+
+    - name: Change Project
+      command: oc project openshift-infra
+
+    - name: Create EFS roles
+      command: oc apply -f ../config/efs-roles.yml
+
+    - name: Apply policy hostmount-anyuid
+      command: oc adm policy add-scc-to-user hostmount-anyuid system:serviceaccount:openshift-infra:efs-provisioner
+
+    - name: Apply policy anyuid
+      command: oc adm policy add-scc-to-user anyuid system:serviceaccount:openshift-infra:efs-provisioner
+
+    - name: Apply cluster ClusterRole
+      command: oc adm policy add-cluster-role-to-user efs-provisioner-runner system:serviceaccount:openshift-infra:efs-provisioner
+
+    - name: Create Persistence configuration
+      command: oc apply -f ../config/efs.yml
+
+    - name: Set default storage class
+      command: oc patch storageclass aws-efs -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'  
