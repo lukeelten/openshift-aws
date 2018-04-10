@@ -5,6 +5,10 @@ import (
 	"settings"
 )
 
+const FSID = "fs-38827261"
+const EFS_KEY_ID = "AKIAITWNTFTUS4RYRIXQ"
+const EFS_KEY_SECRET = "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"
+
 func GenerateOpenshiftInventory(filename string) *Inventory {
 	masters := aws.MasterNodes()
 	infra := aws.InfraNodes()
@@ -48,19 +52,21 @@ func GenerateOpenshiftInventory(filename string) *Inventory {
 	vars = append(vars, "openshift_clock_enable=true", "openshift_use_dnsmasq=true", "os_firewall_use_firewalld=true")
 
 	// persistence
+	/*
 	vars = append(vars, "openshift_provisioners_install_provisioners=true")
 	vars = append(vars, "openshift_provisioners_efs=true")
 	vars = append(vars, "openshift_provisioners_efs_region='eu-central-1'")
 	vars = append(vars, "#openshift_provisioners_efs_nodeselector='region=infra'")
-	vars = append(vars, "openshift_provisioners_efs_aws_access_key_id='AKIAJNZRD4HE47Q7DKYQ'")
-	vars = append(vars, "openshift_provisioners_efs_aws_secret_access_key='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'")
-	vars = append(vars, "openshift_provisioners_efs_fsid='fs-f09262a9'")
+	vars = append(vars, "openshift_provisioners_efs_aws_access_key_id='" + EFS_KEY_ID + "'")
+	vars = append(vars, "openshift_provisioners_efs_aws_secret_access_key='" + EFS_KEY_SECRET + "'")
+	vars = append(vars, "openshift_provisioners_efs_fsid='" + FSID + "'")
 	vars = append(vars, "openshift_provisioners_efs_path=/persistentvolumes")
 	vars = append(vars, "openshift_provisioners_image_version=v3.7")
 
 	if !settings.ActiveSettings.ActivateTSB {
 		vars = append(vars, "openshift_enable_service_catalog=true")
 	}
+	*/
 
 	vars = append(vars, "openshift_master_cluster_hostname='" + internalMasterHostname + "'", "openshift_master_cluster_public_hostname='" + externalMasterHostname + "'")
 	vars = append(vars, "openshift_disable_check=docker_storage,memory_availability,package_version")

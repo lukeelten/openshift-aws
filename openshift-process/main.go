@@ -27,13 +27,21 @@ func main() {
 
 	ansible.CheckReadiness(INVENTORY)
 
+	/*
 	playbook := ansible.OpenPlaybook(installerPath + "/playbooks/prerequisites.yml")
 	playbook.Run(INVENTORY)
 
 	playbook = ansible.OpenPlaybook(installerPath + "/playbooks/deploy_cluster.yml")
 	playbook.Run(INVENTORY)
+	*/
 
-	ansible.ExecuteRemote(INVENTORY, "masters", "/bin/oadm policy add-cluster-role-to-user cluster-admin admin")
+	playbook := ansible.OpenPlaybook(installerPath + "/playbooks/byo/config.yml")
+	playbook.Run(INVENTORY)
+
+	/*
+	playbook = ansible.OpenPlaybook(wd + "/nfs-setup.yml")
+	playbook.Run(INVENTORY)
+	*/
 }
 
 /*
