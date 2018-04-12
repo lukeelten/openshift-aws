@@ -1,6 +1,6 @@
 ---
 - name: Set cluster admin
-  hosts: masters
+  hosts: masters[0]
   become: true
   tasks:
     - name: Add cluster admin role to admin user
@@ -76,4 +76,4 @@
       command: oc apply -f ../config/efs.yml
 
     - name: Set default storage class
-      command: oc patch storageclass aws-efs -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'  
+      command: oc patch storageclass aws-efs -p '{"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
