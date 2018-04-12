@@ -27,14 +27,6 @@ func main() {
 
 	ansible.CheckReadiness(INVENTORY)
 
-	/*
-	playbook := ansible.OpenPlaybook(installerPath + "/playbooks/prerequisites.yml")
-	playbook.Run(INVENTORY)
-
-	playbook = ansible.OpenPlaybook(installerPath + "/playbooks/deploy_cluster.yml")
-	playbook.Run(INVENTORY)
-	*/
-
 	playbook := ansible.OpenPlaybook(installerPath + "/playbooks/byo/config.yml")
 	playbook.Run(INVENTORY)
 
