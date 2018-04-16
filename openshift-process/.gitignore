@@ -1,9 +1,6 @@
 .idea
 openshift-process
-aws
 pkg
-ssh.cfg
-myinventory
 
 generated/*
 !.gitkeep
