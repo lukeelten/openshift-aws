@@ -1,6 +1,3 @@
-data "aws_route53_zone" "existing-zone" {
-  name = "${var.zone}"
-}
 
 data "aws_acm_certificate" "router-certificate" {
   domain   = "*.apps.${var.zone}"
