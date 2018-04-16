@@ -1,5 +1,5 @@
-provider.tf
 .idea
+*.auto.tfvars
 
 # Created by https://www.gitignore.io/api/terraform
 
