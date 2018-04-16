@@ -2,14 +2,8 @@ package aws
 
 import (
 	"github.com/aws/aws-sdk-go/service/ec2"
-	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/elbv2"
 )
-
-var Session *session.Session
-var Client *ec2.EC2
-var LBClent *elbv2.ELBV2
 
 type NodeInfo struct {
 	InternalIp  string
@@ -17,15 +11,6 @@ type NodeInfo struct {
 	ExternalIp  string
 	ExternalDns string
 	Zone string
-}
-
-func InitAws() {
-	Session = session.Must(session.NewSessionWithOptions(session.Options{
-		SharedConfigState: session.SharedConfigEnable,
-	}))
-
-	Client = ec2.New(Session)
-	LBClent = elbv2.New(Session)
 }
 
 func MasterNodes() []NodeInfo {

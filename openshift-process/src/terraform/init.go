@@ -10,12 +10,6 @@ var State TerraformState
 
 
 func InitTerraform(dir string) {
-	if State.inited {
-		return
-	}
-
-
-
 }
 
 

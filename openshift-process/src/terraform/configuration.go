@@ -16,7 +16,6 @@ type Configuration struct {
 	ProjectName string
 	ProjectId string
 	SshKey string
-	Region string
 	Zone string
 
 	Counts NodeCounts
@@ -47,7 +46,6 @@ func DefaultConfig(ProjectName string, SshKey string, Zone string) *Configuratio
 	config.ProjectName = ProjectName
 	config.ProjectId = encodeProjectId(ProjectName)
 	config.SshKey = SshKey
-	config.Region = "eu-central-1"
 	config.Zone = Zone
 
 	config.Counts.Master = 2

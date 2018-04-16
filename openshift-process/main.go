@@ -3,13 +3,23 @@ package main
 import (
 	"settings"
 	"os"
-	"ansible"
 	"aws"
+	"openshift"
+	"ansible"
 )
 
-const INVENTORY = "myinventory"
+const GEN_DIR = "generated/"
+const INVENTORY = GEN_DIR + "inventory"
+const SSH_CONFIG_FILE = GEN_DIR + "ssh.cfg"
+
+
+type Test struct {
+	EfsId string
+	Region string
+}
 
 func main() {
+
 	settings.ParseFlags()
 
 	wd, err := os.Getwd()
@@ -18,10 +28,14 @@ func main() {
 		return
 	}
 
-	aws.InitAws()
+	awsConfig := aws.NewConfig("eu-central-1", "", "")
+	awsConfig.InitSession()
 
-	inventory := ansible.GenerateOpenshiftInventory(INVENTORY)
-	inventory.Write()
+	sshConfig := openshift.GenerateSshConfig()
+	sshConfig.WriteConfig(SSH_CONFIG_FILE)
+
+	config := openshift.GenerateConfig(SSH_CONFIG_FILE)
+	config.GenerateInventory(INVENTORY)
 
 	installerPath := wd + "/../openshift-ansible"
 
@@ -35,8 +49,3 @@ func main() {
 	playbook.Run(INVENTORY)
 	*/
 }
-
-/*
-	playbook := ansible.OpenPlaybook("/home/lukeelten/Projekte/codecentric/repo/openshift-ansible/playbooks/byo/config.yml")
-	playbook.Run(INVENTORY)
- */

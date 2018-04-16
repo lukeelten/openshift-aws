@@ -5,6 +5,7 @@ import "flag"
 type Settings struct {
 	Debug bool
 	ActivateTSB bool
+
 }
 
 var ActiveSettings Settings
