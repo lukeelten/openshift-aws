@@ -23,9 +23,9 @@ resource "aws_elb" "internal-lb" {
   }
 
   tags {
-    Name = "${var.project} - Internal Load Balancer"
-    Project = "${var.project}"
+    Name = "${var.ProjectName} - Internal Load Balancer"
+    Project = "${var.ProjectName}"
     Type = "internal"
-    ProjectId = "${var.project_id}"
+    ProjectId = "${var.ProjectId}"
   }
 }

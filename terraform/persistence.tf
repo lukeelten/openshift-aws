@@ -1,12 +1,12 @@
 resource "aws_efs_file_system" "persistence-storage" {
-  creation_token = "${var.project_id}-openshift-storage"
+  creation_token = "${var.ProjectId}-openshift-storage"
   encrypted = true
   kms_key_id = "${aws_kms_key.persistence-encryption-key.arn}"
 
   tags {
-    Name = "${var.project} - Persistent Storage"
-    Project = "${var.project}"
-    ProjectId = "${var.project_id}"
+    Name = "${var.ProjectName} - Persistent Storage"
+    Project = "${var.ProjectName}"
+    ProjectId = "${var.ProjectId}"
     Type = "persistence"
   }
 }
@@ -16,13 +16,14 @@ resource "aws_kms_key" "persistence-encryption-key" {
   deletion_window_in_days = 7
 
   tags {
-    Name = "${var.project} - Persistent Storage"
-    Project = "${var.project}"
+    Name = "${var.ProjectName} - Persistent Storage"
+    Project = "${var.ProjectName}"
+    ProjectId = "${var.ProjectId}"
   }
 }
 
 resource "aws_kms_alias" "persistence-encryption-key-alias" {
-  name          = "alias/${var.project_id}-persistence-storage-key"
+  name          = "alias/${var.ProjectId}-persistence-storage-key"
   target_key_id = "${aws_kms_key.persistence-encryption-key.id}"
 }
 

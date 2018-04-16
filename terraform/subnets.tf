@@ -6,8 +6,9 @@ resource "aws_subnet" "subnet-public-1" {
   map_public_ip_on_launch = true
 
   tags {
-    Name = "${var.project} - Public Subnet 1"
-    Project = "${var.project}"
+    Name = "${var.ProjectName} - Public Subnet 1"
+    Project = "${var.ProjectName}"
+    ProjectId = "${var.ProjectId}"
   }
 }
 
@@ -64,8 +65,9 @@ resource "aws_subnet" "subnet-private-1" {
   map_public_ip_on_launch = false
 
   tags {
-    Name = "${var.project} - Private Subnet 1"
-    Project = "${var.project}"
+    Name = "${var.ProjectName} - Private Subnet 1"
+    Project = "${var.ProjectName}"
+    ProjectId = "${var.ProjectId}"
   }
 }
 

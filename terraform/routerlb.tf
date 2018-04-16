@@ -6,10 +6,10 @@ resource "aws_lb" "router-lb" {
   subnets = ["${aws_subnet.subnet-public-1.id}"]
 
   tags {
-    Name = "${var.project} - Router Load Balancer"
-    Project = "${var.project}"
+    Name = "${var.ProjectName} - Router Load Balancer"
+    Project = "${var.ProjectId}"
     Type = "infra"
-    ProjectId = "${var.project_id}"
+    ProjectId = "${var.ProjectId}"
   }
 }
 

@@ -4,8 +4,9 @@ resource "aws_vpc" "vpc" {
 #  assign_generated_ipv6_cidr_block = true
 
   tags {
-    Name = "${var.project} - VPC"
-    Project = "${var.project}"
+    Name = "${var.ProjectName} - VPC"
+    Project = "${var.ProjectName}"
+    ProjectId = "${var.ProjectId}"
   }
 }
 
@@ -13,8 +14,9 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = "${aws_vpc.vpc.id}"
 
   tags {
-    Name = "${var.project} - Internet Gateway"
-    Project = "${var.project}"
+    Name = "${var.ProjectName} - Internet Gateway"
+    Project = "${var.ProjectName}"
+    ProjectId = "${var.ProjectId}"
   }
 }
 
@@ -27,7 +29,8 @@ resource "aws_route_table" "public-rt" {
   }
 
   tags {
-    Name = "${var.project} - Public Route Table"
-    Project = "${var.project}"
+    Name = "${var.ProjectName} - Public Route Table"
+    Project = "${var.ProjectName}"
+    ProjectId = "${var.ProjectId}"
   }
 }

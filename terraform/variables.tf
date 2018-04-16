@@ -1,46 +1,52 @@
 # Project name
-variable "project" {
+variable "ProjectName" {
   type = "string"
+  description = "Descriptive name of project"
 }
 
-variable "project_id" {
+variable "ProjectId" {
   type = "string"
   description = "Project Id contains only lowercase alphanumerical characters."
 }
 
-variable "key" {
+variable "SshKey" {
   description = "SSH key to use for EC2 instances"
   type = "string"
 }
 
-variable "node-types" {
+variable "NodeTypes" {
   type = "map"
-  #"bastion" = "t2.micro"
-  #"infrastructure" = "t2.large"
-  #"application" = "t2.large"
-  #"master" = "m4.xlarge"
-  # m5 = 10x faster network
+  # Bastion
+  # Master
+  # Infra
+  # App
 }
 
-variable "zone" {
+variable "Zone" {
   type = "string"
+  description = "Existing DNS zone to put openshift cluster in"
 }
 
-variable "counts" {
+variable "Counts" {
+  description = "Number of instances per node type"
   type = "map"
+  # Master
+  # Infra
+  # App
 }
 
-variable "key_id" {
+variable "Region" {
+  type = "string"
+  description = "target AWS region"
+}
+
+variable "KeyId" {
   type = "string"
   description = "Access key ID"
 }
 
-variable "secret_key" {
+variable "SecretKey" {
   type = "string"
   description = "Secret Access Key"
 }
 
-variable "region" {
-  type = "string"
-  description = "target AWS region"
-}

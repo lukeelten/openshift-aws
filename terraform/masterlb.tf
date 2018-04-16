@@ -1,17 +1,15 @@
 
-
 resource "aws_lb" "master-lb" {
   name = "master-lb"
   load_balancer_type = "network"
- // security_groups = ["${aws_security_group.master-elb-sg.id}"]
 
   subnets = ["${aws_subnet.subnet-public-1.id}"]
 
   tags {
-    Name = "${var.project} - Master Load Balancer"
-    Project = "${var.project}"
+    Name = "${var.ProjectName} - Master Load Balancer"
+    Project = "${var.ProjectName}"
     Type = "master"
-    ProjectId = "${var.project_id}"
+    ProjectId = "${var.ProjectId}"
   }
 }
 

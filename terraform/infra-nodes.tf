@@ -2,13 +2,13 @@ resource "aws_instance" "infra-node" {
   depends_on      = ["aws_internet_gateway.igw", "aws_nat_gateway.private-nat", "aws_route.private_route"]
 
   ami = "${data.aws_ami.centos.id}"
-  instance_type   = "${var.node-types["infrastructure"]}"
-  key_name        = "${var.key}"
+  instance_type   = "${var.NodeTypes["Infra"]}"
+  key_name        = "${var.SshKey}"
   user_data       = "${file("scripts/init.sh")}"
   vpc_security_group_ids = ["${aws_security_group.infra-sg.id}", "${aws_security_group.allow-internal.id}"]
   subnet_id = "${aws_subnet.subnet-private-1.id}"
 
-  count = "${var.counts["infra"]}"
+  count = "${var.Counts["Infra"]}"
 
   root_block_device {
     volume_type = "gp2"
@@ -21,9 +21,9 @@ resource "aws_instance" "infra-node" {
 
   tags {
     Type = "infra"
-    Name = "${var.project} - Infrastructure Node ${count.index + 1}"
-    Project = "${var.project}"
-    ProjectId = "${var.project_id}"
+    Name = "${var.ProjectName} - Infrastructure Node ${count.index + 1}"
+    Project = "${var.ProjectName}"
+    ProjectId = "${var.ProjectId}"
   }
 }
 
@@ -32,7 +32,7 @@ resource "aws_lb_target_group_attachment" "infra-node-tg1" {
   target_id        = "${aws_instance.infra-node.*.id[count.index]}"
   port             = "${aws_lb_target_group.router-lb-tg1.port}"
 
-  count = "${var.counts["infra"]}"
+  count = "${var.Counts["Infra"]}"
 }
 
 
@@ -41,5 +41,5 @@ resource "aws_lb_target_group_attachment" "infra-node-tg2" {
   target_id        = "${aws_instance.infra-node.*.id[count.index]}"
   port             = "${aws_lb_target_group.router-lb-tg2.port}"
 
-  count = "${var.counts["infra"]}"
+  count = "${var.Counts["Infra"]}"
 }

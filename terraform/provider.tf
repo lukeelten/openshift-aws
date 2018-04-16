@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "${var.region}"
-  access_key = "${var.key_id}"
-  secret_key = "${var.secret_key}"
+  region = "${var.Region}"
+  access_key = "${var.KeyId}"
+  secret_key = "${var.SecretKey}"
 }

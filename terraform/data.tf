@@ -20,6 +20,6 @@ data "aws_ami" "centos" {
 }
 
 data "aws_route53_zone" "existing-zone" {
-  name = "${var.zone}"
+  name = "${var.Zone}"
   private_zone = false
 }

@@ -1,9 +1,9 @@
 resource "aws_launch_configuration" "application-lc" {
   depends_on      = ["aws_internet_gateway.igw"]
-  name            = "${var.project}-application-lc"
+  name            = "${var.ProjectName}-application-lc"
   image_id        = "${data.aws_ami.centos.id}"
-  instance_type   = "${var.node-types["application"]}"
-  key_name        = "${var.key}"
+  instance_type   = "${var.NodeTypes["App"]}"
+  key_name        = "${var.SshKey}"
   user_data       = "${file("scripts/init.sh")}"
   security_groups = ["${aws_security_group.nodes-sg.id}", "${aws_security_group.allow-internal.id}"]
 
@@ -19,11 +19,11 @@ resource "aws_launch_configuration" "application-lc" {
 
 resource "aws_autoscaling_group" "application-scaling" {
   depends_on = ["aws_nat_gateway.private-nat", "aws_route.private_route"]
-  name                 = "${var.project}-application-scaling-group"
+  name                 = "${var.ProjectName}-application-scaling-group"
   launch_configuration = "${aws_launch_configuration.application-lc.name}"
 
-  min_size             = "${var.counts["app"]}"
-  max_size             = "${var.counts["app"]}"
+  min_size             = "${var.Counts["App"]}"
+  max_size             = "${var.Counts["App"]}"
 
   vpc_zone_identifier  = ["${aws_subnet.subnet-private-1.id}"]
 
@@ -39,19 +39,19 @@ resource "aws_autoscaling_group" "application-scaling" {
 
   tag {
     key = "Name"
-    value = "${var.project} - Application Node"
+    value = "${var.ProjectName} - Application Node"
     propagate_at_launch = true
   }
 
   tag {
     key = "Project"
-    value = "${var.project}"
+    value = "${var.ProjectName}"
     propagate_at_launch = true
   }
 
   tag {
     key = "ProjectId"
-    value = "${var.project_id}"
+    value = "${var.ProjectId}"
     propagate_at_launch = true
   }
 }

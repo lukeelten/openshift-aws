@@ -1,6 +1,6 @@
 resource "aws_security_group" "bastion-sg" {
-  description = "${var.project} Security Group for Bastion server"
-  name        = "${var.project}-bastion-sg"
+  description = "${var.ProjectName} Security Group for Bastion server"
+  name        = "${var.ProjectName}-bastion-sg"
   vpc_id      = "${aws_vpc.vpc.id}"
 
   ingress = [
@@ -26,14 +26,15 @@ resource "aws_security_group" "bastion-sg" {
   }
 
   tags {
-    Name = "${var.project} - Bastion SG"
-    Project = "${var.project}"
+    Name = "${var.ProjectName} - Bastion SG"
+    Project = "${var.ProjectName}"
+    ProjectId = "${var.ProjectId}"
   }
 }
 
 resource "aws_security_group" "master-sg" {
-  description = "${var.project} Security Group for Master Nodes"
-  name        = "${var.project}-master-sg"
+  description = "${var.ProjectName} Security Group for Master Nodes"
+  name        = "${var.ProjectName}-master-sg"
   vpc_id      = "${aws_vpc.vpc.id}"
 
   ingress = [
@@ -71,14 +72,15 @@ resource "aws_security_group" "master-sg" {
   }
 
   tags {
-    Name = "${var.project} - Master Nodes SG"
-    Project = "${var.project}"
+    Name = "${var.ProjectName} - Master Nodes SG"
+    Project = "${var.ProjectName}"
+    ProjectId = "${var.ProjectId}"
   }
 }
 
 resource "aws_security_group" "etcd-sg" {
-  description = "${var.project} Security Group for ETCD"
-  name        = "${var.project}-etcd-sg"
+  description = "${var.ProjectName} Security Group for ETCD"
+  name        = "${var.ProjectName}-etcd-sg"
   vpc_id      = "${aws_vpc.vpc.id}"
 
   ingress = [
@@ -110,14 +112,15 @@ resource "aws_security_group" "etcd-sg" {
   }
 
   tags {
-    Name = "${var.project} - ETCD SG"
-    Project = "${var.project}"
+    Name = "${var.ProjectName} - ETCD SG"
+    Project = "${var.ProjectName}"
+    ProjectId = "${var.ProjectId}"
   }
 }
 
 resource "aws_security_group" "infra-sg" {
-  description = "${var.project} Security Group for Infrastructure Nodes"
-  name        = "${var.project}-infra-sg"
+  description = "${var.ProjectName} Security Group for Infrastructure Nodes"
+  name        = "${var.ProjectName}-infra-sg"
   vpc_id      = "${aws_vpc.vpc.id}"
 
   ingress = [
@@ -155,14 +158,15 @@ resource "aws_security_group" "infra-sg" {
   }
 
   tags {
-    Name = "${var.project} - Infrastructure Nodes SG"
-    Project = "${var.project}"
+    Name = "${var.ProjectName} - Infrastructure Nodes SG"
+    Project = "${var.ProjectName}"
+    ProjectId = "${var.ProjectId}"
   }
 }
 
 resource "aws_security_group" "nodes-sg" {
-  description = "${var.project} Security Group for Nodes"
-  name        = "${var.project}-nodes-sg"
+  description = "${var.ProjectName} Security Group for Nodes"
+  name        = "${var.ProjectName}-nodes-sg"
   vpc_id      = "${aws_vpc.vpc.id}"
 
   ingress = [
@@ -194,14 +198,15 @@ resource "aws_security_group" "nodes-sg" {
   }
 
   tags {
-    Name = "${var.project} - Nodes SG"
-    Project = "${var.project}"
+    Name = "${var.ProjectName} - Nodes SG"
+    Project = "${var.ProjectName}"
+    ProjectId = "${var.ProjectId}"
   }
 }
 
 resource "aws_security_group" "allow-all-sg" {
-  description = "${var.project} Allow everything"
-  name        = "${var.project}-allow-all-sg"
+  description = "${var.ProjectName} Allow everything"
+  name        = "${var.ProjectName}-allow-all-sg"
   vpc_id      = "${aws_vpc.vpc.id}"
 
   ingress = [
@@ -227,14 +232,15 @@ resource "aws_security_group" "allow-all-sg" {
   }
 
   tags {
-    Name = "${var.project} - Allow All"
-    Project = "${var.project}"
+    Name = "${var.ProjectName} - Allow All"
+    Project = "${var.ProjectName}"
+    ProjectId = "${var.ProjectId}"
   }
 }
 
 resource "aws_security_group" "allow-internal" {
-  description = "${var.project} Allow Internal Traffic"
-  name        = "${var.project}-allow-internal-sg"
+  description = "${var.ProjectName} Allow Internal Traffic"
+  name        = "${var.ProjectName}-allow-internal-sg"
   vpc_id      = "${aws_vpc.vpc.id}"
 
   ingress = [
@@ -272,14 +278,15 @@ resource "aws_security_group" "allow-internal" {
   }
 
   tags {
-    Name = "${var.project} - Allow Internal Traffic"
-    Project = "${var.project}"
+    Name = "${var.ProjectName} - Allow Internal Traffic"
+    Project = "${var.ProjectName}"
+    ProjectId = "${var.ProjectId}"
   }
 }
 
 resource "aws_security_group" "storage-sg" {
-  description = "${var.project} Storage Security Group"
-  name        = "${var.project}-storage-sg"
+  description = "${var.ProjectName} Storage Security Group"
+  name        = "${var.ProjectName}-storage-sg"
   vpc_id      = "${aws_vpc.vpc.id}"
 
   ingress = [
@@ -305,7 +312,8 @@ resource "aws_security_group" "storage-sg" {
   }
 
   tags {
-    Name = "${var.project} - Storage Security Group"
-    Project = "${var.project}"
+    Name = "${var.ProjectName} - Storage Security Group"
+    Project = "${var.ProjectName}"
+    ProjectId = "${var.ProjectId}"
   }
 }
