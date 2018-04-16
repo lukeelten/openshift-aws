@@ -5,6 +5,9 @@ pkg
 ssh.cfg
 myinventory
 
+generated/*
+!.gitkeep
+
 # Created by https://www.gitignore.io/api/go,linux,ansible,terraform,intellij+iml
 
 ### Ansible ###
