@@ -4,8 +4,8 @@ kind: ConfigMap
 metadata:
   name: efs-provisioner
 data:
-  file.system.id: fs-e2f909bb
-  aws.region: eu-central-1
+  file.system.id: {{ .EfsId }}
+  aws.region: {{ .Region }}
   provisioner.name: provisioner/aws-efs
 ---
 kind: Deployment
@@ -47,7 +47,7 @@ spec:
       volumes:
         - name: pv-volume
           nfs:
-            server: fs-e2f909bb.efs.eu-central-1.amazonaws.com
+            server: {{ .EfsId }}.efs.{{ .Region }}.amazonaws.com
             path: /
 ---
 kind: StorageClass

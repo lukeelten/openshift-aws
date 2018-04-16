@@ -1,0 +1,59 @@
+[OSEv3:children]
+masters
+nodes
+etcd
+
+[OSEv3:vars]
+ansible_user=centos
+ansible_become=true
+ansible_ssh_common_args='-F {{ .SshConfig }} -o StrictHostKeyChecking=no -o ControlMaster=auto -o ControlPersist=30m'
+
+deployment_type=origin
+openshift_clock_enable=true
+openshift_use_dnsmasq=true
+os_firewall_use_firewalld=true
+openshift_router_selector='region=infra'
+openshift_registry_selector='region=infra'
+openshift_master_cluster_method=native
+
+{{ if .Debug }}
+openshift_disable_check=docker_storage,memory_availability,package_version
+{{ end }}
+
+openshift_release={{ .OriginRelease }}
+openshift_image_tag={{ .OriginRelease }}
+
+openshift_master_default_subdomain='{{ .RoutesDomain }}'
+#openshift_master_cluster_hostname='{{ .InternalMaster }}'
+openshift_master_cluster_hostname='{{ .ExternalMaster }}'
+openshift_master_cluster_public_hostname='{{ .ExternalMaster }}'
+
+openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
+openshift_master_htpasswd_users={'admin': '$apr1$zgSjCrLt$1KSuj66CggeWSv.D.BXOA1', 'user': '$apr1$.gw8w9i1$ln9bfTRiD6OwuNTG5LvW50'}
+
+
+[masters]
+{{ range .Masters }}
+{{ . | printNode }}
+{{ end }}
+
+
+[etcd]
+{{ range .Masters }}
+{{ .InternalIp }}
+{{ end }}
+
+
+[nodes]
+{{ range .Masters }}
+{{ . | printNode }}
+{{ end }}
+
+{{ range .Infras }}
+{{ . | printNode }}
+{{ end }}
+
+{{ range .Apps }}
+{{ . | printNode }}
+{{ end }}
+
