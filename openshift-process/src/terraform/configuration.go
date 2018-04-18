@@ -11,7 +11,7 @@ type AwsConfig struct {
 	SecretKey string
 }
 
-type Configuration struct {
+type TerraformVars struct {
 	ProjectName string
 	ProjectId string
 	SshKey string
@@ -34,13 +34,13 @@ type NodeTypes struct {
 	App string
 }
 
-func NewConfig() *Configuration {
-	var config Configuration
+func NewVars() *TerraformVars {
+	var config TerraformVars
 	return &config
 }
 
-func DefaultConfig(ProjectName string, SshKey string, Zone string) *Configuration {
-	config := NewConfig()
+func DefaultConfig(ProjectName string, SshKey string, Zone string) *TerraformVars {
+	config := NewVars()
 
 	config.ProjectName = ProjectName
 	config.ProjectId = util.EncodeProjectId(ProjectName)
@@ -59,7 +59,7 @@ func DefaultConfig(ProjectName string, SshKey string, Zone string) *Configuratio
 	return config
 }
 
-func (config* Configuration) GenerateJson() []byte {
+func (config*TerraformVars) GenerateJson() []byte {
 	 b, err := json.Marshal(config)
 
 	 if err != nil {
@@ -69,7 +69,7 @@ func (config* Configuration) GenerateJson() []byte {
 	 return b
 }
 
-func (config* Configuration) WriteFile(filename string) {
+func (config*TerraformVars) WriteFile(filename string) {
 	json := config.GenerateJson()
 
 	f, err := os.Create(filename)

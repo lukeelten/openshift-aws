@@ -5,6 +5,7 @@ import (
 	"os"
 	"openshift"
 	"ansible"
+	"terraform"
 )
 
 const GEN_DIR = "generated/"
@@ -20,6 +21,13 @@ func main() {
 		panic(err)
 		return
 	}
+
+	terraformDir := wd + "/../terraform"
+	tf := terraform.NewConfig(terraformDir, &settings)
+	tf.InitTerraform()
+	tf.Apply()
+
+	// @todo wait for AWS to become ready
 
 	settings.AWSConfig.InitSession()
 
