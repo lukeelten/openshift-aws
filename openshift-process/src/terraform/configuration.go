@@ -3,8 +3,7 @@ package terraform
 import (
 	"os"
 	"encoding/json"
-	"regexp"
-	"strings"
+	"util"
 )
 
 type AwsConfig struct {
@@ -44,7 +43,7 @@ func DefaultConfig(ProjectName string, SshKey string, Zone string) *Configuratio
 	config := NewConfig()
 
 	config.ProjectName = ProjectName
-	config.ProjectId = encodeProjectId(ProjectName)
+	config.ProjectId = util.EncodeProjectId(ProjectName)
 	config.SshKey = SshKey
 	config.Zone = Zone
 
@@ -84,8 +83,3 @@ func (config* Configuration) WriteFile(filename string) {
 	f.Sync()
 }
 
-func encodeProjectId(name string) string {
-	r := regexp.MustCompile("[^\\w]")
-	name = strings.ToLower(name)
-	return r.ReplaceAllString(name, "")
-}

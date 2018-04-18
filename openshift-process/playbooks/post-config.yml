@@ -61,7 +61,7 @@
       command: oc project openshift-infra
 
     - name: Create EFS roles
-      command: oc apply -f ../config/efs-roles.yml
+      command: oc apply -f ../generated/efs-roles.yml
 
     - name: Apply policy hostmount-anyuid
       command: oc adm policy add-scc-to-user hostmount-anyuid system:serviceaccount:openshift-infra:efs-provisioner
@@ -73,7 +73,7 @@
       command: oc adm policy add-cluster-role-to-user efs-provisioner-runner system:serviceaccount:openshift-infra:efs-provisioner
 
     - name: Create Persistence configuration
-      command: oc apply -f ../config/efs.yml
+      command: oc apply -f ../generated/efs.yml
 
     - name: Set default storage class
       command: oc patch storageclass aws-efs -p '{"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
