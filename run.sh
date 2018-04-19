@@ -1,5 +1,8 @@
 #!/bin/bash
 
-docker run --rm \
+docker run -it --rm \
     --name openshift-installer \
-    openshift-installer
+    --mount type=bind,source="$(pwd)",target=/app \
+    -w "/app/openshift-process" \
+    openshift-installer \
+    ./openshift-process "$@"

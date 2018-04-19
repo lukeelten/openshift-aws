@@ -19,15 +19,5 @@ RUN curl https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_linux_
         && rm terraform.zip
 
 # Create Directories
-RUN mkdir -p /app/openshift-process/generated
-
-# Copy files
-COPY openshift-ansible /app/openshift-ansible
-COPY terraform /app/terraform
-COPY openshift-process/templates /app/openshift-process/templates
-COPY openshift-process/playbooks /app/openshift-process/playbooks
-COPY openshift-process/openshift-process /app/openshift-process
-
-WORKDIR /app/openshift-process
-
-CMD ["sh"]
+RUN mkdir -p /app
+WORKDIR /app
