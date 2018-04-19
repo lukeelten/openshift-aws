@@ -64,8 +64,8 @@ func loadValues(settings *Settings) {
 }
 
 func validateSettings(settings *Settings) {
-	if len(settings.ProjectName) < 5 {
-		panic("Invalid project name. Please provide at least 5 characters")
+	if len(settings.ProjectName) < 4 {
+		panic("Invalid project name. Please provide at least 4 characters")
 	}
 
 	if len(settings.ProjectId) < 3 {

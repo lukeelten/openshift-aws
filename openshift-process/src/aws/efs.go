@@ -18,7 +18,7 @@ func GetEFSId(projectId string) string {
 		panic("No EFS FileSystem found.")
 	}
 
-	return *fsList[0].FileSystemId
+	return *(fsList[0].FileSystemId)
 }
 
 func getAllEFS() []*efs.FileSystemDescription {
@@ -33,7 +33,7 @@ func getAllEFS() []*efs.FileSystemDescription {
 }
 
 func filterByTags(fsList []*efs.FileSystemDescription, tags map[string]string) []*efs.FileSystemDescription {
-	result := make([]*efs.FileSystemDescription, 1)
+	result := make([]*efs.FileSystemDescription, 0)
 
 	for _, fs := range fsList {
 		fsTags := getTags(fs)

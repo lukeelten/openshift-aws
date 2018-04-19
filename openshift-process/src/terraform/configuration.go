@@ -16,6 +16,7 @@ type TerraformVars struct {
 	ProjectId string
 	SshKey string
 	Zone string
+	Region string
 
 	Counts NodeCounts
 	Types NodeTypes
@@ -46,10 +47,11 @@ func DefaultConfig(ProjectName string, SshKey string, Zone string) *TerraformVar
 	config.ProjectId = util.EncodeProjectId(ProjectName)
 	config.SshKey = SshKey
 	config.Zone = Zone
+	config.Region = "eu-central-1"
 
 	config.Counts.Master = 2
 	config.Counts.Infra = 2
-	config.Counts.App = 2
+	config.Counts.App = 3
 
 	config.Types.Bastion = "t2.nano"
 	config.Types.Master = "m4.large"

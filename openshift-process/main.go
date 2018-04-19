@@ -5,7 +5,10 @@ import (
 	"os"
 	"openshift"
 	"ansible"
+	"util"
 	"terraform"
+	"time"
+	"fmt"
 )
 
 const GEN_DIR = "generated/"
@@ -24,29 +27,51 @@ func main() {
 
 	terraformDir := wd + "/../terraform"
 	tf := terraform.NewConfig(terraformDir, &settings)
-	tf.InitTerraform()
-	tf.Apply()
+	if !tf.InitTerraform() {
+		panic("Cannot init terraform. Is the directory correct? " + terraformDir)
+	}
 
-	// @todo wait for AWS to become ready
+	if err := tf.Validate(); err != nil {
+		util.ExitOnError("Invalid terraform configuration.", err)
+	}
+
+	if err := tf.Apply(); err != nil {
+		fmt.Fprintf(os.Stderr, "Error during terraform process. Remaining infrastructure will be destroyed.")
+		tf.Destroy()
+		util.ExitOnError("Error during terraform process", err)
+	}
+
+	// @todo find better solution
+	time.Sleep(5 * time.Minute)
 
 	settings.AWSConfig.InitSession()
 
 	sshConfig := openshift.GenerateSshConfig()
-	sshConfig.WriteConfig(SSH_CONFIG_FILE)
+	if err := sshConfig.WriteConfig(SSH_CONFIG_FILE); err != nil {
+		util.ExitOnError("Cannot write SSH configuration file", err)
+	}
 
 	config := openshift.GenerateConfig(SSH_CONFIG_FILE)
-	config.GenerateInventory(INVENTORY)
+	if err:= config.GenerateInventory(INVENTORY); err != nil {
+		util.ExitOnError("Cannot write OpenShift inventory file.", err)
+	}
 
 	persistenceConfig := openshift.NewPersistenceConfig(&settings)
-	persistenceConfig.GeneratePersistenceConfigFiles(GEN_DIR)
+	if err := persistenceConfig.GeneratePersistenceConfigFiles(GEN_DIR); err != nil {
+		util.ExitOnError("Cannot write persistence storage configuration.", err)
+	}
 
 	installerPath := wd + "/../openshift-ansible"
 
-	ansible.CheckReadiness(INVENTORY)
+	//ansible.CheckReadiness(INVENTORY)
 
 	playbook := ansible.OpenPlaybook(installerPath + "/playbooks/byo/config.yml")
-	playbook.Run(INVENTORY)
+	if err := playbook.Run(INVENTORY); err != nil {
+		util.ExitOnError("Failed to run OpenShift installer.", err)
+	}
 
 	playbook = ansible.OpenPlaybook(wd + "/playbooks/post-config.yml")
-	playbook.Run(INVENTORY)
+	if err := playbook.Run(INVENTORY); err != nil {
+		util.ExitOnError("Failed to run post installation configuration", err)
+	}
 }

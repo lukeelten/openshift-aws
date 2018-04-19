@@ -14,22 +14,22 @@ func OpenPlaybook(filename string) *Playbook {
 	return playbook
 }
 
-func (playbook *Playbook) Run(inventory string) {
+func (playbook *Playbook) Run(inventory string) error {
 	if configuration.Debug {
-		util.Execute("ansible-playbook", "-vvv", "-i", inventory, playbook.filename)
+		return util.Execute("ansible-playbook", "-vvv", "-i", inventory, playbook.filename)
 	} else {
-		util.Execute("ansible-playbook", "-i", inventory, playbook.filename)
+		return util.Execute("ansible-playbook", "-i", inventory, playbook.filename)
 	}
 }
 
-func ExecuteRemote (inventory string, nodes string, command string) {
+func ExecuteRemote (inventory string, nodes string, command string) error {
 	if configuration.Debug {
-		util.Execute("ansible", "-vvv", "-i", inventory, nodes, "-a", command)
+		return util.Execute("ansible", "-vvv", "-i", inventory, nodes, "-a", command)
 	} else {
-		util.Execute("ansible", "-i", inventory, nodes, "-a", command)
+		return util.Execute("ansible", "-i", inventory, nodes, "-a", command)
 	}
 }
 
-func CheckReadiness (inventory string) bool {
+func CheckReadiness (inventory string) error {
 	return util.Execute("ansible", "-i", inventory, "nodes","-a", "/usr/bin/uname -a",  "-T", "5")
 }

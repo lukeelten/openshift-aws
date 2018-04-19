@@ -16,19 +16,18 @@ func GenerateSshConfig() *SshConfig {
 	return &config
 }
 
-func (config *SshConfig) WriteConfig(filename string) {
+func (config *SshConfig) WriteConfig(filename string) error {
 	f, err := os.Create(filename)
 	if err != nil {
-		panic(nil)
+		return err
 	}
 
 	defer f.Close()
 
 	t, err := template.New("ssh.tmpl").ParseFiles("templates/ssh.tmpl")
-
 	if err != nil {
-		panic(err)
+		return err
 	}
 
-	t.Execute(f, config)
+	return t.Execute(f, config)
 }

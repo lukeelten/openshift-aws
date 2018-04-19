@@ -43,14 +43,14 @@ func printNode(node Node) string {
 	return s
 }
 
-func (config *InventoryConfig) GenerateInventory(filename string) {
+func (config *InventoryConfig) GenerateInventory(filename string) error {
 	fmap := template.FuncMap{
 		"printNode": printNode,
 	}
 
 	f, err := os.Create(filename)
 	if err != nil {
-		panic(nil)
+		return err
 	}
 
 	defer f.Close()
@@ -58,8 +58,8 @@ func (config *InventoryConfig) GenerateInventory(filename string) {
 	t, err := template.New("inventory.tmpl").Funcs(fmap).ParseFiles("templates/inventory.tmpl")
 
 	if err != nil {
-		panic(err)
+		return err
 	}
 
-	t.Execute(f, config)
+	return t.Execute(f, config)
 }

@@ -32,15 +32,39 @@ func (config *Config) InitTerraform() bool {
 	}
 
 	config.GenerateVarsFile()
-	config.inited = util.ExecuteDir(config.Dir, "terraform", "init")
+	config.inited = util.ExecuteDir(config.Dir, "terraform", "init") == nil
 
 	return config.inited
 }
 
-func (config *Config) Apply() {
+func (config *Config) Apply() error {
 	if !config.inited {
 		panic("Please init terraform before apply")
 	}
 
-	util.ExecuteDir(config.Dir, "terraform", "apply", "-auto-approve")
+	return util.ExecuteDir(config.Dir, "terraform", "apply", "-auto-approve")
+}
+
+func (config *Config) Plan() error {
+	if !config.inited {
+		panic("Please init terraform before plan")
+	}
+
+	return util.ExecuteDir(config.Dir, "terraform", "plan")
+}
+
+func (config *Config) Validate() error {
+	if !config.inited {
+		panic("Please init terraform before validate")
+	}
+
+	return util.ExecuteDir(config.Dir, "terraform", "validate")
+}
+
+func (config *Config) Destroy() error {
+	if !config.inited {
+		panic("Please init terraform before destroy")
+	}
+
+	return util.ExecuteDir(config.Dir, "terraform", "destroy", "-auto-approve")
 }

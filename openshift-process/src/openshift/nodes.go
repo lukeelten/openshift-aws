@@ -9,7 +9,7 @@ func GenerateConfig(sshConfig string) *InventoryConfig {
 
 	config := InventoryConfig{
 		Debug: true,
-		OriginRelease: "v3.7.1",
+		OriginRelease: "v3.7.2",
 		RoutesDomain: "apps.cc-openshift.de",
 		InternalMaster: "internal-api.cc-openshift.de",
 		ExternalMaster: "master.cc-openshift.de",

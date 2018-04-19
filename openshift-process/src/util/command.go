@@ -5,11 +5,11 @@ import (
 	"os"
 )
 
-func Execute(command string, arg ...string) bool {
+func Execute(command string, arg ...string) error {
 	return ExecuteDir("", command, arg...)
 }
 
-func ExecuteDir(dir string, command string, arg ...string) bool {
+func ExecuteDir(dir string, command string, arg ...string) error {
 	cmd := exec.Command(command, arg...)
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
@@ -17,5 +17,5 @@ func ExecuteDir(dir string, command string, arg ...string) bool {
 	cmd.Dir = dir
 	err := cmd.Run()
 
-	return err != nil
+	return err
 }
