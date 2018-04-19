@@ -2,7 +2,7 @@ resource "aws_launch_configuration" "application-lc" {
   depends_on      = ["aws_internet_gateway.igw"]
   name            = "${var.ProjectName}-application-lc"
   image_id        = "${data.aws_ami.centos.id}"
-  instance_type   = "${var.NodeTypes["App"]}"
+  instance_type   = "${var.Types["App"]}"
   key_name        = "${var.SshKey}"
   user_data       = "${file("scripts/init.sh")}"
   security_groups = ["${aws_security_group.nodes-sg.id}", "${aws_security_group.allow-internal.id}"]

@@ -4,7 +4,7 @@ resource "aws_instance" "bastion" {
   depends_on             = ["aws_internet_gateway.igw"]
 
   ami                    = "${data.aws_ami.centos.id}"
-  instance_type          = "${var.NodeTypes["Bastion"]}"
+  instance_type          = "${var.Types["Bastion"]}"
   key_name               = "${var.SshKey}"
 
   subnet_id              = "${aws_subnet.subnet-public-1.id}"

@@ -2,7 +2,7 @@ resource "aws_instance" "infra-node" {
   depends_on      = ["aws_internet_gateway.igw", "aws_nat_gateway.private-nat", "aws_route.private_route"]
 
   ami = "${data.aws_ami.centos.id}"
-  instance_type   = "${var.NodeTypes["Infra"]}"
+  instance_type   = "${var.Types["Infra"]}"
   key_name        = "${var.SshKey}"
   user_data       = "${file("scripts/init.sh")}"
   vpc_security_group_ids = ["${aws_security_group.infra-sg.id}", "${aws_security_group.allow-internal.id}"]

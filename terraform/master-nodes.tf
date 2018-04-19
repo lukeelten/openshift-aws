@@ -2,7 +2,7 @@ resource "aws_instance" "master-node" {
   depends_on      = ["aws_nat_gateway.private-nat", "aws_route.private_route"]
 
   ami             = "${data.aws_ami.centos.id}"
-  instance_type   = "${var.NodeTypes["Master"]}"
+  instance_type   = "${var.Types["Master"]}"
   key_name        = "${var.SshKey}"
   user_data       = "${file("scripts/init.sh")}"
 
