@@ -1,5 +1,6 @@
 
 resource "aws_lb" "router-lb" {
+  depends_on      = ["aws_internet_gateway.igw"]
   name = "router-lb"
   load_balancer_type = "network"
 
@@ -40,6 +41,22 @@ resource "aws_lb_target_group" "router-lb-tg1" {
   port     = 80
   protocol = "TCP"
   vpc_id   = "${aws_vpc.vpc.id}"
+
+  tags {
+    Name = "${var.ProjectName} - HTTP Routing Traffic"
+    Project = "${var.ProjectName}"
+    ProjectId = "${var.ProjectId}"
+  }
+
+  health_check {
+    protocol = "TCP"
+    interval = 10
+    // timeout = 10
+    // 30 seconds for a target to become healthy
+    healthy_threshold = 3
+    // 30 seconds to detect unhealthy targets
+    unhealthy_threshold = 3
+  }
 }
 
 resource "aws_lb_target_group" "router-lb-tg2" {
@@ -47,4 +64,20 @@ resource "aws_lb_target_group" "router-lb-tg2" {
   port     = 443
   protocol = "TCP"
   vpc_id   = "${aws_vpc.vpc.id}"
+
+  tags {
+    Name = "${var.ProjectName} - HTTPS Routing Traffic"
+    Project = "${var.ProjectName}"
+    ProjectId = "${var.ProjectId}"
+  }
+
+  health_check {
+    protocol = "TCP"
+    interval = 10
+    // timeout = 10
+    // 30 seconds for a target to become healthy
+    healthy_threshold = 3
+    // 30 seconds to detect unhealthy targets
+    unhealthy_threshold = 3
+  }
 }

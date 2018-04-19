@@ -15,11 +15,14 @@ resource "aws_elb" "internal-lb" {
   instances           = ["${aws_instance.master-node.*.id}"]
 
   health_check {
-    healthy_threshold = 2
-    interval = 5
     target = "TCP:8443"
-    timeout = 4
-    unhealthy_threshold = 5
+
+    interval = 10
+    timeout = 5
+    // 50 seconds for a target to become healthy
+    healthy_threshold = 5
+    // 30 seconds to detect unhealthy targets
+    unhealthy_threshold = 3
   }
 
   tags {
