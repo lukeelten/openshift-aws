@@ -1,0 +1,18 @@
+{
+  "ProjectName": "Sprint1",
+  "ProjectId": "sprint1",
+  "SshKey": "tobias@Codecentric",
+  "Region": "eu-central-1",
+  "Zone": "cc-openshift.de",
+  "Counts": {
+    "Master": 2,
+    "Infra": 2,
+    "App": 3
+  },
+  "NodeTypes": {
+    "Bastion": "t2.nano",
+    "Master": "t2.medium",
+    "Infra": "t2.medium",
+    "App": "m4.large"
+  }
+}
