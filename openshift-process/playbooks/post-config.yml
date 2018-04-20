@@ -55,7 +55,7 @@
   hosts: localhost
   tasks:
     - name: Login to Cluster
-      command: oc login master.cc-openshift.de:8443 -u admin -p OriginAdmin
+      command: oc login master.cc-openshift.de:8443 -u admin -p OriginAdmin --insecure-skip-tls-verify
 
     - name: Change Project
       command: oc project openshift-infra
