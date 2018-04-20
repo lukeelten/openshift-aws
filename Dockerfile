@@ -19,5 +19,5 @@ RUN curl https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_linux_
         && rm terraform.zip
 
 # Create Directories
-RUN mkdir -p /app
+RUN mkdir -p /app && mkdir -p /root/.ssh && mkdir -p /root/.aws
 WORKDIR /app

@@ -5,10 +5,12 @@ Host {{ .BastionHostname }}
 	ControlPath ~/.ssh/ansible-%r@%h:%p
 	StrictHostKeyChecking no
 	ProxyCommand none
+	IdentityFile ~/.ssh/id_rsa
 	ForwardAgent yes
 	Hostname {{ .BastionHostname }}
 
 Host 10.10.*
 	ProxyCommand ssh -o StrictHostKeyChecking=no -W %h:%p centos@{{ .BastionHostname }}
 	StrictHostKeyChecking no
+	IdentityFile ~/.ssh/id_rsa
 
