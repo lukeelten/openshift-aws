@@ -34,7 +34,7 @@ var cmdFlags flags
 
 func initFlags() {
 	cmdFlags.debug = flag.Bool("debug", true, "Debug mode enables extended output")
-	cmdFlags.region = flag.String("region", "eu-central-1", "AWS refion to create the infrastructure in")
+	cmdFlags.region = flag.String("region", "eu-central-1", "AWS region to create the infrastructure in")
 	cmdFlags.aws_key = flag.String("aws-key", "", "AWS access key id. If empty the credentials used for AWS CLI will be loaded")
 	cmdFlags.aws_secret = flag.String("aws-secret", "", "AWS secret key. If empty the credentials used for AWS CLI will be loaded")
 
