@@ -20,6 +20,9 @@ type TerraformVars struct {
 
 	Counts NodeCounts
 	Types NodeTypes
+
+	EnableEfs bool
+	EncryptEfs bool
 }
 
 type NodeCounts struct {
@@ -57,6 +60,9 @@ func DefaultConfig(ProjectName string, SshKey string, Zone string) *TerraformVar
 	config.Types.Master = "m4.large"
 	config.Types.Infra = "t2.medium"
 	config.Types.App = "t2.medium"
+
+	config.EnableEfs = true
+	config.EncryptEfs = true
 
 	return config
 }
