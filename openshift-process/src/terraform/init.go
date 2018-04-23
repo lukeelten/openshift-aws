@@ -12,7 +12,7 @@ type Config struct {
 	Vars *TerraformVars
 }
 
-func NewConfig(dir string, settings *configuration.Settings) *Config {
+func NewConfig(dir string, settings *configuration.CmdFlags) *Config {
 	config := Config{}
 	config.inited = false
 	config.Dir = dir

@@ -4,11 +4,11 @@ import (
 	"configuration"
 	"os"
 	"openshift"
-	"ansible"
 	"util"
 	"terraform"
 	"time"
 	"fmt"
+	"ansible"
 )
 
 const GEN_DIR = "generated/"

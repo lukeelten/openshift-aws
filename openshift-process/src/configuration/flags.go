@@ -9,7 +9,7 @@ import (
 
 var Debug bool
 
-type Settings struct {
+type CmdFlags struct {
 	Debug bool
 
 	ProjectId string
@@ -42,11 +42,11 @@ func initFlags() {
 	cmdFlags.projectId = flag.String("id", "", "Project id to tag all instances. If empty an appropriate ID will be generated from project name.")
 }
 
-func ParseFlags() Settings {
+func ParseFlags() CmdFlags {
 	initFlags()
 	flag.Parse()
 
-	settings := Settings{}
+	settings := CmdFlags{}
 	loadValues(&settings)
 	validateSettings(&settings)
 	Debug = settings.Debug
@@ -54,7 +54,7 @@ func ParseFlags() Settings {
 	return settings
 }
 
-func loadValues(settings *Settings) {
+func loadValues(settings *CmdFlags) {
 	settings.Debug = *cmdFlags.debug
 	settings.ProjectName = *cmdFlags.projectName
 	settings.ProjectId = *cmdFlags.projectId
@@ -63,7 +63,7 @@ func loadValues(settings *Settings) {
 	settings.AWSConfig = config
 }
 
-func validateSettings(settings *Settings) {
+func validateSettings(settings *CmdFlags) {
 	if len(settings.ProjectName) < 4 {
 		panic("Invalid project name. Please provide at least 4 characters")
 	}

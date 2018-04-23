@@ -13,7 +13,7 @@ type PersistenceConfig struct {
 }
 
 
-func NewPersistenceConfig(settings *configuration.Settings) *PersistenceConfig {
+func NewPersistenceConfig(settings *configuration.CmdFlags) *PersistenceConfig {
 	efsId := aws.GetEFSId(settings.ProjectId)
 	config := PersistenceConfig{efsId, settings.AWSConfig.Region}
 
