@@ -51,3 +51,12 @@ variable "SecretKey" {
   description = "Secret Access Key"
 }
 
+variable "EnableEfs" {
+  type = "string"
+  description = "Enable Persistence with EFS."
+}
+
+variable "EncryptEfs" {
+  type = "string"
+  description = "Encrypt EFS using Amazon KMS for key management."
+}
