@@ -16,6 +16,8 @@ type CmdFlags struct {
 	ProjectName string
 
 	AWSConfig *aws.AwsConfig
+
+	ConfigFile string
 }
 
 
@@ -28,6 +30,8 @@ type flags struct {
 	region *string
 	aws_key *string
 	aws_secret *string
+
+	configFile *string
 }
 
 var cmdFlags flags
@@ -40,6 +44,7 @@ func initFlags() {
 
 	cmdFlags.projectName = flag.String("name", "", "Project Name to use in AWS tags and descriptions")
 	cmdFlags.projectId = flag.String("id", "", "Project id to tag all instances. If empty an appropriate ID will be generated from project name.")
+	cmdFlags.configFile = flag.String("config", "config.json", "Path / Name of configuration file to load")
 }
 
 func ParseFlags() CmdFlags {
@@ -58,6 +63,7 @@ func loadValues(settings *CmdFlags) {
 	settings.Debug = *cmdFlags.debug
 	settings.ProjectName = *cmdFlags.projectName
 	settings.ProjectId = *cmdFlags.projectId
+	settings.ConfigFile = *cmdFlags.configFile
 
 	config := aws.NewConfig(*cmdFlags.region, *cmdFlags.aws_key, *cmdFlags.aws_secret)
 	settings.AWSConfig = config
