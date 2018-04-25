@@ -1,7 +1,7 @@
 {
   "ProjectName": "Sprint1",
   "ProjectId": "sprint1",
-  "SshKey": "tobias@Codecentric",
+  "PublicKey": "ssh-rsa ÖLKAJSÖLKJDN",
   "Region": "eu-central-1",
   "Zone": "cc-openshift.de",
   "Counts": {

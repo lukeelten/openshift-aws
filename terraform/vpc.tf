@@ -34,3 +34,8 @@ resource "aws_route_table" "public-rt" {
     ProjectId = "${var.ProjectId}"
   }
 }
+
+resource "aws_key_pair" "public-key" {
+  key_name   = "${var.ProjectId}-key"
+  public_key = "${var.PublicKey}"
+}

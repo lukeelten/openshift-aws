@@ -5,7 +5,7 @@ resource "aws_instance" "bastion" {
 
   ami                    = "${data.aws_ami.centos.id}"
   instance_type          = "${var.Types["Bastion"]}"
-  key_name               = "${var.SshKey}"
+  key_name               = "${aws_key_pair.public-key.key_name}"
 
   subnet_id              = "${aws_subnet.subnets-public.*.id[0]}"
 

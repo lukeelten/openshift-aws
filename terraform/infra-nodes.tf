@@ -3,7 +3,7 @@ resource "aws_instance" "infra-node" {
 
   ami = "${data.aws_ami.centos.id}"
   instance_type   = "${var.Types["Infra"]}"
-  key_name        = "${var.SshKey}"
+  key_name        = "${aws_key_pair.public-key.key_name}"
   user_data       = "${file("scripts/init.sh")}"
   vpc_security_group_ids = ["${aws_security_group.infra-sg.id}", "${aws_security_group.allow-internal.id}"]
 

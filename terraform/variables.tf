@@ -9,8 +9,8 @@ variable "ProjectId" {
   description = "Project Id contains only lowercase alphanumerical characters."
 }
 
-variable "SshKey" {
-  description = "SSH key to use for EC2 instances"
+variable "PublicKey" {
+  description = "Public SSH key which will be used for EC2 instances to access."
   type = "string"
 }
 

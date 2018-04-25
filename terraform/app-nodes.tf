@@ -3,7 +3,7 @@ resource "aws_launch_configuration" "application-lc" {
   name            = "${var.ProjectName}-application-lc"
   image_id        = "${data.aws_ami.centos.id}"
   instance_type   = "${var.Types["App"]}"
-  key_name        = "${var.SshKey}"
+  key_name        = "${aws_key_pair.public-key.key_name}"
   user_data       = "${file("scripts/init.sh")}"
   security_groups = ["${aws_security_group.nodes-sg.id}", "${aws_security_group.allow-internal.id}"]
 
