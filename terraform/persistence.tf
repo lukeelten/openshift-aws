@@ -13,11 +13,11 @@ resource "aws_efs_file_system" "persistence-storage" {
   }
 }
 
-resource "aws_efs_mount_target" "persistence-mt1" {
-  count = "${var.EnableEfs}"
+resource "aws_efs_mount_target" "persistence-mount-targets" {
+  count = "${(var.EnableEfs * aws_subnet.subnets-private.count)}"
 
   file_system_id = "${aws_efs_file_system.persistence-storage.id}"
-  subnet_id      = "${aws_subnet.subnet-private-1.id}"
+  subnet_id      = "${aws_subnet.subnets-private.*.id[(count.index % aws_subnet.subnets-private.count)]}"
   security_groups = ["${aws_security_group.storage-sg.id}"]
 }
 

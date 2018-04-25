@@ -2,7 +2,7 @@
 resource "aws_elb" "internal-lb" {
   name     = "api-internal-lb"
   internal = true
-  subnets = ["${aws_subnet.subnet-private-1.id}"]
+  subnets = ["${aws_subnet.subnets-private.*.id}"]
   security_groups = ["${aws_security_group.allow-all-sg.id}"]
 
   listener {

@@ -2,7 +2,7 @@ resource "aws_nat_gateway" "private-nat" {
   depends_on      = ["aws_internet_gateway.igw"]
 
   allocation_id = "${aws_eip.nat-eip.id}"
-  subnet_id     = "${aws_subnet.subnet-public-1.id}"
+  subnet_id     = "${aws_subnet.subnets-public.*.id[1]}"
 
   tags {
     Name = "Private Subnets Internet Connection"

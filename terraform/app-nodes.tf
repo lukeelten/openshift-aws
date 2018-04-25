@@ -25,7 +25,7 @@ resource "aws_autoscaling_group" "application-scaling" {
   min_size             = "${var.Counts["App"]}"
   max_size             = "${var.Counts["App"]}"
 
-  vpc_zone_identifier  = ["${aws_subnet.subnet-private-1.id}"]
+  vpc_zone_identifier  = ["${aws_subnet.subnets-private.*.id}"]
 
   lifecycle {
     create_before_destroy = true

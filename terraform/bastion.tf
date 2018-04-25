@@ -7,7 +7,7 @@ resource "aws_instance" "bastion" {
   instance_type          = "${var.Types["Bastion"]}"
   key_name               = "${var.SshKey}"
 
-  subnet_id              = "${aws_subnet.subnet-public-1.id}"
+  subnet_id              = "${aws_subnet.subnets-public.*.id[0]}"
 
   user_data              = "${file("scripts/bastion.sh")}"
   vpc_security_group_ids = ["${aws_security_group.bastion-sg.id}"]

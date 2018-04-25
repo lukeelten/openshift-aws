@@ -4,7 +4,7 @@ resource "aws_lb" "router-lb" {
   name = "router-lb"
   load_balancer_type = "network"
 
-  subnets = ["${aws_subnet.subnet-public-1.id}"]
+  subnets = ["${aws_subnet.subnets-public.*.id}"]
 
   tags {
     Name = "${var.ProjectName} - Router Load Balancer"

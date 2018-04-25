@@ -7,7 +7,7 @@ resource "aws_instance" "master-node" {
   user_data       = "${file("scripts/init.sh")}"
 
   vpc_security_group_ids = ["${aws_security_group.master-sg.id}", "${aws_security_group.etcd-sg.id}", "${aws_security_group.allow-internal.id}"]
-  subnet_id = "${aws_subnet.subnet-private-1.id}"
+  subnet_id = "${aws_subnet.subnets-private.*.id[(count.index % aws_subnet.subnets-private.count)]}"
 
   count = "${var.Counts["Master"]}"
 
