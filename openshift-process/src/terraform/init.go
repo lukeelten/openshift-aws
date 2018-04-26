@@ -12,11 +12,11 @@ type Config struct {
 	Vars *TerraformVars
 }
 
-func NewConfig(dir string, settings *configuration.CmdFlags) *Config {
+func NewConfig(dir string, pubKey string, settings *configuration.CmdFlags) *Config {
 	config := Config{}
 	config.inited = false
 	config.Dir = dir
-	config.Vars = DefaultConfig(settings.ProjectName, "tobias@Codecentric", "cc-openshift.de")
+	config.Vars = DefaultConfig(settings.ProjectName, pubKey, "cc-openshift.de")
 	config.Vars.ProjectId = settings.ProjectId
 
 	return &config

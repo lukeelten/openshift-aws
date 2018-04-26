@@ -1,0 +1,12 @@
+---
+- name: Copy SSH private key to bastion host
+  hosts: bastion
+  become: false
+  tasks:
+    - name: Copy private key file
+      copy:
+        src: ../generated/ssh.key
+        dest: ~/.ssh/openshift.key
+        owner: centos
+        group: centos
+        mode: 0400

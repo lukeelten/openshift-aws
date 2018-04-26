@@ -14,7 +14,7 @@ type AwsConfig struct {
 type TerraformVars struct {
 	ProjectName string
 	ProjectId string
-	SshKey string
+	PublicKey string
 	Zone string
 	Region string
 
@@ -43,13 +43,13 @@ func NewVars() *TerraformVars {
 	return &config
 }
 
-func DefaultConfig(ProjectName string, SshKey string, Zone string) *TerraformVars {
+func DefaultConfig(ProjectName string, publicKey string, Zone string) *TerraformVars {
 	config := NewVars()
 
 	config.ProjectName = ProjectName
 	config.ProjectId = util.EncodeProjectId(ProjectName)
-	config.SshKey = SshKey
 	config.Zone = Zone
+	config.PublicKey = publicKey
 	config.Region = "eu-central-1"
 
 	config.Counts.Master = 2

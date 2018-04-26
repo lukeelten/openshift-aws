@@ -14,10 +14,13 @@ import (
 const GEN_DIR = "generated/"
 const INVENTORY = GEN_DIR + "inventory"
 const SSH_CONFIG_FILE = GEN_DIR + "ssh.cfg"
+const SSH_KEY_FILE = "ssh.key"
+
+var settings configuration.CmdFlags
 
 func main() {
 
-	settings := configuration.ParseFlags()
+	settings = configuration.ParseFlags()
 
 	wd, err := os.Getwd()
 	if err != nil {
@@ -25,8 +28,14 @@ func main() {
 		return
 	}
 
+	key := util.NewKeyPair()
+	key.WritePrivateKey(GEN_DIR + SSH_KEY_FILE)
+	key.WritePublicPem(GEN_DIR + SSH_KEY_FILE + ".pub")
+	agent := util.NewSshAgentClient()
+	agent.AddKey(key)
+
 	terraformDir := wd + "/../terraform"
-	tf := terraform.NewConfig(terraformDir, &settings)
+	tf := terraform.NewConfig(terraformDir, key.GetPublicKey(), &settings)
 	if !tf.InitTerraform() {
 		panic("Cannot init terraform. Is the directory correct? " + terraformDir)
 	}
@@ -41,29 +50,18 @@ func main() {
 		util.ExitOnError("Error during terraform process", err)
 	}
 
-	// three minutes should be enough
-	time.Sleep(3 * time.Minute)
-
 	settings.AWSConfig.InitSession()
 
-	sshConfig := openshift.GenerateSshConfig()
-	if err := sshConfig.WriteConfig(SSH_CONFIG_FILE); err != nil {
-		util.ExitOnError("Cannot write SSH configuration file", err)
-	}
+	go generateSshConfig()
+	go generatePersistenceConfig()
+	go generateInventory()
 
-	config := openshift.GenerateConfig(SSH_CONFIG_FILE)
-	if err:= config.GenerateInventory(INVENTORY); err != nil {
-		util.ExitOnError("Cannot write OpenShift inventory file.", err)
-	}
 
-	persistenceConfig := openshift.NewPersistenceConfig(&settings)
-	if err := persistenceConfig.GeneratePersistenceConfigFiles(GEN_DIR); err != nil {
-		util.ExitOnError("Cannot write persistence storage configuration.", err)
-	}
+	// three minutes should be enough to init EC2 instances
+	fmt.Println("\nWaiting for instances to get ready ...")
+	time.Sleep(3 * time.Minute)
 
 	installerPath := wd + "/../openshift-ansible"
-
-	//ansible.CheckReadiness(INVENTORY)
 
 	playbook := ansible.OpenPlaybook(installerPath + "/playbooks/byo/config.yml")
 	if err := playbook.Run(INVENTORY); err != nil {
@@ -73,5 +71,26 @@ func main() {
 	playbook = ansible.OpenPlaybook(wd + "/playbooks/post-config.yml")
 	if err := playbook.Run(INVENTORY); err != nil {
 		util.ExitOnError("Failed to run post installation configuration", err)
+	}
+}
+
+func generateSshConfig() {
+	sshConfig := openshift.GenerateSshConfig()
+	if err := sshConfig.WriteConfig(SSH_CONFIG_FILE); err != nil {
+		util.ExitOnError("Cannot write SSH configuration file", err)
+	}
+}
+
+func generatePersistenceConfig() {
+	persistenceConfig := openshift.NewPersistenceConfig(&settings)
+	if err := persistenceConfig.GeneratePersistenceConfigFiles(GEN_DIR); err != nil {
+		util.ExitOnError("Cannot write persistence storage configuration.", err)
+	}
+}
+
+func generateInventory() {
+	config := openshift.GenerateConfig(SSH_CONFIG_FILE)
+	if err:= config.GenerateInventory(INVENTORY); err != nil {
+		util.ExitOnError("Cannot write OpenShift inventory file.", err)
 	}
 }
