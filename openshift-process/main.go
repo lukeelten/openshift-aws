@@ -9,6 +9,7 @@ import (
 	"time"
 	"fmt"
 	"ansible"
+	"aws"
 )
 
 const GEN_DIR = "generated/"
@@ -16,11 +17,18 @@ const INVENTORY = GEN_DIR + "inventory"
 const SSH_CONFIG_FILE = GEN_DIR + "ssh.cfg"
 const SSH_KEY_FILE = "ssh.key"
 
-var settings configuration.CmdFlags
+var config *configuration.InputVars
 
 func main() {
 
-	settings = configuration.ParseFlags()
+	cmdFlags := configuration.ParseFlags()
+	if len(cmdFlags.ConfigFile) > 0 {
+		config = configuration.LoadInputVars(cmdFlags.ConfigFile)
+	} else {
+		config = configuration.DefaultConfig()
+	}
+	config.MergeCmdFlags(cmdFlags)
+	config.Validate()
 
 	wd, err := os.Getwd()
 	if err != nil {
@@ -35,7 +43,7 @@ func main() {
 	agent.AddKey(key)
 
 	terraformDir := wd + "/../terraform"
-	tf := terraform.NewConfig(terraformDir, key.GetPublicKey(), &settings)
+	tf := terraform.NewConfig(terraformDir, key.GetPublicKey(), config)
 	if !tf.InitTerraform() {
 		panic("Cannot init terraform. Is the directory correct? " + terraformDir)
 	}
@@ -50,7 +58,7 @@ func main() {
 		util.ExitOnError("Error during terraform process", err)
 	}
 
-	settings.AWSConfig.InitSession()
+	aws.InitSession(config)
 
 	go generateSshConfig()
 	go generatePersistenceConfig()
@@ -82,7 +90,7 @@ func generateSshConfig() {
 }
 
 func generatePersistenceConfig() {
-	persistenceConfig := openshift.NewPersistenceConfig(&settings)
+	persistenceConfig := openshift.NewPersistenceConfig(config)
 	if err := persistenceConfig.GeneratePersistenceConfigFiles(GEN_DIR); err != nil {
 		util.ExitOnError("Cannot write persistence storage configuration.", err)
 	}

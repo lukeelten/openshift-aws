@@ -2,9 +2,7 @@ package configuration
 
 import (
 	"flag"
-	"aws"
 	"util"
-	"strings"
 )
 
 var Debug bool
@@ -15,7 +13,11 @@ type CmdFlags struct {
 	ProjectId string
 	ProjectName string
 
-	AWSConfig *aws.AwsConfig
+	AwsConfig struct {
+		Region string
+		KeyId string
+		SecretKey string
+	}
 
 	ConfigFile string
 }
@@ -53,7 +55,6 @@ func ParseFlags() CmdFlags {
 
 	settings := CmdFlags{}
 	loadValues(&settings)
-	validateSettings(&settings)
 	Debug = settings.Debug
 
 	return settings
@@ -65,21 +66,11 @@ func loadValues(settings *CmdFlags) {
 	settings.ProjectId = *cmdFlags.projectId
 	settings.ConfigFile = *cmdFlags.configFile
 
-	config := aws.NewConfig(*cmdFlags.region, *cmdFlags.aws_key, *cmdFlags.aws_secret)
-	settings.AWSConfig = config
-}
-
-func validateSettings(settings *CmdFlags) {
-	if len(settings.ProjectName) < 4 {
-		panic("Invalid project name. Please provide at least 4 characters")
-	}
-
-	if len(settings.ProjectId) < 3 {
+	if len(settings.ProjectName) >= NAME_MIN_LENGTH && len(settings.ProjectId) < NAME_MIN_LENGTH {
 		settings.ProjectId = util.EncodeProjectId(settings.ProjectName)
-	} else {
-		id := util.EncodeProjectId(settings.ProjectId)
-		if !strings.EqualFold(settings.ProjectId, id) {
-			panic("The given project id contains invalid chracters. Please use only alphanumerical characters.")
-		}
 	}
+
+	settings.AwsConfig.Region = *cmdFlags.region
+	settings.AwsConfig.KeyId = *cmdFlags.aws_key
+	settings.AwsConfig.SecretKey = *cmdFlags.aws_secret
 }

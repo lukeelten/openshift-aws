@@ -9,7 +9,11 @@ import (
 	"strings"
 )
 
+const NAME_MIN_LENGTH=4
+
 type InputVars struct {
+	Debug bool
+
 	ProjectName string
 	ProjectId string
 
@@ -49,18 +53,27 @@ func LoadInputVars(filename string) *InputVars {
 	vars := InputVars{}
 	json.Unmarshal(content, &vars)
 
+	if len(vars.ProjectName) >= NAME_MIN_LENGTH && len(vars.ProjectId) < NAME_MIN_LENGTH {
+		vars.ProjectId = util.EncodeProjectId(vars.ProjectName)
+	}
+
 	err = vars.Validate()
 	util.ExitOnError("Invalid configuration", err)
 
 	return &vars
 }
 
+func DefaultConfig() *InputVars {
+	config := InputVars{}
+	return &config
+}
+
 func (vars *InputVars) Validate() error {
-	if len(vars.ProjectName) < 4 {
+	if len(vars.ProjectName) < NAME_MIN_LENGTH {
 		return errors.New("invalid argument: Your Project name should contain at least 4 characters")
 	}
 
-	if len(vars.ProjectId) < 4 {
+	if len(vars.ProjectId) < NAME_MIN_LENGTH {
 		return errors.New("invalid argument: Your Project ID should contain at least 4 characters")
 	}
 
@@ -107,4 +120,25 @@ func (vars *InputVars) Validate() error {
 	}
 
 	return nil
+}
+
+func (vars *InputVars) MergeCmdFlags(flags CmdFlags) {
+	vars.Debug = vars.Debug || flags.Debug
+
+	if len(flags.ProjectName) > NAME_MIN_LENGTH {
+		vars.ProjectName = flags.ProjectName
+	}
+
+	if len(flags.ProjectId) > NAME_MIN_LENGTH {
+		vars.ProjectId = flags.ProjectId
+	}
+
+	if len(flags.AwsConfig.Region) > 0 {
+		vars.AwsConfig.Region = flags.AwsConfig.Region
+	}
+
+	if len(flags.AwsConfig.KeyId) > 0 && len(flags.AwsConfig.SecretKey) > 0 {
+		vars.AwsConfig.KeyId = flags.AwsConfig.KeyId
+		vars.AwsConfig.SecretKey = flags.AwsConfig.SecretKey
+	}
 }
