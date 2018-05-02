@@ -93,10 +93,11 @@ resource "aws_security_group" "master-sg" {
       security_groups  = ["${aws_security_group.internal-lb-sg.id}", "${aws_security_group.nodes-sg.id}"]
     },
     {
-      from_port        = 8443
-      to_port          = 8443
+      // Seems useless, but is for future use
+      from_port        = 8444
+      to_port          = 8444
       protocol         = "tcp"
-      self             = true
+      security_groups  = ["${aws_security_group.internal-lb-sg.id}", "${aws_security_group.nodes-sg.id}"]
     }
   ]
 
@@ -124,13 +125,7 @@ resource "aws_security_group" "etcd-sg" {
       from_port        = 2379
       to_port          = 2379
       protocol         = "tcp"
-      self             = true
-    },
-    {
-      from_port        = 2379
-      to_port          = 2379
-      protocol         = "tcp"
-      security_groups  = ["${aws_security_group.master-sg.id}"]
+      security_groups  = ["${aws_security_group.nodes-sg.id}"]
     },
     {
       from_port        = 2380
@@ -209,9 +204,27 @@ resource "aws_security_group" "nodes-sg" {
       self             = true
     },
     {
+      from_port        = 10256
+      to_port          = 10256
+      protocol         = "tcp"
+      self             = true
+    },
+    {
       from_port        = 4789
       to_port          = 4789
       protocol         = "udp"
+      self             = true
+    },
+    {
+      from_port        = 53
+      to_port          = 53
+      protocol         = "udp"
+      self             = true
+    },
+    {
+      from_port        = 53
+      to_port          = 53
+      protocol         = "tcp"
       self             = true
     },
     {
@@ -220,7 +233,7 @@ resource "aws_security_group" "nodes-sg" {
       to_port          = 2049
       protocol         = "tcp"
       security_groups  = ["${aws_security_group.storage-sg.id}"]
-    },
+    }
   ]
 
   egress {
