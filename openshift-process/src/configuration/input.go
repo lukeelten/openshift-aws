@@ -57,9 +57,6 @@ func LoadInputVars(filename string) *InputVars {
 		vars.ProjectId = util.EncodeProjectId(vars.ProjectName)
 	}
 
-	err = vars.Validate()
-	util.ExitOnError("Invalid configuration", err)
-
 	return &vars
 }
 
