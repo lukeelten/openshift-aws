@@ -1,14 +1,14 @@
-Host bastion
-    HostName {{ .BastionHostname }}
+Host {{ .BastionHostname }}
 	User centos
 	ControlMaster auto
 	ControlPersist 5m
 	ControlPath ~/.ssh/ansible-%r@%h:%p
-    StrictHostKeyChecking no
-    ProxyCommand none
-    CheckHostIP no
-    ForwardAgent yes
+	StrictHostKeyChecking no
+	ProxyCommand none
+	ForwardAgent yes
+	Hostname {{ .BastionHostname }}
 
 Host 10.10.*
-	ProxyCommand ssh -o StrictHostKeyChecking=no -W %h:%p centos@bastion
+	ProxyCommand ssh -o StrictHostKeyChecking=no -W %h:%p centos@{{ .BastionHostname }}
 	StrictHostKeyChecking no
+
