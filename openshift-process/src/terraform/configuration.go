@@ -57,7 +57,7 @@ func DefaultConfig(ProjectName string, publicKey string, Zone string) *Terraform
 	config.Counts.App = 3
 
 	config.Types.Bastion = "t2.nano"
-	config.Types.Master = "m4.large"
+	config.Types.Master = "m5.large"
 	config.Types.Infra = "t2.medium"
 	config.Types.App = "t2.medium"
 
@@ -78,7 +78,7 @@ func (config*TerraformVars) GenerateJson() []byte {
 }
 
 func (config*TerraformVars) WriteFile(filename string) {
-	json := config.GenerateJson()
+	data := config.GenerateJson()
 
 	f, err := os.Create(filename)
 	if err != nil {
@@ -87,7 +87,7 @@ func (config*TerraformVars) WriteFile(filename string) {
 
 	defer f.Close()
 
-	f.Write(json)
+	f.Write(data)
 	f.Sync()
 }
 
