@@ -33,8 +33,8 @@ resource "aws_security_group" "bastion-sg" {
 }
 
 resource "aws_security_group" "internal-lb-sg" {
-  description = "${var.ProjectName} Security Group for Bastion server"
-  name        = "${var.ProjectName}-bastion-sg"
+  description = "${var.ProjectName} Security Group for Internal Master Load Balancer"
+  name        = "${var.ProjectName}-internal-lb-sg"
   vpc_id      = "${aws_vpc.vpc.id}"
 
   ingress = [
