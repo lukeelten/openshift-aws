@@ -20,6 +20,9 @@ type CmdFlags struct {
 	}
 
 	ConfigFile string
+
+	SkipTerraform bool
+	SkipConfig    bool
 }
 
 
@@ -34,6 +37,9 @@ type flags struct {
 	aws_secret *string
 
 	configFile *string
+
+	skipTerraform *bool
+	existingConfig *bool
 }
 
 var cmdFlags flags
@@ -47,6 +53,9 @@ func initFlags() {
 	cmdFlags.projectName = flag.String("name", "", "Project Name to use in AWS tags and descriptions")
 	cmdFlags.projectId = flag.String("id", "", "Project id to tag all instances. If empty an appropriate ID will be generated from project name.")
 	cmdFlags.configFile = flag.String("config", "config.json", "Path / Name of configuration file to load")
+
+	cmdFlags.skipTerraform = flag.Bool("skip-terraform", false, "Skip Terraform: Use when infrastructure already exist")
+	cmdFlags.existingConfig = flag.Bool("skip-config", false, "Skip Config generation: Use when config already exist")
 }
 
 func ParseFlags() CmdFlags {
@@ -65,6 +74,8 @@ func loadValues(settings *CmdFlags) {
 	settings.ProjectName = *cmdFlags.projectName
 	settings.ProjectId = *cmdFlags.projectId
 	settings.ConfigFile = *cmdFlags.configFile
+	settings.SkipTerraform = *cmdFlags.skipTerraform
+	settings.SkipConfig = *cmdFlags.existingConfig
 
 	if len(settings.ProjectName) >= NAME_MIN_LENGTH && len(settings.ProjectId) < NAME_MIN_LENGTH {
 		settings.ProjectId = util.EncodeProjectId(settings.ProjectName)

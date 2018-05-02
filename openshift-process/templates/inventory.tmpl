@@ -24,8 +24,8 @@ openshift_release={{ .OriginRelease }}
 openshift_image_tag={{ .OriginRelease }}
 
 openshift_master_default_subdomain='{{ .RoutesDomain }}'
-#openshift_master_cluster_hostname='{{ .InternalMaster }}'
-openshift_master_cluster_hostname='{{ .ExternalMaster }}'
+openshift_master_cluster_hostname='{{ .InternalMaster }}'
+#openshift_master_cluster_hostname='{{ .ExternalMaster }}'
 openshift_master_cluster_public_hostname='{{ .ExternalMaster }}'
 
 openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
