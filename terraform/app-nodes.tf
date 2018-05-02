@@ -5,7 +5,7 @@ resource "aws_launch_configuration" "application-lc" {
   instance_type   = "${var.Types["App"]}"
   key_name        = "${aws_key_pair.public-key.key_name}"
   user_data       = "${file("scripts/init.sh")}"
-  security_groups = ["${aws_security_group.nodes-sg.id}", "${aws_security_group.allow-internal.id}"]
+  security_groups = ["${aws_security_group.nodes-sg.id}"]
 
   root_block_device {
     volume_type = "gp2"

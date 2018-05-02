@@ -5,7 +5,7 @@ resource "aws_instance" "infra-node" {
   instance_type   = "${var.Types["Infra"]}"
   key_name        = "${aws_key_pair.public-key.key_name}"
   user_data       = "${file("scripts/init.sh")}"
-  vpc_security_group_ids = ["${aws_security_group.infra-sg.id}", "${aws_security_group.allow-internal.id}"]
+  vpc_security_group_ids = ["${aws_security_group.nodes-sg.id}", "${aws_security_group.infra-sg.id}"]
 
   subnet_id = "${aws_subnet.subnets-private.*.id[(count.index % aws_subnet.subnets-private.count)]}"
 

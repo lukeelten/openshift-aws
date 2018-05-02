@@ -32,9 +32,9 @@ resource "aws_security_group" "bastion-sg" {
   }
 }
 
-resource "aws_security_group" "master-sg" {
-  description = "${var.ProjectName} Security Group for Master Nodes"
-  name        = "${var.ProjectName}-master-sg"
+resource "aws_security_group" "internal-lb-sg" {
+  description = "${var.ProjectName} Security Group for Bastion server"
+  name        = "${var.ProjectName}-bastion-sg"
   vpc_id      = "${aws_vpc.vpc.id}"
 
   ingress = [
@@ -42,25 +42,61 @@ resource "aws_security_group" "master-sg" {
       from_port        = 8443
       to_port          = 8443
       protocol         = "tcp"
-      cidr_blocks      = ["0.0.0.0/0"]
-    },
+      security_groups  = ["${aws_security_group.nodes-sg.id}"]
+    }
+  ]
+
+  egress {
+    from_port        = 8443
+    to_port          = 8443
+    protocol         = "tcp"
+    security_groups  = ["${aws_security_group.nodes-sg.id}"]
+  }
+
+  tags {
+    Name = "${var.ProjectName} - Internal Load Balancer SG"
+    Project = "${var.ProjectName}"
+    ProjectId = "${var.ProjectId}"
+  }
+}
+
+resource "aws_security_group" "master-sg" {
+  description = "${var.ProjectName} Security Group for Master Nodes"
+  name        = "${var.ProjectName}-master-sg"
+  vpc_id      = "${aws_vpc.vpc.id}"
+
+  ingress = [
     {
       from_port        = 8053
       to_port          = 8053
       protocol         = "tcp"
-      cidr_blocks      = ["${aws_vpc.vpc.cidr_block}"]
+      security_groups  = ["${aws_security_group.nodes-sg.id}"]
     },
     {
       from_port        = 8053
       to_port          = 8053
       protocol         = "udp"
-      cidr_blocks      = ["${aws_vpc.vpc.cidr_block}"]
+      security_groups  = ["${aws_security_group.nodes-sg.id}"]
     },
     {
-      from_port        = 22
-      to_port          = 22
+      from_port        = 8443
+      to_port          = 8443
       protocol         = "tcp"
-      cidr_blocks      = ["${aws_vpc.vpc.cidr_block}"]
+      // Should be restricted to master load balancer, but network lbs does not have security groups
+      cidr_blocks      = ["0.0.0.0/0"]
+    },
+    {
+      // Seems useless, but is for future use
+      from_port        = 8443
+      to_port          = 8443
+      protocol         = "tcp"
+      security_groups  = ["${aws_security_group.internal-lb-sg.id}", "${aws_security_group.nodes-sg.id}"]
+    },
+    {
+      from_port        = 8443
+      to_port          = 8443
+      protocol         = "tcp"
+      self             = true
     }
   ]
 
@@ -88,19 +124,19 @@ resource "aws_security_group" "etcd-sg" {
       from_port        = 2379
       to_port          = 2379
       protocol         = "tcp"
-      cidr_blocks      = ["${aws_vpc.vpc.cidr_block}"]
+      self             = true
     },
     {
-      from_port        = "-1"
-      to_port          = "-1"
-      protocol         = "icmp"
-      cidr_blocks      = ["${aws_vpc.vpc.cidr_block}"]
-    },
-    {
-      from_port        = 22
-      to_port          = 22
+      from_port        = 2379
+      to_port          = 2379
       protocol         = "tcp"
-      cidr_blocks      = ["${aws_vpc.vpc.cidr_block}"]
+      security_groups  = ["${aws_security_group.master-sg.id}"]
+    },
+    {
+      from_port        = 2380
+      to_port          = 2380
+      protocol         = "tcp"
+      self             = true
     }
   ]
 
@@ -128,26 +164,16 @@ resource "aws_security_group" "infra-sg" {
       from_port        = 80
       to_port          = 80
       protocol         = "tcp"
+      // Should be restricted to router lb
       cidr_blocks      = ["0.0.0.0/0"]
     },
     {
       from_port        = 443
       to_port          = 443
       protocol         = "tcp"
+      // Should be restricted to router lb
       cidr_blocks      = ["0.0.0.0/0"]
-    },
-    {
-      from_port        = 22
-      to_port          = 22
-      protocol         = "tcp"
-      cidr_blocks      = ["${aws_vpc.vpc.cidr_block}"]
-    },
-    {
-      from_port        = 2049
-      to_port          = 2049
-      protocol         = "tcp"
-      cidr_blocks      = ["${aws_vpc.vpc.cidr_block}"]
-    },
+    }
   ]
 
   egress {
@@ -174,19 +200,26 @@ resource "aws_security_group" "nodes-sg" {
       from_port        = 22
       to_port          = 22
       protocol         = "tcp"
-      cidr_blocks      = ["${aws_vpc.vpc.cidr_block}"]
+      security_groups  = ["${aws_security_group.bastion-sg.id}"]
     },
     {
       from_port        = 10250
       to_port          = 10250
       protocol         = "tcp"
-      cidr_blocks      = ["${aws_vpc.vpc.cidr_block}"]
+      self             = true
     },
     {
       from_port        = 4789
       to_port          = 4789
       protocol         = "udp"
-      cidr_blocks      = ["${aws_vpc.vpc.cidr_block}"]
+      self             = true
+    },
+    {
+      // EFS
+      from_port        = 2049
+      to_port          = 2049
+      protocol         = "tcp"
+      security_groups  = ["${aws_security_group.storage-sg.id}"]
     },
   ]
 
@@ -204,40 +237,7 @@ resource "aws_security_group" "nodes-sg" {
   }
 }
 
-resource "aws_security_group" "allow-all-sg" {
-  description = "${var.ProjectName} Allow everything"
-  name        = "${var.ProjectName}-allow-all-sg"
-  vpc_id      = "${aws_vpc.vpc.id}"
-
-  ingress = [
-    {
-      from_port        = 0
-      to_port          = 0
-      protocol         = "-1"
-      cidr_blocks      = ["0.0.0.0/0"]
-    },
-    {
-      from_port        = -1
-      to_port          = -1
-      protocol         = "icmp"
-      cidr_blocks      = ["0.0.0.0/0"]
-    }
-  ]
-
-  egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-  }
-
-  tags {
-    Name = "${var.ProjectName} - Allow All"
-    Project = "${var.ProjectName}"
-    ProjectId = "${var.ProjectId}"
-  }
-}
-
+/*
 resource "aws_security_group" "allow-internal" {
   description = "${var.ProjectName} Allow Internal Traffic"
   name        = "${var.ProjectName}-allow-internal-sg"
@@ -283,6 +283,7 @@ resource "aws_security_group" "allow-internal" {
     ProjectId = "${var.ProjectId}"
   }
 }
+*/
 
 resource "aws_security_group" "storage-sg" {
   description = "${var.ProjectName} Storage Security Group"
@@ -293,14 +294,14 @@ resource "aws_security_group" "storage-sg" {
     {
       from_port        = 2049
       to_port          = 2049
-      protocol         = "TCP"
-      cidr_blocks      = ["0.0.0.0/0"]
+      protocol         = "tcp"
+      cidr_blocks      = ["${aws_vpc.vpc.cidr_block}"]
     },
     {
       from_port        = 111
       to_port          = 111
-      protocol         = "TCP"
-      cidr_blocks      = ["0.0.0.0/0"]
+      protocol         = "tcp"
+      cidr_blocks      = ["${aws_vpc.vpc.cidr_block}"]
     },
   ]
 
@@ -308,7 +309,7 @@ resource "aws_security_group" "storage-sg" {
     from_port        = 0
     to_port          = 0
     protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
+    cidr_blocks      = ["${aws_vpc.vpc.cidr_block}"]
   }
 
   tags {
