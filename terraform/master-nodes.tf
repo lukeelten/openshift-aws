@@ -35,3 +35,11 @@ resource "aws_lb_target_group_attachment" "master-to-master-lb" {
 
   count = "${var.Counts["Master"]}"
 }
+
+resource "aws_lb_target_group_attachment" "master-to-internal-lb" {
+  target_group_arn = "${aws_lb_target_group.internal-lb-tg1.arn}"
+  target_id        = "${aws_instance.master-node.*.id[count.index]}"
+  port             = 8443
+
+  count = "${var.Counts["Master"]}"
+}

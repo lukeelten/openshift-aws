@@ -23,13 +23,16 @@ resource "aws_route53_record" "master-record" {
   }
 }
 
-resource "aws_route53_record" "bastion-record" {
+resource "aws_route53_record" "kibana-record" {
   zone_id = "${data.aws_route53_zone.existing-zone.zone_id}"
-  name    = "bastion.${data.aws_route53_zone.existing-zone.name}"
+  name    = "kibana.${data.aws_route53_zone.existing-zone.name}"
   type = "A"
 
-  ttl = 300
-  records = ["${aws_instance.bastion.public_ip}"]
+  alias {
+    name = "${aws_lb.master-lb.dns_name}"
+    evaluate_target_health = false
+    zone_id = "${aws_lb.master-lb.zone_id}"
+  }
 }
 
 resource "aws_route53_record" "internal-api-record" {
@@ -38,8 +41,8 @@ resource "aws_route53_record" "internal-api-record" {
   type = "A"
 
   alias {
-    name = "${aws_elb.internal-lb.dns_name}"
+    name = "${aws_lb.internal-lb.dns_name}"
     evaluate_target_health = false
-    zone_id = "${aws_elb.internal-lb.zone_id}"
+    zone_id = "${aws_lb.internal-lb.zone_id}"
   }
 }
