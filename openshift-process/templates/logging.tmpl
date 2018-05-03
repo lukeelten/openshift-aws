@@ -1,0 +1,26 @@
+[OSEv3:children]
+masters
+nodes
+
+[OSEv3:vars]
+ansible_user=centos
+ansible_become=true
+
+openshift_deployment_type=origin
+openshift_logging_image_version=v3.7.2
+
+# true creates second cluster for operations log
+openshift_logging_use_ops=false
+
+# internal master url
+openshift_logging_master_url=internal-api.cc-openshift.de:8443
+
+#public master url
+openshift_logging_master_public_url=master,cc-openshift.de:8443
+openshift_logging_kibana_hostname=kibana.cc-openshift.de:8443
+
+
+# namespace
+openshift_logging_namespace=logging
+
+openshift_logging_install_logging=true
