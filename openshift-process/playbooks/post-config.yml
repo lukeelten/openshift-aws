@@ -53,6 +53,7 @@
 
 - name: Add Persistence Storage configuration
   hosts: localhost
+  become: false
   tasks:
     - name: Login to Cluster
       command: oc login master.cc-openshift.de:8443 -u admin -p OriginAdmin --insecure-skip-tls-verify

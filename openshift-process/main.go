@@ -85,6 +85,9 @@ func main() {
 		util.ExitOnError("Failed to run OpenShift installer.", err)
 	}
 
+	fmt.Println("\nWaiting for OpenShift to become ready ...")
+	time.Sleep(2 * time.Minute)
+
 	playbook = ansible.OpenPlaybook(wd + "/playbooks/post-config.yml")
 	if err := playbook.Run(INVENTORY); err != nil {
 		util.ExitOnError("Failed to run post installation configuration", err)

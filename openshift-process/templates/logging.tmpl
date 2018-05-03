@@ -5,9 +5,17 @@ nodes
 [OSEv3:vars]
 ansible_user=centos
 ansible_become=true
+ansible_ssh_common_args='-F {{ .SshConfig }} -o StrictHostKeyChecking=no -o ControlMaster=auto -o ControlPersist=30m'
 
 openshift_deployment_type=origin
-openshift_logging_image_version=v3.7.2
+
+
+{{ if .Debug }}
+openshift_disable_check=docker_storage,memory_availability,package_version
+{{ end }}
+
+
+#openshift_logging_image_version=v3.7.2
 
 # true creates second cluster for operations log
 openshift_logging_use_ops=false
@@ -21,6 +29,12 @@ openshift_logging_kibana_hostname=kibana.cc-openshift.de:8443
 
 
 # namespace
-openshift_logging_namespace=logging
+#openshift_logging_namespace=logging
+#openshift_logging_install_logging=true
 
-openshift_logging_install_logging=true
+[masters]
+{{ .FirstMasterIp }}
+
+
+[nodes]
+{{ .FirstMasterIp }}

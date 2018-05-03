@@ -5,7 +5,7 @@ import (
 	"util"
 )
 
-var Debug bool
+var Verbose bool
 
 type CmdFlags struct {
 	Debug bool
@@ -23,6 +23,7 @@ type CmdFlags struct {
 
 	SkipTerraform bool
 	SkipConfig    bool
+	Verbose       bool
 }
 
 
@@ -40,12 +41,13 @@ type flags struct {
 
 	skipTerraform *bool
 	existingConfig *bool
+	verbose *bool
 }
 
 var cmdFlags flags
 
 func initFlags() {
-	cmdFlags.debug = flag.Bool("debug", true, "Debug mode enables extended output")
+	cmdFlags.debug = flag.Bool("debug", true, "Debug mode disables some checks")
 	cmdFlags.region = flag.String("region", "eu-central-1", "AWS region to create the infrastructure in")
 	cmdFlags.aws_key = flag.String("aws-key", "", "AWS access key id. If empty the credentials used for AWS CLI will be loaded")
 	cmdFlags.aws_secret = flag.String("aws-secret", "", "AWS secret key. If empty the credentials used for AWS CLI will be loaded")
@@ -56,6 +58,7 @@ func initFlags() {
 
 	cmdFlags.skipTerraform = flag.Bool("skip-terraform", false, "Skip Terraform: Use when infrastructure already exist")
 	cmdFlags.existingConfig = flag.Bool("skip-config", false, "Skip Config generation: Use when config already exist")
+	cmdFlags.verbose = flag.Bool("verbose", false, "Verbose mode enables extended ansible output")
 }
 
 func ParseFlags() CmdFlags {
@@ -64,7 +67,7 @@ func ParseFlags() CmdFlags {
 
 	settings := CmdFlags{}
 	loadValues(&settings)
-	Debug = settings.Debug
+	Verbose = settings.Verbose
 
 	return settings
 }
@@ -76,6 +79,7 @@ func loadValues(settings *CmdFlags) {
 	settings.ConfigFile = *cmdFlags.configFile
 	settings.SkipTerraform = *cmdFlags.skipTerraform
 	settings.SkipConfig = *cmdFlags.existingConfig
+	settings.Verbose = *cmdFlags.verbose
 
 	if len(settings.ProjectName) >= NAME_MIN_LENGTH && len(settings.ProjectId) < NAME_MIN_LENGTH {
 		settings.ProjectId = util.EncodeProjectId(settings.ProjectName)

@@ -16,6 +16,8 @@ openshift_router_selector='region=infra'
 openshift_registry_selector='region=infra'
 openshift_master_cluster_method=native
 
+openshift_master_dynamic_provisioning_enabled=True
+
 {{ if .Debug }}
 openshift_disable_check=docker_storage,memory_availability,package_version
 {{ end }}
