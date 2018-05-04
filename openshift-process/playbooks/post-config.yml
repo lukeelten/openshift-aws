@@ -76,5 +76,5 @@
     - name: Create Persistence configuration
       command: oc apply -f ../generated/efs.yml
 
-    - name: Set default storage class
-      command: oc patch storageclass aws-efs -p '{"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+#    - name: Set default storage class
+ #     command: oc patch storageclass aws-efs -p '{"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
