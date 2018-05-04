@@ -60,3 +60,8 @@ variable "EncryptEfs" {
   type = "string"
   description = "Encrypt EFS using Amazon KMS for key management."
 }
+
+variable "ClusterId" {
+  type = "string"
+  default = "1"
+}

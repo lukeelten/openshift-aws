@@ -4,7 +4,7 @@ resource "aws_launch_configuration" "application-lc" {
   image_id        = "${data.aws_ami.centos.id}"
   instance_type   = "${var.Types["App"]}"
   key_name        = "${aws_key_pair.public-key.key_name}"
-  user_data       = "${file("scripts/init.sh")}"
+  user_data       = "${file("assets/init.sh")}"
   security_groups = ["${aws_security_group.nodes-sg.id}"]
 
   root_block_device {

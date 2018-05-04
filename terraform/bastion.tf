@@ -9,7 +9,7 @@ resource "aws_instance" "bastion" {
 
   subnet_id              = "${aws_subnet.subnets-public.*.id[0]}"
 
-  user_data              = "${file("scripts/bastion.sh")}"
+  user_data              = "${file("assets/bastion.sh")}"
   vpc_security_group_ids = ["${aws_security_group.bastion-sg.id}"]
 
   root_block_device {
