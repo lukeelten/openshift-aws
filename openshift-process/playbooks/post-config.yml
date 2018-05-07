@@ -80,10 +80,18 @@
       command: oc project openshift-ansible-service-broker
 
     - name: Remove defect etcd volume claim
-      command: oc delete pvc ectd
+      command: oc delete pvc etcd
 
     - name: Add proper etcd volume claim
       command: oc apply -f etcd-pvc.yml
+
+    - name: Cancel failing deployment asb
+      command: oc rollout cancel dc/asb -n openshift-ansible-service-broker
+      ignore_errors: yes
+
+    - name: Cancel failing deployment asb-etcd
+      command: oc rollout cancel dc/asb-etcd -n openshift-ansible-service-broker
+      ignore_errors: yes
 
     - name: Re-deploy asb-etcd
       command: oc rollout latest dc/asb-etcd -n openshift-ansible-service-broker
