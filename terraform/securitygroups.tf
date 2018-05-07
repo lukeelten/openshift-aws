@@ -1,6 +1,6 @@
 resource "aws_security_group" "bastion-sg" {
   description = "${var.ProjectName} Security Group for Bastion server"
-  name        = "${var.ProjectName}-bastion-sg"
+  name        = "${var.ProjectId}-bastion-sg"
   vpc_id      = "${aws_vpc.vpc.id}"
 
   ingress = [
@@ -34,7 +34,7 @@ resource "aws_security_group" "bastion-sg" {
 
 resource "aws_security_group" "internal-lb-sg" {
   description = "${var.ProjectName} Security Group for Internal Master Load Balancer"
-  name        = "${var.ProjectName}-internal-lb-sg"
+  name        = "${var.ProjectId}-internal-lb-sg"
   vpc_id      = "${aws_vpc.vpc.id}"
 
   ingress = [
@@ -62,7 +62,7 @@ resource "aws_security_group" "internal-lb-sg" {
 
 resource "aws_security_group" "master-sg" {
   description = "${var.ProjectName} Security Group for Master Nodes"
-  name        = "${var.ProjectName}-master-sg"
+  name        = "${var.ProjectId}-master-sg"
   vpc_id      = "${aws_vpc.vpc.id}"
 
   ingress = [
@@ -117,7 +117,7 @@ resource "aws_security_group" "master-sg" {
 
 resource "aws_security_group" "etcd-sg" {
   description = "${var.ProjectName} Security Group for ETCD"
-  name        = "${var.ProjectName}-etcd-sg"
+  name        = "${var.ProjectId}-etcd-sg"
   vpc_id      = "${aws_vpc.vpc.id}"
 
   ingress = [
@@ -151,7 +151,7 @@ resource "aws_security_group" "etcd-sg" {
 
 resource "aws_security_group" "infra-sg" {
   description = "${var.ProjectName} Security Group for Infrastructure Nodes"
-  name        = "${var.ProjectName}-infra-sg"
+  name        = "${var.ProjectId}-infra-sg"
   vpc_id      = "${aws_vpc.vpc.id}"
 
   ingress = [
@@ -187,7 +187,7 @@ resource "aws_security_group" "infra-sg" {
 
 resource "aws_security_group" "nodes-sg" {
   description = "${var.ProjectName} Security Group for Nodes"
-  name        = "${var.ProjectName}-nodes-sg"
+  name        = "${var.ProjectId}-nodes-sg"
   vpc_id      = "${aws_vpc.vpc.id}"
 
   ingress = [
@@ -300,7 +300,7 @@ resource "aws_security_group" "allow-internal" {
 
 resource "aws_security_group" "storage-sg" {
   description = "${var.ProjectName} Storage Security Group"
-  name        = "${var.ProjectName}-storage-sg"
+  name        = "${var.ProjectId}-storage-sg"
   vpc_id      = "${aws_vpc.vpc.id}"
 
   ingress = [

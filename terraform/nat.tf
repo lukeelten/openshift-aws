@@ -5,7 +5,7 @@ resource "aws_nat_gateway" "private-nat" {
   subnet_id     = "${aws_subnet.subnets-public.*.id[1]}"
 
   tags {
-    Name = "Private Subnets Internet Connection"
+    Name = "${var.ProjectName} - Private Subnet "
     Project = "${var.ProjectName}"
     ProjectId = "${var.ProjectId}"
   }
@@ -16,7 +16,7 @@ resource "aws_eip" "nat-eip" {
   depends_on = ["aws_internet_gateway.igw"]
 
   tags {
-    Name ="NAT Internet IP"
+    Name ="${var.ProjectName} - NAT Internet IP"
     Project = "${var.ProjectName}"
     ProjectId = "${var.ProjectId}"
   }

@@ -15,6 +15,7 @@ resource "aws_instance" "infra-node" {
     volume_size = 25
   }
 
+  /*
   ebs_block_device {
     volume_type = "gp2"
     volume_size = 100
@@ -24,7 +25,9 @@ resource "aws_instance" "infra-node" {
   ebs_block_device {
     volume_type = "gp2"
     volume_size = 100
-    device_name = "/dev/xvdf"  }
+    device_name = "/dev/xvdf"
+   }
+   */
 
   lifecycle {
     create_before_destroy = true

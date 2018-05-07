@@ -1,7 +1,7 @@
 
 resource "aws_lb" "internal-lb" {
   depends_on      = ["aws_internet_gateway.igw"]
-  name = "api-internal-lb"
+  name = "${var.ProjectId}-api-internal-lb"
   load_balancer_type = "network"
 
   subnets = ["${aws_subnet.subnets-public.*.id}"]
@@ -17,7 +17,7 @@ resource "aws_lb" "internal-lb" {
 }
 
 resource "aws_lb_target_group" "internal-lb-tg1" {
-  name     = "internal-lb-tg1"
+  name     = "${var.ProjectId}-internal-lb-tg1"
   port     = 8443
   protocol = "TCP"
   vpc_id   = "${aws_vpc.vpc.id}"

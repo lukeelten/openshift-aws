@@ -1,7 +1,7 @@
 
 resource "aws_lb" "router-lb" {
   depends_on      = ["aws_internet_gateway.igw"]
-  name = "router-lb"
+  name = "${var.ProjectId}-router-lb"
   load_balancer_type = "network"
 
   subnets = ["${aws_subnet.subnets-public.*.id}"]
@@ -37,7 +37,7 @@ resource "aws_lb_listener" "router-lb-listener2" {
 }
 
 resource "aws_lb_target_group" "router-lb-tg1" {
-  name     = "router-lb-tg1"
+  name     = "${var.ProjectId}-router-lb-tg1"
   port     = 80
   protocol = "TCP"
   vpc_id   = "${aws_vpc.vpc.id}"
@@ -60,7 +60,7 @@ resource "aws_lb_target_group" "router-lb-tg1" {
 }
 
 resource "aws_lb_target_group" "router-lb-tg2" {
-  name     = "router-lb-tg2"
+  name     = "${var.ProjectId}-router-lb-tg2"
   port     = 443
   protocol = "TCP"
   vpc_id   = "${aws_vpc.vpc.id}"

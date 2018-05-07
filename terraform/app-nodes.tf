@@ -1,6 +1,6 @@
 resource "aws_launch_configuration" "application-lc" {
   depends_on      = ["aws_internet_gateway.igw"]
-  name            = "${var.ProjectName}-application-lc"
+  name            = "${var.ProjectId}-application-lc"
   image_id        = "${data.aws_ami.centos.id}"
   instance_type   = "${var.Types["App"]}"
   key_name        = "${aws_key_pair.public-key.key_name}"
@@ -19,7 +19,7 @@ resource "aws_launch_configuration" "application-lc" {
 
 resource "aws_autoscaling_group" "application-scaling" {
   depends_on = ["aws_nat_gateway.private-nat", "aws_route.private_route"]
-  name                 = "${var.ProjectName}-application-scaling-group"
+  name                 = "${var.ProjectId}-application-scaling-group"
   launch_configuration = "${aws_launch_configuration.application-lc.name}"
 
   min_size             = "${var.Counts["App"]}"
