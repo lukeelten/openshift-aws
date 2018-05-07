@@ -58,7 +58,7 @@
     - name: Login to Cluster
       command: oc login master.cc-openshift.de:8443 -u admin -p OriginAdmin --insecure-skip-tls-verify
 
-    - name: Change Project
+    - name: Change Project to openshift-infra
       command: oc project openshift-infra
 
     - name: Create EFS roles
@@ -76,5 +76,20 @@
     - name: Create Persistence configuration
       command: oc apply -f ../generated/efs.yml
 
+    - name: Change project to openshift-ansible-service-broker
+      command: oc project openshift-ansible-service-broker
+
+    - name: Remove defect etcd volume claim
+      command: oc delete pvc ectd
+
+    - name: Add proper etcd volume claim
+      command: oc apply -f etcd-pvc.yml
+
+    - name: Re-deploy asb-etcd
+      command: oc rollout latest dc/asb-etcd -n openshift-ansible-service-broker
+
+    - name: Re-deploy asb
+      command: oc rollout latest dc/asb -n openshift-ansible-service-broker
+
 #    - name: Set default storage class
- #     command: oc patch storageclass aws-efs -p '{"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+#      command: oc patch storageclass aws-efs -p '{"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
