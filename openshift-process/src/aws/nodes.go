@@ -3,6 +3,7 @@ package aws
 import (
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/aws"
+	"configuration"
 )
 
 type NodeInfo struct {
@@ -13,20 +14,20 @@ type NodeInfo struct {
 	Zone string
 }
 
-func MasterNodes() []NodeInfo {
-	return loadNodesOfType("master")
+func MasterNodes(config *configuration.InputVars) []NodeInfo {
+	return loadNodesOfType("master", config.ProjectId)
 }
 
-func InfraNodes() []NodeInfo {
-	return loadNodesOfType("infra")
+func InfraNodes(config *configuration.InputVars) []NodeInfo {
+	return loadNodesOfType("infra", config.ProjectId)
 }
 
-func AppNodes() []NodeInfo {
-	return loadNodesOfType("app")
+func AppNodes(config *configuration.InputVars) []NodeInfo {
+	return loadNodesOfType("app", config.ProjectId)
 }
 
-func BastionNode() NodeInfo {
-	bastion := loadNodesOfType("bastion")
+func BastionNode(config *configuration.InputVars) NodeInfo {
+	bastion := loadNodesOfType("bastion", config.ProjectId)
 	if len(bastion) < 1 {
 		panic("No bastion host found")
 	}
@@ -34,12 +35,16 @@ func BastionNode() NodeInfo {
 	return bastion[0]
 }
 
-func loadNodesOfType(type_ string) []NodeInfo {
+func loadNodesOfType(type_ string, projectid string) []NodeInfo {
 	params := &ec2.DescribeInstancesInput{
 		Filters: []*ec2.Filter{
 			{
 				Name: aws.String("tag:Type"),
 				Values: []*string{aws.String(type_)},
+			},
+			{
+				Name: aws.String("tag:ProjectId"),
+				Values: []*string{aws.String(projectid)},
 			},
 			{
 				Name: aws.String("instance-state-name"),

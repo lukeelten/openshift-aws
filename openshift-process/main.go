@@ -65,9 +65,9 @@ func main() {
 	var wg sync.WaitGroup
 	if !cmdFlags.SkipConfig {
 		wg.Add(3)
-		go generateSshConfig(&wg)
+		go generateSshConfig(config, &wg)
 		go generatePersistenceConfig(config, &wg)
-		go generateInventory(&wg)
+		go generateInventory(config, &wg)
 	}
 
 	if !cmdFlags.SkipTerraform {
@@ -94,10 +94,10 @@ func main() {
 	}
 }
 
-func generateSshConfig(waitGroup *sync.WaitGroup) {
+func generateSshConfig(config *configuration.InputVars, waitGroup *sync.WaitGroup) {
 	defer waitGroup.Done()
 
-	sshConfig := openshift.GenerateSshConfig()
+	sshConfig := openshift.GenerateSshConfig(config)
 	if err := sshConfig.WriteConfig(SSH_CONFIG_FILE); err != nil {
 		util.ExitOnError("Cannot write SSH configuration file", err)
 	}
@@ -112,10 +112,10 @@ func generatePersistenceConfig(config *configuration.InputVars, waitGroup *sync.
 	}
 }
 
-func generateInventory(waitGroup *sync.WaitGroup) {
+func generateInventory(config *configuration.InputVars, waitGroup *sync.WaitGroup) {
 	defer waitGroup.Done()
 
-	openshiftConfig := openshift.GenerateConfig(SSH_CONFIG_FILE)
+	openshiftConfig := openshift.GenerateConfig(SSH_CONFIG_FILE, config)
 	if err:= openshiftConfig.GenerateInventory(INVENTORY); err != nil {
 		util.ExitOnError("Cannot write OpenShift inventory file.", err)
 	}

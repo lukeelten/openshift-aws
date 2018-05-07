@@ -4,16 +4,17 @@ import (
 	"aws"
 	"os"
 	"text/template"
+	"configuration"
 )
 
 type SshConfig struct {
 	BastionHostname string
 }
 
-func GenerateSshConfig() *SshConfig {
-	bastion := aws.BastionNode()
-	config := SshConfig{bastion.ExternalDns}
-	return &config
+func GenerateSshConfig(config *configuration.InputVars) *SshConfig {
+	bastion := aws.BastionNode(config)
+	sshConfig := SshConfig{bastion.ExternalDns}
+	return &sshConfig
 }
 
 func (config *SshConfig) WriteConfig(filename string) error {

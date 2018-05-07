@@ -1,13 +1,16 @@
 package openshift
 
-import "aws"
+import (
+	"aws"
+	"configuration"
+)
 
-func GenerateConfig(sshConfig string) *InventoryConfig {
-	masters := aws.MasterNodes()
-	infra := aws.InfraNodes()
-	apps := aws.AppNodes()
+func GenerateConfig(sshConfig string, config *configuration.InputVars) *InventoryConfig {
+	masters := aws.MasterNodes(config)
+	infra := aws.InfraNodes(config)
+	apps := aws.AppNodes(config)
 
-	config := InventoryConfig{
+	inventory := InventoryConfig{
 		Debug: true,
 		OriginRelease: "v3.7.2",
 		RoutesDomain: "apps.cc-openshift.de",
@@ -21,18 +24,18 @@ func GenerateConfig(sshConfig string) *InventoryConfig {
 	}
 
 	for i, node := range masters {
-		config.Masters[i] = convertNodeObject(node, false, false)
+		inventory.Masters[i] = convertNodeObject(node, false, false)
 	}
 
 	for i, node := range infra {
-		config.Infras[i] = convertNodeObject(node, true, true)
+		inventory.Infras[i] = convertNodeObject(node, true, true)
 	}
 
 	for i, node := range apps {
-		config.Apps[i] = convertNodeObject(node, false, true)
+		inventory.Apps[i] = convertNodeObject(node, false, true)
 	}
 
-	return &config
+	return &inventory
 }
 
 func convertNodeObject (nodeInfo aws.NodeInfo, infra bool, schedulable bool) Node {

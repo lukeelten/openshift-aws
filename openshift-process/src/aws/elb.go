@@ -3,6 +3,7 @@ package aws
 import (
 	"github.com/aws/aws-sdk-go/service/elbv2"
 	"github.com/aws/aws-sdk-go/aws"
+	"configuration"
 )
 
 type LoadBalancer struct {
@@ -10,22 +11,24 @@ type LoadBalancer struct {
 }
 
 
-func GetMasterLB() LoadBalancer {
-	lb := getLbByName("master-lb")
+func GetMasterLB(config *configuration.InputVars) LoadBalancer {
+	lb := getLbByName("master-lb", config)
 	return LoadBalancer{*lb.DNSName}
 }
 
-func GetInfraLB() LoadBalancer {
-	lb := getLbByName("router-lb")
+func GetInfraLB(config *configuration.InputVars) LoadBalancer {
+	lb := getLbByName("router-lb", config)
 	return LoadBalancer{*lb.DNSName}
 }
 
-func GetInternalLB() LoadBalancer {
-	lb := getLbByName("api-internal-lb")
+func GetInternalLB(config *configuration.InputVars) LoadBalancer {
+	lb := getLbByName("api-internal-lb", config)
 	return LoadBalancer{*lb.DNSName}
 }
 
-func getLbByName(name string) *elbv2.LoadBalancer {
+func getLbByName(name string, config *configuration.InputVars) *elbv2.LoadBalancer {
+	name = config.ProjectId + "-" + name
+
 	filter := &elbv2.DescribeLoadBalancersInput{
 		Names: []*string{aws.String(name)},
 	}
