@@ -93,11 +93,19 @@
       command: oc rollout cancel dc/asb-etcd -n openshift-ansible-service-broker
       ignore_errors: yes
 
+    - name: Wait for deployments to cancel (20s)
+      wait_for: timeout=20
+      delegate_to: localhost
+
     - name: Re-deploy asb-etcd
       command: oc rollout latest dc/asb-etcd -n openshift-ansible-service-broker
+      retries: 3
+      delay: 5
 
     - name: Re-deploy asb
       command: oc rollout latest dc/asb -n openshift-ansible-service-broker
+      retries: 3
+      delay: 5
 
 #    - name: Set default storage class
 #      command: oc patch storageclass aws-efs -p '{"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'

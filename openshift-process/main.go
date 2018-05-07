@@ -80,11 +80,24 @@ func main() {
 
 	installerPath := wd + "/../openshift-ansible"
 
+	/*
 	playbook := ansible.OpenPlaybook(installerPath + "/playbooks/byo/config.yml")
 	if err := playbook.Run(INVENTORY); err != nil {
 		util.ExitOnError("Failed to run OpenShift installer.", err)
 	}
+	*/
 
+	playbook := ansible.OpenPlaybook(installerPath + "/playbooks/prerequisites.yml")
+	if err := playbook.Run(INVENTORY); err != nil {
+		util.ExitOnError("Failed to run OpenShift prerequisites.", err)
+	}
+
+	playbook = ansible.OpenPlaybook(installerPath + "/playbooks/deploy_cluster.yml")
+	if err := playbook.Run(INVENTORY); err != nil {
+		util.ExitOnError("Failed to run OpenShift installer.", err)
+	}
+
+	/*
 	fmt.Println("\nWaiting for OpenShift to become ready ...")
 	time.Sleep(2 * time.Minute)
 
@@ -92,6 +105,7 @@ func main() {
 	if err := playbook.Run(INVENTORY); err != nil {
 		util.ExitOnError("Failed to run post installation configuration", err)
 	}
+	*/
 }
 
 func generateSshConfig(config *configuration.InputVars, waitGroup *sync.WaitGroup) {
