@@ -7,4 +7,4 @@
       command: oc login master.cc-openshift.de:8443 -u admin -p OriginAdmin --insecure-skip-tls-verify
 
     - name: Create EFS storage class
-      command: oc apply -f static/ebs.yml
+      command: oc apply -f ../generated/ebs.yml

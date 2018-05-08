@@ -80,13 +80,6 @@ func main() {
 
 	installerPath := wd + "/../openshift-ansible"
 
-	/*
-	playbook := ansible.OpenPlaybook(installerPath + "/playbooks/byo/config.yml")
-	if err := playbook.Run(INVENTORY); err != nil {
-		util.ExitOnError("Failed to run OpenShift installer.", err)
-	}
-	*/
-
 	playbook := ansible.OpenPlaybook(installerPath + "/playbooks/prerequisites.yml")
 	if err := playbook.Run(INVENTORY); err != nil {
 		util.ExitOnError("Failed to run OpenShift prerequisites.", err)
@@ -97,7 +90,6 @@ func main() {
 		util.ExitOnError("Failed to run OpenShift installer.", err)
 	}
 
-	/*
 	fmt.Println("\nWaiting for OpenShift to become ready ...")
 	time.Sleep(2 * time.Minute)
 
@@ -105,7 +97,32 @@ func main() {
 	if err := playbook.Run(INVENTORY); err != nil {
 		util.ExitOnError("Failed to run post installation configuration", err)
 	}
-	*/
+
+	if config.Storage.EnableEfs {
+		playbook = ansible.OpenPlaybook(wd + "/playbooks/efs.yml")
+		if err := playbook.Run(INVENTORY); err != nil {
+			util.ExitOnError("Failed to run EFS configuration", err)
+		}
+	}
+
+	if config.Storage.EnableEbs {
+		playbook = ansible.OpenPlaybook(wd + "/playbooks/ebs.yml")
+		if err := playbook.Run(INVENTORY); err != nil {
+			util.ExitOnError("Failed to run EBS configuration", err)
+		}
+	} else {
+		playbook = ansible.OpenPlaybook(wd + "/playbooks/fix-service-broker.yml")
+		if err := playbook.Run(INVENTORY); err != nil {
+			util.ExitOnError("Failed to fix ansible service broker deployment", err)
+		}
+	}
+
+	/**
+	@todo generate ebs.yml
+	@todo logging inventory generation needs update for new vars
+	@todo provide useful default values for storage
+	@todo set default storage provider based on config
+	 */
 }
 
 func generateSshConfig(config *configuration.InputVars, waitGroup *sync.WaitGroup) {

@@ -95,6 +95,16 @@ func (vars *InputVars) Validate() error {
 		return errors.New("invalid argument: Application Node Count cannot be 0")
 	}
 
+	if !vars.Storage.EnableEfs && !vars.Storage.EnableEbs {
+		return errors.New("invalid storage config: There should be at least one enabled persistence provider")
+	}
+
+	if vars.Storage.Default != "ebs" && vars.Storage.Default != "efs" {
+		return errors.New("invalid argument: Invalid default storage provider")
+	}
+
+
+
 	// @todo validate instance types more precise
 	r := regexp.MustCompile("[tmcpxridgfh][0-9]\\.[\\w]+")
 	if !r.MatchString(vars.NodeTypes.Bastion) {
