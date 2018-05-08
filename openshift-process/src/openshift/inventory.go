@@ -40,6 +40,9 @@ func printNode(node Node) string {
 	s += " openshift_ip=" + node.InternalIp
 	s += " openshift_hostname=" + node.InternalHostname
 
+	s += " public_hostname=master.cc-openshift.de"
+	s += " public_ip=" + node.InternalIp
+
 	return s
 }
 

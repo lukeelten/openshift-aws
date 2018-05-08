@@ -13,7 +13,7 @@ func GenerateConfig(sshConfig string, config *configuration.InputVars) *Inventor
 	inventory := InventoryConfig{
 		Debug: true,
 		// OriginRelease: "v3.7.2",
-		OriginRelease: "v3.9.0",
+		OriginRelease: "v3.9",
 		RoutesDomain: "apps.cc-openshift.de",
 		InternalMaster: "internal-api.cc-openshift.de",
 		ExternalMaster: "master.cc-openshift.de",
@@ -25,7 +25,7 @@ func GenerateConfig(sshConfig string, config *configuration.InputVars) *Inventor
 	}
 
 	for i, node := range masters {
-		inventory.Masters[i] = convertNodeObject(node, false, false)
+		inventory.Masters[i] = convertNodeObject(node, false, true)
 	}
 
 	for i, node := range infra {

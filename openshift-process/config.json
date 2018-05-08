@@ -2,9 +2,19 @@
 
   "ProjectName": "",
   "ProjectId": "",
-  "Domain": "",
-  "EnableEfs": true,
-  "EncryptEfs": true,
+  "Domain": "cc-openshift.de",
+
+  "Storage": {
+    "EnableEfs": true,
+    "EncryptEfs": true,
+
+    "EnableEbs": true,
+    "EncryptEbs": true,
+
+    "Default": "ebs"
+  },
+
+  "AggregatedLogging": true,
 
   "NodeCounts": {
     "Master": 2,
@@ -14,9 +24,9 @@
 
   "NodeTypes": {
     "Bastion": "t2.nano",
-    "Master": "m4.large",
-    "Infra": "t2.medium",
-    "App": "t2.medium"
+    "Master": "m5.xlarge",
+    "Infra": "m5.large",
+    "App": "m5.large"
   },
 
   "AwsConfig": {

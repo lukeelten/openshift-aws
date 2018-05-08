@@ -30,6 +30,9 @@ openshift_master_cluster_public_hostname='{{ .ExternalMaster }}'
 openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
 openshift_master_htpasswd_users={'admin': '$apr1$zgSjCrLt$1KSuj66CggeWSv.D.BXOA1', 'user': '$apr1$.gw8w9i1$ln9bfTRiD6OwuNTG5LvW50'}
 
+openshift_cloudprovider_kind=aws
+openshift_clusterid={{ .ClusterId }}
+
 
 [masters]
 {{ range .Masters }}

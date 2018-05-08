@@ -22,7 +22,6 @@ func NewPersistenceConfig(settings *configuration.InputVars) *PersistenceConfig 
 
 func (config *PersistenceConfig) GeneratePersistenceConfigFiles(dir string) error {
 	deploymemtFilename := dir + "efs.yml"
-	rolesFilename := dir + "efs-roles.yml"
 
 	f, err := os.Create(deploymemtFilename)
 	if err != nil {
@@ -35,21 +34,6 @@ func (config *PersistenceConfig) GeneratePersistenceConfigFiles(dir string) erro
 	if err != nil {
 		return err
 	}
-	err = t.Execute(f, config)
-	if err != nil {
-		return err
-	}
 
-	f2, err := os.Create(rolesFilename)
-	if err != nil {
-		return err
-	}
-	defer f2.Close()
-
-	t2, err := template.New("efs-roles.tmpl").ParseFiles("templates/efs-roles.tmpl")
-	if err != nil {
-		return err
-	}
-
-	return t2.Execute(f2, config)
+	return t.Execute(f, config)
 }

@@ -8,6 +8,9 @@ import (
 type LoggingData struct {
 	Debug bool
 	FirstMasterIp string
+	ClusterId string
+	SshConfig string
+	OriginRelease string
 }
 
 func (config *InventoryConfig) GenerateLoggingInventory(filename string) error {

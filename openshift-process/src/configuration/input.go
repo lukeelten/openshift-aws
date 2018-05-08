@@ -19,8 +19,17 @@ type InputVars struct {
 
 	Domain string
 
-	EnableEfs bool
-	EncryptEfs bool
+	AggregatedLogging bool
+
+	Storage struct {
+		EnableEfs bool
+		EncryptEfs bool
+
+		EnableEbs bool
+		EncryptEbs bool
+
+		Default string
+	}
 
 	NodeCounts struct {
 		Master uint

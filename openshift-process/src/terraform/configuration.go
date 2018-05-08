@@ -23,6 +23,8 @@ type TerraformVars struct {
 
 	EnableEfs bool
 	EncryptEfs bool
+
+	ClusterId string
 }
 
 type NodeCounts struct {
@@ -57,16 +59,14 @@ func DefaultConfig(ProjectName string, publicKey string, Zone string) *Terraform
 	config.Counts.App = 3
 
 	config.Types.Bastion = "t2.nano"
-	config.Types.Master = "m5.large"
-	/*
+	config.Types.Master = "m5.xlarge"
 	config.Types.Infra = "m5.large"
 	config.Types.App = "m5.large"
-	*/
-	config.Types.Infra = "t2.medium"
-	config.Types.App = "t2.medium"
 
 	config.EnableEfs = true
 	config.EncryptEfs = true
+
+	config.ClusterId = "1"
 
 	return config
 }
