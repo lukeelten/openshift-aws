@@ -23,18 +23,6 @@ resource "aws_route53_record" "master-record" {
   }
 }
 
-resource "aws_route53_record" "kibana-record" {
-  zone_id = "${data.aws_route53_zone.existing-zone.zone_id}"
-  name    = "kibana.${data.aws_route53_zone.existing-zone.name}"
-  type = "A"
-
-  alias {
-    name = "${aws_lb.master-lb.dns_name}"
-    evaluate_target_health = false
-    zone_id = "${aws_lb.master-lb.zone_id}"
-  }
-}
-
 resource "aws_route53_record" "internal-api-record" {
   zone_id = "${data.aws_route53_zone.existing-zone.zone_id}"
   name    = "internal-api.${data.aws_route53_zone.existing-zone.name}"

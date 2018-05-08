@@ -3,7 +3,7 @@ resource "aws_efs_file_system" "persistence-storage" {
 
   creation_token = "${var.ProjectId}-openshift-storage"
   encrypted = true
-  kms_key_id = "${aws_kms_key.persistence-encryption-key.arn}"
+  kms_key_id = "${aws_kms_key.efs-encryption-key.arn}"
 
   tags {
     Name = "${var.ProjectName} - Persistent Storage"
@@ -21,21 +21,21 @@ resource "aws_efs_mount_target" "persistence-mount-targets" {
   security_groups = ["${aws_security_group.storage-sg.id}"]
 }
 
-resource "aws_kms_key" "persistence-encryption-key" {
+resource "aws_kms_key" "efs-encryption-key" {
   count = "${var.EncryptEfs}"
 
-  description             = "KMS encrytion key for OpenShift persistence encryption"
+  description             = "KMS encrytion key for OpenShift EFS encryption"
   deletion_window_in_days = 7
 
   tags {
-    Name = "${var.ProjectName} - Persistent Storage"
+    Name = "${var.ProjectName} - EFS Persistent Storage"
     Project = "${var.ProjectName}"
     ProjectId = "${var.ProjectId}"
   }
 }
 
-resource "aws_kms_alias" "persistence-encryption-key-alias" {
+resource "aws_kms_alias" "efs-encryption-key-alias" {
   count = "${var.EncryptEfs}"
-  name          = "alias/${var.ProjectId}-persistence-storage-key"
-  target_key_id = "${aws_kms_key.persistence-encryption-key.id}"
+  name          = "alias/${var.ProjectId}-efs-storage-key"
+  target_key_id = "${aws_kms_key.efs-encryption-key.id}"
 }

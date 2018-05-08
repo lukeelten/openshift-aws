@@ -15,20 +15,6 @@ resource "aws_instance" "infra-node" {
     volume_size = 25
   }
 
-  /*
-  ebs_block_device {
-    volume_type = "gp2"
-    volume_size = 100
-    device_name = "/dev/xvdg"
-  }
-
-  ebs_block_device {
-    volume_type = "gp2"
-    volume_size = 100
-    device_name = "/dev/xvdf"
-   }
-   */
-
   lifecycle {
     create_before_destroy = true
   }
@@ -38,6 +24,7 @@ resource "aws_instance" "infra-node" {
     Name = "${var.ProjectName} - Infrastructure Node ${count.index + 1}"
     Project = "${var.ProjectName}"
     ProjectId = "${var.ProjectId}"
+    "kubernetes.io/cluster/${var.ProjectId}" = "${var.ClusterId}"
   }
 }
 

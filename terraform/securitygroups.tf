@@ -233,7 +233,35 @@ resource "aws_security_group" "nodes-sg" {
       to_port          = 2049
       protocol         = "tcp"
       security_groups  = ["${aws_security_group.storage-sg.id}"]
-    }
+    },
+    {
+      // Elastic Search
+      from_port        = 9300
+      to_port          = 9300
+      protocol         = "tcp"
+      self             = true
+    },
+    {
+      // Elastic Search
+      from_port        = 9200
+      to_port          = 9200
+      protocol         = "tcp"
+      self             = true
+    },
+    {
+      // Fluentd
+      from_port        = 9880
+      to_port          = 9880
+      protocol         = "tcp"
+      self             = true
+    },
+    {
+      // Fluentd
+      from_port        = 24224
+      to_port          = 24224
+      protocol         = "tcp"
+      self             = true
+    },
   ]
 
   egress {
@@ -247,56 +275,9 @@ resource "aws_security_group" "nodes-sg" {
     Name = "${var.ProjectName} - Nodes SG"
     Project = "${var.ProjectName}"
     ProjectId = "${var.ProjectId}"
+    "kubernetes.io/cluster/${var.ProjectId}" = "${var.ClusterId}"
   }
 }
-
-/*
-resource "aws_security_group" "allow-internal" {
-  description = "${var.ProjectName} Allow Internal Traffic"
-  name        = "${var.ProjectName}-allow-internal-sg"
-  vpc_id      = "${aws_vpc.vpc.id}"
-
-  ingress = [
-    {
-      from_port        = 0
-      to_port          = 0
-      protocol         = "-1"
-      cidr_blocks      = ["${aws_vpc.vpc.cidr_block}"]
-    },
-    {
-      from_port        = -1
-      to_port          = -1
-      protocol         = "icmp"
-      cidr_blocks      = ["0.0.0.0/0"]
-    },
-    {
-      from_port        = 2049
-      to_port          = 2049
-      protocol         = "TCP"
-      cidr_blocks      = ["0.0.0.0/0"]
-    },
-    {
-      from_port        = 111
-      to_port          = 111
-      protocol         = "TCP"
-      cidr_blocks      = ["0.0.0.0/0"]
-    },
-  ]
-
-  egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["${aws_vpc.vpc.cidr_block}"]
-  }
-
-  tags {
-    Name = "${var.ProjectName} - Allow Internal Traffic"
-    Project = "${var.ProjectName}"
-    ProjectId = "${var.ProjectId}"
-  }
-}
-*/
 
 resource "aws_security_group" "storage-sg" {
   description = "${var.ProjectName} Storage Security Group"

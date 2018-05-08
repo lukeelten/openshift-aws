@@ -13,6 +13,7 @@ resource "aws_lb" "internal-lb" {
     Project = "${var.ProjectName}"
     Type = "internal"
     ProjectId = "${var.ProjectId}"
+    "kubernetes.io/cluster/${var.ProjectId}" = "${var.ClusterId}"
   }
 }
 

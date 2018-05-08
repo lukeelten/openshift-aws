@@ -63,5 +63,6 @@ variable "EncryptEfs" {
 
 variable "ClusterId" {
   type = "string"
+  description = "Cluster Id for tagging resources"
   default = "1"
 }

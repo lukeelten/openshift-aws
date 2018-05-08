@@ -11,6 +11,7 @@ resource "aws_subnet" "subnets-public" {
     Name = "${var.ProjectName} - Public Subnet ${count.index + 1}"
     Project = "${var.ProjectName}"
     ProjectId = "${var.ProjectId}"
+    "kubernetes.io/cluster/${var.ProjectId}" = "${var.ClusterId}"
   }
 }
 
@@ -34,6 +35,7 @@ resource "aws_subnet" "subnets-private" {
     Name = "${var.ProjectName} - Private Subnet ${count.index}"
     Project = "${var.ProjectName}"
     ProjectId = "${var.ProjectId}"
+    "kubernetes.io/cluster/${var.ProjectId}" = "${var.ClusterId}"
   }
 }
 

@@ -54,4 +54,10 @@ resource "aws_autoscaling_group" "application-scaling" {
     value = "${var.ProjectId}"
     propagate_at_launch = true
   }
+
+  tag {
+    key = "kubernetes.io/cluster/${var.ProjectId}"
+    value = "${var.ClusterId}"
+    propagate_at_launch = true
+  }
 }

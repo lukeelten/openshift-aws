@@ -11,6 +11,7 @@ resource "aws_lb" "router-lb" {
     Project = "${var.ProjectId}"
     Type = "infra"
     ProjectId = "${var.ProjectId}"
+    "kubernetes.io/cluster/${var.ProjectId}" = "${var.ClusterId}"
   }
 }
 
