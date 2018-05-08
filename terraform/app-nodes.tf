@@ -7,6 +7,8 @@ resource "aws_launch_configuration" "application-lc" {
   user_data       = "${file("assets/init.sh")}"
   security_groups = ["${aws_security_group.nodes-sg.id}"]
 
+  iam_instance_profile = "${aws_iam_instance_profile.node-profile.name}"
+
   root_block_device {
     volume_type = "gp2"
     volume_size = 25

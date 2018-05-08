@@ -7,6 +7,7 @@ resource "aws_instance" "infra-node" {
   user_data       = "${file("assets/init.sh")}"
   vpc_security_group_ids = ["${aws_security_group.nodes-sg.id}", "${aws_security_group.infra-sg.id}"]
   subnet_id = "${aws_subnet.subnets-private.*.id[(count.index % aws_subnet.subnets-private.count)]}"
+  iam_instance_profile = "${aws_iam_instance_profile.node-profile.name}"
 
   count = "${var.Counts["Infra"]}"
 

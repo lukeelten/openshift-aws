@@ -8,6 +8,7 @@ resource "aws_instance" "master-node" {
 
   vpc_security_group_ids = ["${aws_security_group.nodes-sg.id}", "${aws_security_group.master-sg.id}", "${aws_security_group.etcd-sg.id}"]
   subnet_id = "${aws_subnet.subnets-private.*.id[(count.index % aws_subnet.subnets-private.count)]}"
+  iam_instance_profile = "${aws_iam_instance_profile.master-profile.name}"
 
   count = "${var.Counts["Master"]}"
 
