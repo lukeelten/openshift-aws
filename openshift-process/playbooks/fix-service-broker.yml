@@ -1,0 +1,35 @@
+---
+- name: Fix broken Ansible Service Broker Deployments
+  hosts: localhost
+  become: false
+  tasks:
+    - name: Change project to openshift-ansible-service-broker
+      command: oc project openshift-ansible-service-broker
+
+    - name: Remove defect etcd volume claim
+      command: oc delete pvc etcd
+
+    - name: Add proper etcd volume claim
+      command: oc apply -f static/etcd-pvc.yml
+
+    - name: Cancel failing deployment asb
+      command: oc rollout cancel dc/asb -n openshift-ansible-service-broker
+      ignore_errors: yes
+
+    - name: Cancel failing deployment asb-etcd
+      command: oc rollout cancel dc/asb-etcd -n openshift-ansible-service-broker
+      ignore_errors: yes
+
+    - name: Wait for deployments to cancel (20s)
+      wait_for: timeout=20
+      delegate_to: localhost
+
+    - name: Re-deploy asb-etcd
+      command: oc rollout latest dc/asb-etcd -n openshift-ansible-service-broker
+      retries: 3
+      delay: 5
+
+    - name: Re-deploy asb
+      command: oc rollout latest dc/asb -n openshift-ansible-service-broker
+      retries: 3
+      delay: 5

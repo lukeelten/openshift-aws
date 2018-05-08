@@ -1,0 +1,10 @@
+---
+- name: Add EBS Storage configuration
+  hosts: localhost
+  become: false
+  tasks:
+    - name: Login to Cluster
+      command: oc login master.cc-openshift.de:8443 -u admin -p OriginAdmin --insecure-skip-tls-verify
+
+    - name: Create EFS storage class
+      command: oc apply -f static/ebs.yml
