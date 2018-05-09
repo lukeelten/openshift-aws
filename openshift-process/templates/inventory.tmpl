@@ -52,6 +52,7 @@ openshift_logging_master_url='{{ .InternalMaster }}:8443'
 {{ if .ClusterMetrics }}
 openshift_metrics_install_metrics=true
 openshift_metrics_image_version='{{ .OriginRelease }}'
+openshift_metrics_cassandra_storage_type=dynamic
 {{ end }}
 
 
