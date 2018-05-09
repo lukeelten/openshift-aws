@@ -25,7 +25,7 @@ resource "aws_instance" "infra-node" {
     Name = "${var.ProjectName} - Infrastructure Node ${count.index + 1}"
     Project = "${var.ProjectName}"
     ProjectId = "${var.ProjectId}"
-    "kubernetes.io/cluster/${var.ProjectId}" = "${var.ClusterId}"
+    "kubernetes.io/cluster/openshift" = "${var.ClusterId}"
   }
 }
 

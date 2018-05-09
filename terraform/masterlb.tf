@@ -11,7 +11,7 @@ resource "aws_lb" "master-lb" {
     Project = "${var.ProjectName}"
     Type = "master"
     ProjectId = "${var.ProjectId}"
-    "kubernetes.io/cluster/${var.ProjectId}" = "${var.ClusterId}"
+    "kubernetes.io/cluster/openshift" = "${var.ClusterId}"
   }
 }
 

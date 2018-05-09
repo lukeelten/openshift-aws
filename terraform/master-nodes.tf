@@ -26,7 +26,7 @@ resource "aws_instance" "master-node" {
     Name = "${var.ProjectName} - Master Node ${count.index + 1}"
     Project = "${var.ProjectName}"
     ProjectId = "${var.ProjectId}"
-    "kubernetes.io/cluster/${var.ProjectId}" = "${var.ClusterId}"
+    "kubernetes.io/cluster/openshift" = "${var.ClusterId}"
   }
 }
 

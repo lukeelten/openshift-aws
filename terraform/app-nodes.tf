@@ -58,7 +58,7 @@ resource "aws_autoscaling_group" "application-scaling" {
   }
 
   tag {
-    key = "kubernetes.io/cluster/${var.ProjectId}"
+    key = "kubernetes.io/cluster/openshift"
     value = "${var.ClusterId}"
     propagate_at_launch = true
   }

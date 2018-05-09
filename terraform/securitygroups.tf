@@ -275,7 +275,7 @@ resource "aws_security_group" "nodes-sg" {
     Name = "${var.ProjectName} - Nodes SG"
     Project = "${var.ProjectName}"
     ProjectId = "${var.ProjectId}"
-    "kubernetes.io/cluster/${var.ProjectId}" = "${var.ClusterId}"
+    "kubernetes.io/cluster/openshift" = "${var.ClusterId}"
   }
 }
 
