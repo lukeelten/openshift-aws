@@ -7,7 +7,7 @@ resource "aws_vpc" "vpc" {
     Name = "${var.ProjectName} - VPC"
     Project = "${var.ProjectName}"
     ProjectId = "${var.ProjectId}"
-    "kubernetes.io/cluster/openshift" = "1"
+    "kubernetes.io/cluster/openshift" = "${var.ClusterId}"
   }
 }
 
