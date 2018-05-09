@@ -7,10 +7,10 @@ WORKDIR /root
 RUN yum -y install centos-release-openshift-origin37 && yum -y install origin-clients && rm -rf /var/cache/yum
 
 # Install AWS CLI tool (not needed yet)
-#RUN yum -y install epel-release && yum -y install python-pip && pip -q install awscli && rm -rf /var/cache/yum
+#RUN yum -y install epel-release && yum -y install python-pip python-passlib python2-passlib && pip -q install awscli && rm -rf /var/cache/yum
 
 # Install ansible tool
-RUN yum -y install epel-release && yum -y install ansible unzip && rm -rf /var/cache/yum
+RUN yum -y install epel-release && yum -y install ansible unzip python-passlib python2-passlib && rm -rf /var/cache/yum
 
 # Install terraform
 RUN curl https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_linux_amd64.zip -o terraform.zip \
