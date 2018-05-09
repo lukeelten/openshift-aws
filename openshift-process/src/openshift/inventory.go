@@ -13,6 +13,8 @@ type InventoryConfig struct {
 	InternalMaster string
 	ExternalMaster string
 
+	EnableEbs bool
+
 	SshConfig string
 
 	Masters []Node

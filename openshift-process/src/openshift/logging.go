@@ -5,17 +5,9 @@ import (
 	"text/template"
 )
 
-type LoggingData struct {
-	Debug bool
-	FirstMasterIp string
-	ClusterId string
-	SshConfig string
-	OriginRelease string
-}
+
 
 func (config *InventoryConfig) GenerateLoggingInventory(filename string) error {
-	data := LoggingData{config.Debug, config.Masters[0].InternalIp}
-
 	f, err := os.Create(filename)
 	if err != nil {
 		return err
@@ -29,5 +21,5 @@ func (config *InventoryConfig) GenerateLoggingInventory(filename string) error {
 		return err
 	}
 
-	return t.Execute(f, data)
+	return t.Execute(f, config)
 }

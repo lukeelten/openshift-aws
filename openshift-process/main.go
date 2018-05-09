@@ -116,13 +116,6 @@ func main() {
 			util.ExitOnError("Failed to fix ansible service broker deployment", err)
 		}
 	}
-
-	/**
-	@todo generate ebs.yml
-	@todo logging inventory generation needs update for new vars
-	@todo provide useful default values for storage
-	@todo set default storage provider based on config
-	 */
 }
 
 func generateSshConfig(config *configuration.InputVars, waitGroup *sync.WaitGroup) {

@@ -66,6 +66,8 @@ func LoadInputVars(filename string) *InputVars {
 		vars.ProjectId = util.EncodeProjectId(vars.ProjectName)
 	}
 
+	vars.Storage.Default = strings.ToLower(vars.Storage.Default)
+
 	return &vars
 }
 
@@ -99,11 +101,13 @@ func (vars *InputVars) Validate() error {
 		return errors.New("invalid storage config: There should be at least one enabled persistence provider")
 	}
 
-	if vars.Storage.Default != "ebs" && vars.Storage.Default != "efs" {
+	if vars.Storage.Default != "" && vars.Storage.Default != "ebs" && vars.Storage.Default != "efs" {
 		return errors.New("invalid argument: Invalid default storage provider")
 	}
 
-
+	if vars.AggregatedLogging && !vars.Storage.EnableEbs {
+		return errors.New("invalid storage config: Aggregated logging depends on EBS storage")
+	}
 
 	// @todo validate instance types more precise
 	r := regexp.MustCompile("[tmcpxridgfh][0-9]\\.[\\w]+")

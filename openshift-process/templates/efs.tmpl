@@ -55,7 +55,7 @@ apiVersion: storage.k8s.io/v1
 metadata:
   name: aws-efs
   annotations:
-    storageclass.kubernetes.io/is-default-class: "false"
+    storageclass.kubernetes.io/is-default-class: "{{ .EfsDefault }}"
 provisioner: provisioner/aws-efs
 ---
 kind: PersistentVolumeClaim
