@@ -4,9 +4,9 @@
     {
       "Action": [
         "ec2:DescribeVolumes",
-        "ec2:CreateVolumes",
+        "ec2:CreateVolume",
         "ec2:CreateTags",
-        "ec2:DescribeInstance",
+        "ec2:DescribeInstances",
         "ec2:AttachVolume",
         "ec2:DetachVolume",
         "ec2:DeleteVolume",
