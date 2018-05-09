@@ -110,11 +110,6 @@ func main() {
 		if err := playbook.Run(INVENTORY); err != nil {
 			util.ExitOnError("Failed to run EBS configuration", err)
 		}
-	} else {
-		playbook = ansible.OpenPlaybook(wd + "/playbooks/fix-service-broker.yml")
-		if err := playbook.Run(INVENTORY); err != nil {
-			util.ExitOnError("Failed to fix ansible service broker deployment", err)
-		}
 	}
 }
 

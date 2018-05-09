@@ -12,12 +12,16 @@ func GenerateConfig(sshConfig string, config *configuration.InputVars) *Inventor
 
 	inventory := InventoryConfig{
 		Debug: true,
-		// OriginRelease: "v3.7.2",
 		OriginRelease: "v3.9",
 		RoutesDomain: "apps.cc-openshift.de",
 		InternalMaster: "internal-api.cc-openshift.de",
 		ExternalMaster: "master.cc-openshift.de",
 		SshConfig: sshConfig,
+		EnableEbs: config.Storage.EnableEbs,
+		ClusterId: "1",
+
+		AggregatedLogging: config.AggregatedLogging,
+		ClusterMetrics: config.ClusterMetrics,
 
 		Masters: make([]Node, len(masters)),
 		Infras: make([]Node, len(infra)),

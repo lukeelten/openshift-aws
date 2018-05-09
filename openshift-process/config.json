@@ -15,6 +15,7 @@
   },
 
   "AggregatedLogging": true,
+  "ClusterMetrics": true,
 
   "NodeCounts": {
     "Master": 2,

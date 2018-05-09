@@ -20,6 +20,7 @@ type InputVars struct {
 	Domain string
 
 	AggregatedLogging bool
+	ClusterMetrics bool
 
 	Storage struct {
 		EnableEfs bool

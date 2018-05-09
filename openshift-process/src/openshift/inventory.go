@@ -12,8 +12,11 @@ type InventoryConfig struct {
 	RoutesDomain string
 	InternalMaster string
 	ExternalMaster string
-
 	EnableEbs bool
+	ClusterId string
+
+	AggregatedLogging bool
+	ClusterMetrics bool
 
 	SshConfig string
 
