@@ -16,7 +16,7 @@ os_firewall_use_firewalld=true
 
 openshift_router_selector='region=infra'
 openshift_registry_selector='region=infra'
-template_service_broker_selector='region=infra'
+template_service_broker_selector={'region': 'infra'}
 
 openshift_master_cluster_method=native
 ansible_service_broker_install=false
