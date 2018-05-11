@@ -14,7 +14,7 @@
     "Default": "ebs"
   },
 
-  "AggregatedLogging": true,
+  "AggregatedLogging": false,
   "ClusterMetrics": true,
 
   "NodeCounts": {
