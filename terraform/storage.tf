@@ -46,6 +46,7 @@ resource "aws_s3_bucket" "registry-storage" {
   bucket_prefix = "${var.ProjectId}-registry-"
   acl    = "private"
   region = "${var.Region}"
+  force_destroy = true
 
   tags {
     Name = "${var.ProjectName} - Docker Registry Storage"
