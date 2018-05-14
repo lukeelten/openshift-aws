@@ -39,3 +39,18 @@ resource "aws_kms_alias" "efs-encryption-key-alias" {
   name          = "alias/${var.ProjectId}-efs-storage-key"
   target_key_id = "${aws_kms_key.efs-encryption-key.id}"
 }
+
+resource "aws_s3_bucket" "registry-storage" {
+  count = "${var.RegistryS3}"
+
+  bucket_prefix = "${var.ProjectId}-registry-"
+  acl    = "private"
+  region = "${var.Region}"
+
+  tags {
+    Name = "${var.ProjectName} - Docker Registry Storage"
+    Project = "${var.ProjectName}"
+    ProjectId = "${var.ProjectId}"
+    Type = "registry"
+  }
+}

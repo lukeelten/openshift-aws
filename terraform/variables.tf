@@ -66,3 +66,8 @@ variable "ClusterId" {
   description = "Cluster Id for tagging resources"
   default = "1"
 }
+
+variable "RegistryS3" {
+  type = "string"
+  description = "Create a S3 bucket to store docker image in object storage"
+}
