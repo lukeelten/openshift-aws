@@ -22,10 +22,16 @@ func GenerateConfig(sshConfig string, config *configuration.InputVars) *Inventor
 
 		AggregatedLogging: config.AggregatedLogging,
 		ClusterMetrics: config.ClusterMetrics,
+		RegistryToS3: config.RegistryToS3,
 
 		Masters: make([]Node, len(masters)),
 		Infras: make([]Node, len(infra)),
 		Apps: make([]Node, len(apps)),
+	}
+
+	if inventory.RegistryToS3 {
+		inventory.Registry.BucketName = aws.GetRegistryBucketName(config)
+		inventory.Registry.Region = config.AwsConfig.Region
 	}
 
 	for i, node := range masters {

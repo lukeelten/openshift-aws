@@ -66,6 +66,9 @@ func getTags(fs *efs.FileSystemDescription) map[string]string {
 }
 
 func matchMaps(primary map[string]string, target map[string]string) bool {
+	if len(primary) > len(target) {
+		return false
+	}
 
 	for key, value := range primary {
 		if targetValue, ok := target[key]; ok {

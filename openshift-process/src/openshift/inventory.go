@@ -18,6 +18,12 @@ type InventoryConfig struct {
 	AggregatedLogging bool
 	ClusterMetrics bool
 
+	RegistryToS3 bool
+	Registry struct {
+		BucketName string
+		Region string
+	}
+
 	SshConfig string
 
 	Masters []Node

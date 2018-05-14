@@ -16,10 +16,11 @@
 
   "AggregatedLogging": false,
   "ClusterMetrics": true,
+  "RegistryToS3": true,
 
   "NodeCounts": {
     "Master": 2,
-    "Infra": 2,
+    "Infra": 3,
     "App": 3
   },
 

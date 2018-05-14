@@ -54,6 +54,10 @@ openshift_logging_es_pvc_dynamic=true
 openshift_metrics_install_metrics=true
 openshift_metrics_image_version='{{ .OriginRelease }}'
 openshift_metrics_cassandra_storage_type=dynamic
+openshift_metrics_hawkular_nodeselector={'region': 'infra'}
+openshift_metrics_cassandra_nodeselector={'region': 'infra'}
+openshift_metrics_hawkular_agent_nodeselector={'region': 'infra'}
+openshift_metrics_heapster_nodeselector={'region': 'infra'}
 {{ end }}
 
 
@@ -61,6 +65,19 @@ openshift_metrics_cassandra_storage_type=dynamic
 openshift_cloudprovider_kind=aws
 openshift_clusterid='{{ .ClusterId }}'
 {{ end }}
+
+{{ if .RegistryToS3 }}
+openshift_hosted_registry_storage_kind=object
+openshift_hosted_registry_storage_provider=s3
+openshift_hosted_registry_storage_s3_bucket='{{ .Registry.BucketName }}'
+openshift_hosted_registry_storage_s3_region='{{ .Registry.Region }}'
+openshift_hosted_registry_storage_s3_chunksize=26214400
+openshift_hosted_registry_storage_s3_rootdirectory=/
+openshift_hosted_registry_pullthrough=true
+openshift_hosted_registry_acceptschema2=true
+openshift_hosted_registry_enforcequota=true
+{{ end }}
+
 
 [masters]
 {{ range .Masters }}

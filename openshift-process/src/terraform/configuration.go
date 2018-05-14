@@ -24,6 +24,8 @@ type TerraformVars struct {
 	EnableEfs bool
 	EncryptEfs bool
 
+	RegistryS3 bool
+
 	ClusterId string
 }
 
@@ -65,6 +67,7 @@ func DefaultConfig(ProjectName string, publicKey string, Zone string) *Terraform
 
 	config.EnableEfs = true
 	config.EncryptEfs = true
+	config.RegistryS3 = true
 
 	config.ClusterId = "1"
 

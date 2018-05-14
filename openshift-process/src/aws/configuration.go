@@ -8,12 +8,14 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"configuration"
+	"github.com/aws/aws-sdk-go/service/s3"
 )
 
 var Session *session.Session
 var Client *ec2.EC2
 var LBClent *elbv2.ELBV2
 var EFSClient *efs.EFS
+var S3Client *s3.S3
 
 func InitSession(config *configuration.InputVars) {
 	awsConfig := aws.Config{
@@ -32,4 +34,5 @@ func InitSession(config *configuration.InputVars) {
 	Client = ec2.New(Session)
 	LBClent = elbv2.New(Session)
 	EFSClient = efs.New(Session)
+	S3Client = s3.New(Session)
 }

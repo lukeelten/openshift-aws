@@ -45,6 +45,8 @@ type InputVars struct {
 		App string
 	}
 
+	RegistryToS3 bool
+
 	AwsConfig struct {
 		Region string
 		KeyId string
