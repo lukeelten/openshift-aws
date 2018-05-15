@@ -5,6 +5,7 @@ import (
 	"aws"
 	"os"
 	"text/template"
+	"strings"
 )
 
 type PersistenceConfig struct {
@@ -18,6 +19,8 @@ type PersistenceConfig struct {
 
 	EbsDefault bool
 	EfsDefault bool
+
+	Zones string
 }
 
 
@@ -61,6 +64,9 @@ func (config *PersistenceConfig) GeneratePersistenceConfigFiles(dir string) erro
 	}
 
 	if config.EnableEbs {
+		zones := aws.GetAvailabilityZones()
+		config.Zones = strings.Join(zones, ", ")
+
 		f2, err := os.Create(ebsFilename)
 		if err != nil {
 			return err

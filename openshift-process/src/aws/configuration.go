@@ -9,6 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"configuration"
 	"github.com/aws/aws-sdk-go/service/s3"
+	"util"
 )
 
 var Session *session.Session
@@ -35,4 +36,16 @@ func InitSession(config *configuration.InputVars) {
 	LBClent = elbv2.New(Session)
 	EFSClient = efs.New(Session)
 	S3Client = s3.New(Session)
+}
+
+func GetAvailabilityZones() []string {
+	result, err := Client.DescribeAvailabilityZones(nil)
+	util.ExitOnError("Cannot load availability zones", err)
+
+	zones := make([]string, len(result.AvailabilityZones))
+	for i, zone := range result.AvailabilityZones {
+		zones[i] = *zone.RegionName
+	}
+
+	return zones
 }
