@@ -1,13 +1,27 @@
 ---
 - name: Add EBS Storage configuration
-  hosts: localhost
-  become: false
+  hosts: masters[0]
+  become: true
   tasks:
-    - name: Login to Cluster
-      command: oc login master.cc-openshift.de:8443 -u admin -p OriginAdmin --insecure-skip-tls-verify
-
     - name: Delete old EBS storage class
-      command: oc delete storageclass gp2
+      oc:
+        name: gp2
+        state: absent
+        kind: StorageClass
 
     - name: Create EBS storage class
-      command: oc apply -f ../generated/ebs.yml
+      oc:
+        state: present
+        inline:
+          kind: StorageClass
+          apiVersion: storage.k8s.io/v1
+          metadata:
+            name: aws-ebs
+            annotations:
+              storageclass.kubernetes.io/is-default-class: "true"
+          provisioner: kubernetes.io/aws-ebs
+          parameters:
+            type: gp2
+            encrypted: "true"
+            fsType: ext4
+            zones: eu-central-1a, eu-central-1b, eu-central-1c

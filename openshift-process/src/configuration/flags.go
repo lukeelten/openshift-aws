@@ -23,6 +23,7 @@ type CmdFlags struct {
 
 	SkipTerraform bool
 	SkipConfig    bool
+	SkipPre       bool
 	Verbose       bool
 }
 
@@ -41,6 +42,7 @@ type flags struct {
 
 	skipTerraform *bool
 	existingConfig *bool
+	skipPre *bool
 	verbose *bool
 }
 
@@ -58,6 +60,7 @@ func initFlags() {
 
 	cmdFlags.skipTerraform = flag.Bool("skip-terraform", false, "Skip Terraform: Use when infrastructure already exist")
 	cmdFlags.existingConfig = flag.Bool("skip-config", false, "Skip Config generation: Use when config already exist")
+	cmdFlags.skipPre = flag.Bool("skip-pre", false, "Skip prerequisites playbook execution")
 	cmdFlags.verbose = flag.Bool("verbose", false, "Verbose mode enables extended ansible output")
 }
 
@@ -80,6 +83,7 @@ func loadValues(settings *CmdFlags) {
 	settings.SkipTerraform = *cmdFlags.skipTerraform
 	settings.SkipConfig = *cmdFlags.existingConfig
 	settings.Verbose = *cmdFlags.verbose
+	settings.SkipPre = *cmdFlags.skipPre
 
 	if len(settings.ProjectName) >= NAME_MIN_LENGTH && len(settings.ProjectId) < NAME_MIN_LENGTH {
 		settings.ProjectId = util.EncodeProjectId(settings.ProjectName)

@@ -44,7 +44,7 @@ func GetAvailabilityZones() []string {
 
 	zones := make([]string, len(result.AvailabilityZones))
 	for i, zone := range result.AvailabilityZones {
-		zones[i] = *zone.RegionName
+		zones[i] = *zone.ZoneName
 	}
 
 	return zones

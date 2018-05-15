@@ -80,9 +80,12 @@ func main() {
 
 	installerPath := wd + "/../openshift-ansible"
 
-	playbook := ansible.OpenPlaybook(installerPath + "/playbooks/prerequisites.yml")
-	if err := playbook.Run(INVENTORY); err != nil {
-		util.ExitOnError("Failed to run OpenShift prerequisites.", err)
+	var playbook *ansible.Playbook
+	if !cmdFlags.SkipPre {
+		playbook = ansible.OpenPlaybook(installerPath + "/playbooks/prerequisites.yml")
+		if err := playbook.Run(INVENTORY); err != nil {
+			util.ExitOnError("Failed to run OpenShift prerequisites.", err)
+		}
 	}
 
 	playbook = ansible.OpenPlaybook(installerPath + "/playbooks/deploy_cluster.yml")
