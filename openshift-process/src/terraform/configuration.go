@@ -3,7 +3,7 @@ package terraform
 import (
 	"os"
 	"encoding/json"
-	"util"
+	"configuration"
 )
 
 type AwsConfig struct {
@@ -42,36 +42,32 @@ type NodeTypes struct {
 	App string
 }
 
-func NewVars() *TerraformVars {
-	var config TerraformVars
+func CreateConfig(vars *configuration.InputVars, publicKey string) *TerraformVars {
+	config := TerraformVars{
+		ProjectName: vars.ProjectName,
+		ProjectId: vars.ProjectId,
+		Zone: vars.Domain,
+		PublicKey: publicKey,
+		Region: vars.AwsConfig.Region,
+		Counts: NodeCounts{
+			vars.NodeCounts.Master,
+			vars.NodeCounts.Infra,
+			vars.NodeCounts.App,
+		},
+		Types: NodeTypes{
+			vars.NodeTypes.Bastion,
+			vars.NodeTypes.Master,
+			vars.NodeTypes.Infra,
+			vars.NodeTypes.App,
+		},
+
+		EnableEfs: vars.Storage.EnableEfs,
+		EncryptEfs: vars.Storage.EncryptEfs,
+		RegistryS3: vars.RegistryToS3,
+		ClusterId: vars.ClusterId,
+	}
+
 	return &config
-}
-
-func DefaultConfig(ProjectName string, publicKey string, Zone string) *TerraformVars {
-	config := NewVars()
-
-	config.ProjectName = ProjectName
-	config.ProjectId = util.EncodeProjectId(ProjectName)
-	config.Zone = Zone
-	config.PublicKey = publicKey
-	config.Region = "eu-central-1"
-
-	config.Counts.Master = 2
-	config.Counts.Infra = 2
-	config.Counts.App = 3
-
-	config.Types.Bastion = "t2.nano"
-	config.Types.Master = "m5.xlarge"
-	config.Types.Infra = "m5.large"
-	config.Types.App = "m5.large"
-
-	config.EnableEfs = true
-	config.EncryptEfs = true
-	config.RegistryS3 = true
-
-	config.ClusterId = "1"
-
-	return config
 }
 
 func (config*TerraformVars) GenerateJson() []byte {

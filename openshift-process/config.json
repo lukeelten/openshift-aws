@@ -3,6 +3,7 @@
   "ProjectName": "",
   "ProjectId": "",
   "Domain": "cc-openshift.de",
+  "ClusterId": "1",
 
   "Storage": {
     "EnableEfs": true,

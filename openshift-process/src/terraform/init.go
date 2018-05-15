@@ -16,8 +16,7 @@ func NewConfig(dir string, pubKey string, settings *configuration.InputVars) *Co
 	config := Config{}
 	config.inited = false
 	config.Dir = dir
-	config.Vars = DefaultConfig(settings.ProjectName, pubKey, "cc-openshift.de")
-	config.Vars.ProjectId = settings.ProjectId
+	config.Vars = CreateConfig(settings, pubKey)
 
 	return &config
 }

@@ -18,6 +18,7 @@ type InputVars struct {
 	ProjectId string
 
 	Domain string
+	ClusterId string
 
 	AggregatedLogging bool
 	ClusterMetrics bool
@@ -110,6 +111,10 @@ func (vars *InputVars) Validate() error {
 
 	if vars.AggregatedLogging && !vars.Storage.EnableEbs {
 		return errors.New("invalid storage config: Aggregated logging depends on EBS storage")
+	}
+
+	if len(vars.ClusterId) < 1 {
+		return errors.New("invalid cluster Id")
 	}
 
 	// @todo validate instance types more precise
