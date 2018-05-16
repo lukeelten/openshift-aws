@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [ -z "$SSH_AUTH_SOCK" ]; then
+  eval $(ssh-agent)
+fi
+
 agentdir=`dirname $SSH_AUTH_SOCK`
 
 docker run -it --rm \
