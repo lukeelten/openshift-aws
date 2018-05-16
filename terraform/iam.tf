@@ -49,15 +49,9 @@ resource "aws_iam_policy_attachment" "master-elb-attach" {
   policy_arn = "${aws_iam_policy.master-elb-policy.arn}"
 }
 
-resource "aws_iam_policy_attachment" "nodes-attach-to-nodes" {
+resource "aws_iam_policy_attachment" "nodes-attach" {
   name       = "${var.ProjectId}-nodes-attach-to-nodes"
   roles      = ["${aws_iam_role.node-role.name}"]
-  policy_arn = "${aws_iam_policy.nodes-policy.arn}"
-}
-
-resource "aws_iam_policy_attachment" "nodes-attach-to-infra" {
-  name       = "${var.ProjectId}-nodes-attach-to-infra"
-  roles      = ["${aws_iam_role.infra-role.name}"]
   policy_arn = "${aws_iam_policy.nodes-policy.arn}"
 }
 
