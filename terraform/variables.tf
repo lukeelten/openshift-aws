@@ -43,12 +43,14 @@ variable "Region" {
 
 variable "KeyId" {
   type = "string"
-  description = "Access key ID"
+  description = "Access key ID. Can be empty if terraform is run on EC2 instance with proper IAM role."
+  default = ""
 }
 
 variable "SecretKey" {
   type = "string"
-  description = "Secret Access Key"
+  description = "Secret Access Key. Can be empty if terraform is run on EC2 instance with proper IAM role."
+  default = ""
 }
 
 variable "EnableEfs" {
