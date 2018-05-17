@@ -4,24 +4,17 @@
   become: true
   tasks:
     - name: Delete old EBS storage class
-      openshift_raw:
-        name: gp2
-        state: absent
-        kind: StorageClass
+      command: oc delete storageclass gp2
 
-    - name: Create EBS storage class
-      openshift_raw:
-        state: present
-        definition:
-          kind: StorageClass
-          apiVersion: storage.k8s.io/v1
-          metadata:
-            name: aws-ebs
-            annotations:
-              storageclass.kubernetes.io/is-default-class: "true"
-          provisioner: kubernetes.io/aws-ebs
-          parameters:
-            type: gp2
-            encrypted: "true"
-            fsType: ext4
-            zones: eu-central-1a, eu-central-1b, eu-central-1c
+    - name: Copy EBS storage class definition
+      copy:
+        src: ../generated/ebs.yml
+        dest: /tmp/ebs.yml
+
+    - name: Apply EBS storage class definition
+      command: oc apply -f /tmp/ebs.yml
+
+    - name: Remove temporary files
+      file:
+        state: absent
+        path: /tmp/ebs.yml
