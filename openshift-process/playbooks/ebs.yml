@@ -4,15 +4,15 @@
   become: true
   tasks:
     - name: Delete old EBS storage class
-      oc:
+      openshift_raw:
         name: gp2
         state: absent
         kind: StorageClass
 
     - name: Create EBS storage class
-      oc:
+      openshift_raw:
         state: present
-        inline:
+        definition:
           kind: StorageClass
           apiVersion: storage.k8s.io/v1
           metadata:
