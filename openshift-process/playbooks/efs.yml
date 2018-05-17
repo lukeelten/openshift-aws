@@ -66,8 +66,10 @@
 
     - name: Delete temporary files
       file:
-        path: "{{ item }}"
+        path: "/tmp/efs.yml"
         state: absent
-        with_items:
-          - "/tmp/efs.yml"
-          - "/tmp/efs-roles.yml"
+
+    - name: Delete temporary files
+      file:
+        path: "/tmp/efs-roles.yml"
+        state: absent
