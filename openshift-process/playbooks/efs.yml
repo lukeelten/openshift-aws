@@ -21,18 +21,6 @@
         permanent: true
         state: enabled
 
-    - name: Add firewalld Port 20048
-      firewalld:
-        port: 20048/tcp
-        permanent: true
-        state: enabled
-
-    - name: Add firewalld Port 111
-      firewalld:
-        port: 111/tcp
-        permanent: true
-        state: enabled
-
     - name: Enable firewalld nfs service
       firewalld:
         service: nfs
@@ -45,17 +33,24 @@
         state: restarted
 
 - name: Add EFS Storage configuration
-  hosts: localhost
-  become: false
+  hosts: masters[0]
+  become: true
   tasks:
-    - name: Login to Cluster
-      command: oc login master.cc-openshift.de:8443 -u admin -p OriginAdmin --insecure-skip-tls-verify
+    - name: Copy EFS roles definition
+      copy:
+        src: static/efs-roles.yml
+        dest: /tmp/efs-roles.yml
+
+    - name: Copy EFS storage class definition
+      copy:
+        src: ../generated/efs.yml
+        dest: /tmp/efs.yml
 
     - name: Change Project to openshift-infra
       command: oc project openshift-infra
 
     - name: Create EFS roles
-      command: oc apply -f static/efs-roles.yml
+      command: oc apply -f /tmp/efs-roles.yml
 
     - name: Apply policy hostmount-anyuid
       command: oc adm policy add-scc-to-user hostmount-anyuid system:serviceaccount:openshift-infra:efs-provisioner
@@ -66,5 +61,13 @@
     - name: Apply cluster ClusterRole
       command: oc adm policy add-cluster-role-to-user efs-provisioner-runner system:serviceaccount:openshift-infra:efs-provisioner
 
-    - name: Create Persistence configuration
-      command: oc apply -f ../generated/efs.yml
+    - name: Create EFS storage class
+      command: oc apply -f /tmp/efs.yml
+
+    - name: Delete temporary files
+      file:
+        path: "{{ item }}"
+        state: absent
+        with_items:
+          - "/tmp/efs.yml"
+          - "/tmp/efs-roles.yml"
