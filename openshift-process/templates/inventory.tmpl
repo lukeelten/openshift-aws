@@ -47,6 +47,8 @@ openshift_logging_es_pvc_dynamic=true
 openshift_logging_master_public_url='https://{{ .ExternalMaster }}:8443'
 openshift_logging_master_url='https://{{ .InternalMaster }}:8443'
 
+openshift_logging_elasticsearch_proxy_image_version=latest
+
 #openshift_logging_kibana_hostname='kibana.{{ .RoutesDomain }}'
 {{ end }}
 
