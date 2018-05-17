@@ -15,14 +15,14 @@
     "Default": "ebs"
   },
 
-  "AggregatedLogging": false,
+  "AggregatedLogging": true,
   "ClusterMetrics": true,
   "RegistryToS3": true,
 
   "NodeCounts": {
     "Master":3,
     "Infra": 3,
-    "App": 3
+    "App": 6
   },
 
   "NodeTypes": {
