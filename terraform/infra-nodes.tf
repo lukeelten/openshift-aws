@@ -13,7 +13,7 @@ resource "aws_instance" "infra-node" {
 
   root_block_device {
     volume_type = "gp2"
-    volume_size = 25
+    volume_size = 40
   }
 
   lifecycle {
