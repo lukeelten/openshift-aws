@@ -1,7 +1,6 @@
 package openshift
 
 import (
-	"strconv"
 	"text/template"
 	"os"
 )
@@ -37,14 +36,12 @@ type Node struct {
 
 	Region string
 	Zone string
-	Schedulable bool
 }
 
 func printNode(node Node) string {
 	var s string
-	extra := " openshift_schedulable=" + strconv.FormatBool(node.Schedulable)
 
-	extra += " openshift_node_labels=\"{'region':'" + node.Region
+	extra := " openshift_node_labels=\"{'region':'" + node.Region
 	extra += "','zone':'" + node.Zone + "'}\""
 
 	s += node.InternalIp + extra

@@ -35,31 +35,26 @@ func GenerateConfig(sshConfig string, config *configuration.InputVars) *Inventor
 	}
 
 	for i, node := range masters {
-		inventory.Masters[i] = convertNodeObject(node, false, true)
+		inventory.Masters[i] = convertNodeObject(node, "master")
 	}
 
 	for i, node := range infra {
-		inventory.Infras[i] = convertNodeObject(node, true, true)
+		inventory.Infras[i] = convertNodeObject(node, "infra")
 	}
 
 	for i, node := range apps {
-		inventory.Apps[i] = convertNodeObject(node, false, true)
+		inventory.Apps[i] = convertNodeObject(node, "primary")
 	}
 
 	return &inventory
 }
 
-func convertNodeObject (nodeInfo aws.NodeInfo, infra bool, schedulable bool) Node {
+func convertNodeObject (nodeInfo aws.NodeInfo, region string) Node {
 	node := Node{
 		InternalIp: nodeInfo.InternalIp,
 		InternalHostname: nodeInfo.InternalDns,
 		Zone: nodeInfo.Zone,
-		Schedulable: schedulable,
-		Region: "primary",
-	}
-
-	if infra {
-		node.Region = "infra"
+		Region: region,
 	}
 
 	return node
