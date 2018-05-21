@@ -10,6 +10,7 @@ ansible_ssh_common_args='-F {{ .SshConfig }} -o StrictHostKeyChecking=no -o Cont
 
 deployment_type=origin
 openshift_deployment_type=origin
+
 openshift_clock_enable=true
 openshift_use_dnsmasq=true
 os_firewall_use_firewalld=true
@@ -17,17 +18,17 @@ os_firewall_use_firewalld=true
 openshift_router_selector='region=infra'
 openshift_registry_selector='region=infra'
 template_service_broker_selector={'region': 'infra'}
-
-openshift_master_cluster_method=native
 ansible_service_broker_install=false
+osm_use_cockpit=true
+
+{{ if gt (len .Masters) 1 }}
+openshift_master_cluster_method=native
+{{ end }}
 
 openshift_release='{{ .OriginRelease }}'
-
 openshift_master_default_subdomain='{{ .RoutesDomain }}'
 openshift_master_cluster_hostname='{{ .InternalMaster }}'
 openshift_master_cluster_public_hostname='{{ .ExternalMaster }}'
-
-osm_use_cockpit=true
 
 openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
 openshift_master_htpasswd_users={'admin': '$apr1$zgSjCrLt$1KSuj66CggeWSv.D.BXOA1', 'user': '$apr1$.gw8w9i1$ln9bfTRiD6OwuNTG5LvW50'}

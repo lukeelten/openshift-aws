@@ -93,6 +93,10 @@ func (vars *InputVars) Validate() error {
 		return errors.New("invalid argument: Master Node Count cannot be 0")
 	}
 
+	if vars.NodeCounts.Master == 2 {
+		return errors.New("invalid argument: Master Node Count should be 1 or 3 or more")
+	}
+
 	if vars.NodeCounts.Infra < 1 {
 		return errors.New("invalid argument: Infrastructure Node Count cannot be 0")
 	}
