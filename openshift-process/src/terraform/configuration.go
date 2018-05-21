@@ -4,6 +4,7 @@ import (
 	"os"
 	"encoding/json"
 	"configuration"
+	"util"
 )
 
 type AwsConfig struct {
@@ -70,24 +71,18 @@ func CreateConfig(vars *configuration.InputVars, publicKey string) *TerraformVar
 	return &config
 }
 
-func (config*TerraformVars) GenerateJson() []byte {
+func (config *TerraformVars) GenerateJson() []byte {
 	 b, err := json.Marshal(config)
-
-	 if err != nil {
-	 	panic(err)
-	 }
+	 util.ExitOnError("Cannot marshal terraform configuration to json", err)
 
 	 return b
 }
 
-func (config*TerraformVars) WriteFile(filename string) {
+func (config *TerraformVars) WriteFile(filename string) {
 	data := config.GenerateJson()
 
 	f, err := os.Create(filename)
-	if err != nil {
-		panic(nil)
-	}
-
+	util.ExitOnError("Cannot create terraform configuration file", err)
 	defer f.Close()
 
 	f.Write(data)

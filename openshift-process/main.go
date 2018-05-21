@@ -45,13 +45,12 @@ func main() {
 
 		terraformDir := wd + "/../terraform"
 		tf := terraform.NewConfig(terraformDir, key.GetPublicKey(), config)
-		if !tf.InitTerraform() {
-			panic("Cannot init terraform. Is the directory correct? " + terraformDir)
-		}
+		tf.GenerateVarsFile()
+		err := tf.InitTerraform()
+		util.ExitOnError("Cannot init terraform. Is the directory correct? " + terraformDir, err)
 
-		if err := tf.Validate(); err != nil {
-			util.ExitOnError("Invalid terraform configuration.", err)
-		}
+		err = tf.Validate()
+		util.ExitOnError("Invalid terraform configuration.", err)
 
 		if err := tf.Apply(); err != nil {
 			fmt.Fprintf(os.Stderr, "Error during terraform process. Remaining infrastructure will be destroyed.")
