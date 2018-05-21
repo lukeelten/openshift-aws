@@ -3,7 +3,6 @@
 awsdir="$HOME/.aws"
 
 if [ -z "$SSH_AUTH_SOCK" ]; then
-  exec /usr/bin/ssh-agent $SHELL
   eval $(ssh-agent)
 fi
 
