@@ -48,7 +48,7 @@ type flags struct {
 
 var cmdFlags flags
 
-func initFlags() {
+func init() {
 	cmdFlags.debug = flag.Bool("debug", true, "Debug mode disables some checks")
 	cmdFlags.region = flag.String("region", "eu-central-1", "AWS region to create the infrastructure in")
 	cmdFlags.aws_key = flag.String("aws-key", "", "AWS access key id. If empty the credentials used for AWS CLI will be loaded")
@@ -65,7 +65,6 @@ func initFlags() {
 }
 
 func ParseFlags() CmdFlags {
-	initFlags()
 	flag.Parse()
 
 	settings := CmdFlags{}
