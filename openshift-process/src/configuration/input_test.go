@@ -48,7 +48,65 @@ func TestDefaultConfig(t *testing.T) {
 
 func TestInputVars_MergeCmdFlags(t *testing.T) {
 	assert := assert.New(t)
-	assert.True(true)
+
+	config := getValidInputVars()
+	config.Debug = false
+	assert.Nil(config.Validate())
+
+	cmdFlags := CmdFlags{
+		Debug: true,
+		ProjectId: "cmd-project-id",
+		ProjectName: "cmd-project-name",
+	}
+	cmdFlags.AwsConfig.Region = "eu-west-1"
+	cmdFlags.AwsConfig.KeyId = "cmd-key-123"
+	cmdFlags.AwsConfig.SecretKey = "#cmd-098#"
+
+	assert.NotEqual("cmd-project-name", config.ProjectName)
+	assert.NotEqual("cmd-project-id", config.ProjectId)
+
+	assert.NotEqual("eu-west-1", config.AwsConfig.Region)
+	assert.NotEqual("cmd-key-123", config.AwsConfig.KeyId)
+	assert.NotEqual("#cmd-098#", config.AwsConfig.SecretKey)
+
+	config.MergeCmdFlags(cmdFlags)
+	assert.True(config.Debug)
+	assert.Equal("cmd-project-name", config.ProjectName)
+	assert.Equal("cmd-project-id", config.ProjectId)
+
+	assert.Equal("eu-west-1", config.AwsConfig.Region)
+	assert.Equal("cmd-key-123", config.AwsConfig.KeyId)
+	assert.Equal("#cmd-098#", config.AwsConfig.SecretKey)
+
+	config = getValidInputVars()
+	config.Debug = true
+	cmdFlags.Debug = false
+	config.MergeCmdFlags(cmdFlags)
+	assert.True(config.Debug)
+
+	config = getValidInputVars()
+	config.Debug = false
+	cmdFlags.Debug = false
+	config.MergeCmdFlags(cmdFlags)
+	assert.False(config.Debug)
+
+	config = getValidInputVars()
+	oldKeyId := config.AwsConfig.KeyId
+	oldSecretKey := config.AwsConfig.SecretKey
+	cmdFlags.AwsConfig.KeyId = ""
+	config.MergeCmdFlags(cmdFlags)
+
+	assert.Equal(oldKeyId, config.AwsConfig.KeyId)
+	assert.Equal(oldSecretKey, config.AwsConfig.SecretKey)
+
+	config = getValidInputVars()
+	oldKeyId = config.AwsConfig.KeyId
+	oldSecretKey = config.AwsConfig.SecretKey
+	cmdFlags.AwsConfig.SecretKey = ""
+	config.MergeCmdFlags(cmdFlags)
+
+	assert.Equal(oldKeyId, config.AwsConfig.KeyId)
+	assert.Equal(oldSecretKey, config.AwsConfig.SecretKey)
 }
 
 func TestInputVars_Validate(t *testing.T) {
