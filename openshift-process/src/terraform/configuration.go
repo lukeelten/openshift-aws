@@ -31,9 +31,9 @@ type TerraformVars struct {
 }
 
 type NodeCounts struct {
-	Master uint
-	Infra uint
-	App uint
+	Master int
+	Infra int
+	App int
 }
 
 type NodeTypes struct {

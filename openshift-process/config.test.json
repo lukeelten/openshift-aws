@@ -1,0 +1,40 @@
+{
+
+  "ProjectName": "TestProject",
+  "ProjectId": "TestId",
+  "Domain": "test.de",
+  "ClusterId": "1234",
+
+  "Storage": {
+    "EnableEfs": true,
+    "EncryptEfs": false,
+
+    "EnableEbs": false,
+    "EncryptEbs": true,
+
+    "Default": "ebs"
+  },
+
+  "AggregatedLogging": true,
+  "ClusterMetrics": false,
+  "RegistryToS3": true,
+
+  "NodeCounts": {
+    "Master":10,
+    "Infra": 1,
+    "App": 0
+  },
+
+  "NodeTypes": {
+    "Bastion": "t2.nano",
+    "Master": "m5.xlarge",
+    "Infra": "m5.large",
+    "App": "m5.xxlarge"
+  },
+
+  "AwsConfig": {
+    "Region": "eu-central-1",
+    "KeyId": "key-123",
+    "SecretKey": "#9876#"
+  }
+}

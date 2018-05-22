@@ -25,6 +25,19 @@ func TestNewConfig(t *testing.T) {
 	assert.Equal(publicKey, config.Vars.PublicKey)
 }
 
+func TestConfig_CheckState(t *testing.T) {
+	assert := assert2.New(t)
+
+	config := &Config{}
+
+	assert.False(config.inited)
+	assert.Panics(func() {config.checkState()})
+
+	config.inited = true
+	assert.True(config.inited)
+	assert.NotPanics(func() {config.checkState()})
+}
+
 func TestConfig_InitTerraformSuccess(t *testing.T) {
 	resetCommands()
 
@@ -78,17 +91,138 @@ func TestConfig_InitTerraformFail(t *testing.T) {
 	assert.False(config.inited)
 
 	// Next call should do the same
+	err := errors.New("test123")
 	mock = commandMock{}
-	mock.On("RunDir", testdir).Return(errors.New("anything"))
+	mock.On("RunDir", testdir).Return(err)
 	commands.init = mock
 
 	ret = config.InitTerraform()
 
 	mock.AssertExpectations(t)
 	assert.NotNil(ret)
+	assert.Equal(err, ret)
 	assert.False(config.inited)
 }
 
+func TestConfig_Apply(t *testing.T) {
+	const dir = "test-dir"
+	resetCommands()
+
+	mock := commandMock{}
+	mock.On("RunDir", dir).Return(nil)
+	commands.apply = mock
+
+	assert := assert2.New(t)
+	config := &Config{Dir:dir}
+
+	assert.False(config.inited)
+	assert.Panics(func() {config.Apply()})
+
+	config.inited = true
+	ret := config.Apply()
+	assert.Nil(ret)
+	mock.AssertExpectations(t)
+
+	err := errors.New("test123")
+	mock = commandMock{}
+	mock.On("RunDir", dir).Return(err)
+	commands.apply = mock
+
+	ret = config.Apply()
+	assert.NotNil(ret)
+	assert.Equal(err, ret)
+	mock.AssertExpectations(t)
+}
+
+func TestConfig_Destroy(t *testing.T) {
+	const dir = "test-dir"
+	resetCommands()
+
+	mock := commandMock{}
+	mock.On("RunDir", dir).Return(nil)
+	commands.destroy = mock
+
+	assert := assert2.New(t)
+	config := &Config{Dir:dir}
+
+	assert.False(config.inited)
+	assert.Panics(func() {config.Apply()})
+
+	config.inited = true
+	ret := config.Destroy()
+	assert.Nil(ret)
+	mock.AssertExpectations(t)
+
+	err := errors.New("test123")
+	mock = commandMock{}
+	mock.On("RunDir", dir).Return(err)
+	commands.destroy = mock
+
+	ret = config.Destroy()
+	assert.NotNil(ret)
+	assert.Equal(err, ret)
+	mock.AssertExpectations(t)
+}
+
+func TestConfig_Plan(t *testing.T) {
+	const dir = "test-dir"
+	resetCommands()
+
+	mock := commandMock{}
+	mock.On("RunDir", dir).Return(nil)
+	commands.plan = mock
+
+	assert := assert2.New(t)
+	config := &Config{Dir:dir}
+
+	assert.False(config.inited)
+	assert.Panics(func() {config.Apply()})
+
+	config.inited = true
+	ret := config.Plan()
+	assert.Nil(ret)
+	mock.AssertExpectations(t)
+
+	err := errors.New("test123")
+	mock = commandMock{}
+	mock.On("RunDir", dir).Return(err)
+	commands.plan = mock
+
+	ret = config.Plan()
+	assert.NotNil(ret)
+	assert.Equal(err, ret)
+	mock.AssertExpectations(t)
+}
+
+func TestConfig_Validate(t *testing.T) {
+	const dir = "test-dir"
+	resetCommands()
+
+	mock := commandMock{}
+	mock.On("RunDir", dir).Return(nil)
+	commands.validate = mock
+
+	assert := assert2.New(t)
+	config := &Config{Dir:dir}
+
+	assert.False(config.inited)
+	assert.Panics(func() {config.Apply()})
+
+	config.inited = true
+	ret := config.Validate()
+	assert.Nil(ret)
+	mock.AssertExpectations(t)
+
+	err := errors.New("test123")
+	mock = commandMock{}
+	mock.On("RunDir", dir).Return(err)
+	commands.validate = mock
+
+	ret = config.Validate()
+	assert.NotNil(ret)
+	assert.Equal(err, ret)
+	mock.AssertExpectations(t)
+}
 
 func resetCommands() {
 	// Resets all commands to nil. If an unexpected call is done, tests wll fail due to nil object

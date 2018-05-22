@@ -34,9 +34,9 @@ type InputVars struct {
 	}
 
 	NodeCounts struct {
-		Master uint
-		Infra uint
-		App uint
+		Master int
+		Infra int
+		App int
 	}
 
 	NodeTypes struct {
@@ -58,10 +58,7 @@ type InputVars struct {
 
 func LoadInputVars(filename string) *InputVars {
 	content, err := ioutil.ReadFile(filename)
-
-	if err != nil {
-		util.ExitOnError("Cannot Open configuration file", err)
-	}
+	util.ExitOnError("Cannot Open configuration file", err)
 
 	vars := InputVars{}
 	json.Unmarshal(content, &vars)
@@ -113,6 +110,14 @@ func (vars *InputVars) Validate() error {
 		return errors.New("invalid argument: Invalid default storage provider")
 	}
 
+	if vars.Storage.Default == "ebs" && !vars.Storage.EnableEbs {
+		return errors.New("invalid storage config: The chosen default storage class is not enabled")
+	}
+
+	if vars.Storage.Default == "efs" && !vars.Storage.EnableEfs {
+		return errors.New("invalid storage config: The chosen default storage class is not enabled")
+	}
+
 	if vars.AggregatedLogging && !vars.Storage.EnableEbs {
 		return errors.New("invalid storage config: Aggregated logging depends on EBS storage")
 	}
@@ -122,7 +127,7 @@ func (vars *InputVars) Validate() error {
 	}
 
 	// @todo validate instance types more precise
-	r := regexp.MustCompile("[tmcpxridgfh][0-9]\\.[\\w]+")
+	r := regexp.MustCompile("^[tmcpxridgfh][0-9]\\.[\\w]+$")
 	if !r.MatchString(vars.NodeTypes.Bastion) {
 		return errors.New("invalid argument: Invalid Bastion type (" + vars.NodeTypes.Bastion + ")")
 	}
@@ -145,7 +150,7 @@ func (vars *InputVars) Validate() error {
 		return errors.New("invalid argument: Invalid Domain given (" + vars.Domain + ")")
 	}
 
-	r = regexp.MustCompile("[a-z]{2}-[a-z]{4,}-[\\d]")
+	r = regexp.MustCompile("^[a-z]{2}-[a-z]{4,}-[\\d]$")
 	vars.AwsConfig.Region = strings.ToLower(vars.AwsConfig.Region)
 	if !r.MatchString(vars.AwsConfig.Region) {
 		return errors.New("invalid argument: Invalid AWS region (" + vars.AwsConfig.Region + ")")
