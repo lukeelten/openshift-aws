@@ -23,9 +23,9 @@ func init() {
 	commands.ansiblePlaybookVerbose = util.NewCommand("ansible-playbook", "-vvv", "-i")
 }
 
-func OpenPlaybook(filename string) *Playbook {
-	playbook := &Playbook{filename}
-	return playbook
+func OpenPlaybook(filename string) (playbook *Playbook) {
+	playbook = &Playbook{filename}
+	return
 }
 
 func (playbook *Playbook) Run(inventory string) error {
