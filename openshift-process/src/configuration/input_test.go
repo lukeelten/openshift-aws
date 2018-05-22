@@ -383,6 +383,8 @@ func testAwsValidation(assert *assert.Assertions) {
 	// test valid node types bastion
 	config.NodeTypes.Bastion = "m4.xlarge"
 	assert.Nil(config.Validate())
+	config.NodeTypes.Bastion = "x1e.xlarge"
+	assert.Nil(config.Validate())
 
 	// Reset config
 	config = getValidInputVars()
@@ -403,6 +405,8 @@ func testAwsValidation(assert *assert.Assertions) {
 
 	// test valid node types master
 	config.NodeTypes.Master = "m4.xlarge"
+	assert.Nil(config.Validate())
+	config.NodeTypes.Master = "x1e.xlarge"
 	assert.Nil(config.Validate())
 
 	// Reset config
@@ -425,6 +429,8 @@ func testAwsValidation(assert *assert.Assertions) {
 	// test valid node types infra
 	config.NodeTypes.Infra = "m4.xlarge"
 	assert.Nil(config.Validate())
+	config.NodeTypes.Infra = "x1e.xlarge"
+	assert.Nil(config.Validate())
 
 	// Reset config
 	config = getValidInputVars()
@@ -445,5 +451,7 @@ func testAwsValidation(assert *assert.Assertions) {
 
 	// test valid node types app
 	config.NodeTypes.App = "m4.xlarge"
+	assert.Nil(config.Validate())
+	config.NodeTypes.App = "x1e.xlarge"
 	assert.Nil(config.Validate())
 }

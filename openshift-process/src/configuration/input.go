@@ -127,7 +127,7 @@ func (vars *InputVars) Validate() error {
 	}
 
 	// @todo validate instance types more precise
-	r := regexp.MustCompile("^[tmcpxridgfh][0-9]\\.[\\w]+$")
+	r := regexp.MustCompile("^([tmcpxridgfh][0-9]|x[0-9]e)\\.[\\w]+$")
 	if !r.MatchString(vars.NodeTypes.Bastion) {
 		return errors.New("invalid argument: Invalid Bastion type (" + vars.NodeTypes.Bastion + ")")
 	}
