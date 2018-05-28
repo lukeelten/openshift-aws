@@ -10,6 +10,7 @@ import (
 )
 
 const NAME_MIN_LENGTH=4
+const DEFAULT_CONFIG = "config.default.json"
 
 type InputVars struct {
 	Debug bool
@@ -73,8 +74,8 @@ func LoadInputVars(filename string) *InputVars {
 }
 
 func DefaultConfig() *InputVars {
-	config := InputVars{}
-	return &config
+	config := LoadInputVars(DEFAULT_CONFIG)
+	return config
 }
 
 func (vars *InputVars) Validate() error {
