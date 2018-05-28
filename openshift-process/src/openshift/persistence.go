@@ -9,6 +9,8 @@ import (
 )
 
 type PersistenceConfig struct {
+	ProjectId string
+
 	EfsId string
 	Region string
 
@@ -25,9 +27,9 @@ type PersistenceConfig struct {
 
 
 func NewPersistenceConfig(settings *configuration.InputVars) *PersistenceConfig {
-	efsId := aws.GetEFSId(settings.ProjectId)
 	config := PersistenceConfig{
-		EfsId:      efsId,
+		ProjectId: settings.ProjectId,
+		EfsId:      "",
 		Region:     settings.AwsConfig.Region,
 		EnableEfs:  settings.Storage.EnableEfs,
 		EncryptEbs: settings.Storage.EncryptEbs,
@@ -44,6 +46,8 @@ func (config *PersistenceConfig) GeneratePersistenceConfigFiles(dir string) erro
 	ebsFilename := dir + "ebs.yml"
 
 	if config.EnableEfs {
+		config.EfsId = aws.GetEFSId(config.ProjectId)
+
 		f, err := os.Create(efsFilename)
 		if err != nil {
 			return err
