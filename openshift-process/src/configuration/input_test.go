@@ -40,6 +40,8 @@ func getValidInputVars() *InputVars {
 }
 
 func TestDefaultConfig(t *testing.T) {
+	defaultConfig = "../../" + defaultConfig
+
 	assert := assert.New(t)
 
 	config := DefaultConfig()

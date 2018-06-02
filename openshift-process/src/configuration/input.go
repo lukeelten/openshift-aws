@@ -10,7 +10,8 @@ import (
 )
 
 const NAME_MIN_LENGTH=4
-const DEFAULT_CONFIG = "config.default.json"
+
+var defaultConfig string
 
 type InputVars struct {
 	Debug bool
@@ -57,6 +58,10 @@ type InputVars struct {
 }
 
 
+func init() {
+	defaultConfig = "config.default.json"
+}
+
 func LoadInputVars(filename string) *InputVars {
 	content, err := ioutil.ReadFile(filename)
 	util.ExitOnError("Cannot Open configuration file", err)
@@ -74,7 +79,7 @@ func LoadInputVars(filename string) *InputVars {
 }
 
 func DefaultConfig() *InputVars {
-	config := LoadInputVars(DEFAULT_CONFIG)
+	config := LoadInputVars(defaultConfig)
 	return config
 }
 
