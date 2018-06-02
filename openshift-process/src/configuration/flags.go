@@ -56,7 +56,7 @@ func init() {
 
 	cmdFlags.projectName = flag.String("name", "", "Project Name to use in AWS tags and descriptions")
 	cmdFlags.projectId = flag.String("id", "", "Project id to tag all instances. If empty an appropriate ID will be generated from project name.")
-	cmdFlags.configFile = flag.String("config", "config.json", "Path / Name of configuration file to load")
+	cmdFlags.configFile = flag.String("config", "config.yaml", "Path / Name of configuration file to load")
 
 	cmdFlags.skipTerraform = flag.Bool("skip-terraform", false, "Skip Terraform: Use when infrastructure already exist")
 	cmdFlags.existingConfig = flag.Bool("skip-config", false, "Skip Config generation: Use when config already exist")

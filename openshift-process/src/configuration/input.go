@@ -3,10 +3,10 @@ package configuration
 import (
 	"util"
 	"io/ioutil"
-	"encoding/json"
 	"errors"
 	"regexp"
 	"strings"
+	"gopkg.in/yaml.v2"
 )
 
 const NAME_MIN_LENGTH=4
@@ -14,52 +14,59 @@ const NAME_MIN_LENGTH=4
 var defaultConfig string
 
 type InputVars struct {
-	Debug bool
+	Debug bool `yaml:"Debug"`
 
-	ProjectName string
-	ProjectId string
+	ProjectName string `yaml:"ProjectName"`
+	ProjectId string `yaml:"ProjectId"`
 
-	Domain string
-	ClusterId string
+	Domain string `yaml:"Domain"`
+	ClusterId string `yaml:"ClusterId"`
 
-	AggregatedLogging bool
-	ClusterMetrics bool
+	AggregatedLogging bool `yaml:"AggregatedLogging"`
+	ClusterMetrics bool `yaml:"ClusterMetrics"`
 
-	Storage struct {
-		EnableEfs bool
-		EncryptEfs bool
+	Storage StorageConfig `yaml:"Storage"`
+	NodeCounts NodeCountConfig `yaml:"NodeCounts"`
 
-		EnableEbs bool
-		EncryptEbs bool
+	NodeTypes NodeTypeConfig `yaml:"NodeTypes"`
 
-		Default string
-	}
+	RegistryToS3 bool `yaml:"RegistryToS3"`
 
-	NodeCounts struct {
-		Master int
-		Infra int
-		App int
-	}
+	AwsConfig AwsConfiguration `yaml:"AwsConfig"`
+}
 
-	NodeTypes struct {
-		Bastion string
-		Master string
-		Infra string
-		App string
-	}
+type StorageConfig struct {
+	EnableEfs bool `yaml:"EnableEfs"`
+	EncryptEfs bool `yaml:"EncryptEfs"`
 
-	RegistryToS3 bool
+	EnableEbs bool `yaml:"EnableEbs"`
+	EncryptEbs bool `yaml:"EncryptEbs"`
 
-	AwsConfig struct {
-		Region string
-		KeyId string
-		SecretKey string
-	}
+	Default string `yaml:"Default"`
+}
+
+type NodeCountConfig struct {
+	Master int `yaml:"Master"`
+	Infra int `yaml:"Infra"`
+	App int `yaml:"App"`
+}
+
+type NodeTypeConfig struct {
+	Bastion string `yaml:"Bastion"`
+	Master string `yaml:"Master"`
+	Infra string `yaml:"Infra"`
+	App string `yaml:"App"`
+}
+
+type AwsConfiguration struct {
+	Region string `yaml:"Region"`
+	KeyId string `yaml:"KeyId"`
+	SecretKey string `yaml:"SecretKey"`
 }
 
 
 func init() {
-	defaultConfig = "config.default.json"
+	defaultConfig = "config.default.yaml"
 }
 
 func LoadInputVars(filename string) *InputVars {
@@ -67,7 +74,7 @@ func LoadInputVars(filename string) *InputVars {
 	util.ExitOnError("Cannot Open configuration file", err)
 
 	vars := InputVars{}
-	json.Unmarshal(content, &vars)
+	yaml.Unmarshal(content, &vars)
 
 	if len(vars.ProjectName) >= NAME_MIN_LENGTH && len(vars.ProjectId) < NAME_MIN_LENGTH {
 		vars.ProjectId = util.EncodeProjectId(vars.ProjectName)

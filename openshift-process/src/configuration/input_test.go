@@ -40,7 +40,12 @@ func getValidInputVars() *InputVars {
 }
 
 func TestDefaultConfig(t *testing.T) {
-	defaultConfig = "../../" + defaultConfig
+	pwd, err := os.Getwd()
+	if err != nil {
+		assert.Fail(t, err.Error())
+	}
+
+	defaultConfig = pwd + "/../../" + defaultConfig;
 
 	assert := assert.New(t)
 
@@ -162,7 +167,7 @@ func TestLoadInputVars(t *testing.T) {
 		assert.Fail(t, err.Error())
 	}
 
-	testFile := pwd + "/../../config.test.json"
+	testFile := pwd + "/../../config.test.yaml"
 	assert := assert.New(t)
 
 	config := LoadInputVars(testFile)
