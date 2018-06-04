@@ -53,7 +53,7 @@ func getBucketTags(bucket string) map[string]string {
 
 	if err != nil {
 		if awsErr, ok := err.(awserr.Error); ok {
-			if awsErr.Code() == "NoSuchTagSet" {
+			if awsErr.Code() == "NoSuchTagSet" || awsErr.Code() == "NoSuchBucket" {
 				// Error ok, just return empty map
 				return make(map[string]string, 0)
 			}
