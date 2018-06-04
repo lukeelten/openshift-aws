@@ -456,6 +456,9 @@ func testAwsValidation(assert *assert.Assertions) {
 	config.NodeTypes.App = "large"
 	assert.NotNil(config.Validate())
 
+	config.NodeTypes.App = "t2-medium"
+	assert.NotNil(config.Validate())
+
 	// test valid node types app
 	config.NodeTypes.App = "m4.xlarge"
 	assert.Nil(config.Validate())

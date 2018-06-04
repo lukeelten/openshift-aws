@@ -28,7 +28,7 @@ func main() {
 		config = configuration.DefaultConfig()
 	}
 	config.MergeCmdFlags(cmdFlags)
-	config.Validate()
+	util.ExitOnError("Invalid configuration found", config.Validate())
 
 	wd, err := os.Getwd()
 	if err != nil {
