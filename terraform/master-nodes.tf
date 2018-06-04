@@ -43,5 +43,5 @@ resource "aws_lb_target_group_attachment" "master-to-internal-lb" {
   target_id        = "${aws_instance.master-node.*.id[count.index]}"
   port             = 8443
 
-  count = "${var.Counts["Master"]}"
+  count = "${var.Counts["Master"] > 1 ? var.Counts["Master"] : 0}"
 }

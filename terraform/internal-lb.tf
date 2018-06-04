@@ -4,9 +4,12 @@ resource "aws_lb" "internal-lb" {
   name = "${var.ProjectId}-api-internal-lb"
   load_balancer_type = "network"
 
-  subnets = ["${aws_subnet.subnets-public.*.id}"]
+  subnets = ["${aws_subnet.subnets-private.*.id}"]
 
   internal = true
+  enable_cross_zone_load_balancing = true
+
+  count = "${var.Counts["Master"] > 1 ? 1 : 0}"
 
   tags {
     Name = "${var.ProjectName} - Internal Load Balancer"
@@ -22,6 +25,8 @@ resource "aws_lb_target_group" "internal-lb-tg1" {
   port     = 8443
   protocol = "TCP"
   vpc_id   = "${aws_vpc.vpc.id}"
+
+  count = "${aws_lb.internal-lb.count}"
 
   tags {
     Name = "${var.ProjectName} - Traffic to Master Nodes"
@@ -41,6 +46,8 @@ resource "aws_lb_target_group" "internal-lb-tg1" {
 }
 
 resource "aws_lb_listener" "internal-lb-listener1" {
+  count = "${aws_lb.internal-lb.count}"
+
   load_balancer_arn = "${aws_lb.internal-lb.arn}"
   port              = "8443"
   protocol          = "TCP"
@@ -52,6 +59,8 @@ resource "aws_lb_listener" "internal-lb-listener1" {
 }
 
 resource "aws_lb_listener" "internal-lb-listener2" {
+  count = "${aws_lb.internal-lb.count}"
+
   load_balancer_arn = "${aws_lb.internal-lb.arn}"
   port              = "443"
   protocol          = "TCP"

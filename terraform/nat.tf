@@ -5,7 +5,7 @@ resource "aws_nat_gateway" "private-nat" {
   subnet_id     = "${aws_subnet.subnets-public.*.id[1]}"
 
   tags {
-    Name = "${var.ProjectName} - Private Subnet "
+    Name = "${var.ProjectName} - Private Subnet"
     Project = "${var.ProjectName}"
     ProjectId = "${var.ProjectId}"
     "kubernetes.io/cluster/openshift" = "${var.ClusterId}"
