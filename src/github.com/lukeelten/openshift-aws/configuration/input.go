@@ -1,12 +1,12 @@
 package configuration
 
 import (
-	"util"
 	"io/ioutil"
 	"errors"
 	"regexp"
 	"strings"
 	"gopkg.in/yaml.v2"
+	"github.com/lukeelten/openshift-aws/util"
 )
 
 const NAME_MIN_LENGTH=4

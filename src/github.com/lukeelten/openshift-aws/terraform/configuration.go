@@ -3,8 +3,8 @@ package terraform
 import (
 	"os"
 	"encoding/json"
-	"configuration"
-	"util"
+	"github.com/lukeelten/openshift-aws/configuration"
+	"github.com/lukeelten/openshift-aws/util"
 )
 
 type AwsConfig struct {

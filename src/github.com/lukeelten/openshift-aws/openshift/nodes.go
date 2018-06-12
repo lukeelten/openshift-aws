@@ -1,8 +1,8 @@
 package openshift
 
 import (
-	"aws"
-	"configuration"
+	"github.com/lukeelten/openshift-aws/configuration"
+	"github.com/lukeelten/openshift-aws/aws"
 )
 
 func GenerateConfig(sshConfig string, config *configuration.InputVars) *InventoryConfig {

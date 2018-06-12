@@ -1,8 +1,8 @@
 package ansible
 
 import (
-	"util"
-	"configuration"
+	"github.com/lukeelten/openshift-aws/util"
+	"github.com/lukeelten/openshift-aws/configuration"
 )
 
 type Playbook struct {

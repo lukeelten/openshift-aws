@@ -1,8 +1,8 @@
 package terraform
 
 import (
-	"configuration"
-	"util"
+	"github.com/lukeelten/openshift-aws/util"
+	"github.com/lukeelten/openshift-aws/configuration"
 )
 
 type Config struct {

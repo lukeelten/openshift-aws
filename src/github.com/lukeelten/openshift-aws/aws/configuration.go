@@ -7,9 +7,9 @@ import (
 	"github.com/aws/aws-sdk-go/service/efs"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
-	"configuration"
 	"github.com/aws/aws-sdk-go/service/s3"
-	"util"
+	"github.com/lukeelten/openshift-aws/util"
+	"github.com/lukeelten/openshift-aws/configuration"
 )
 
 var Session *session.Session

@@ -1,11 +1,11 @@
 package openshift
 
 import (
-	"configuration"
-	"aws"
 	"os"
 	"text/template"
 	"strings"
+	"github.com/lukeelten/openshift-aws/aws"
+	"github.com/lukeelten/openshift-aws/configuration"
 )
 
 type PersistenceConfig struct {

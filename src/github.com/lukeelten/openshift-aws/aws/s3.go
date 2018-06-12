@@ -2,10 +2,10 @@ package aws
 
 import (
 	"github.com/aws/aws-sdk-go/service/s3"
-	"util"
-	"configuration"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
+	"github.com/lukeelten/openshift-aws/util"
+	"github.com/lukeelten/openshift-aws/configuration"
 )
 
 func GetRegistryBucketName(config *configuration.InputVars) string {

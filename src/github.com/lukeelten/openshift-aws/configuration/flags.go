@@ -2,7 +2,7 @@ package configuration
 
 import (
 	"flag"
-	"util"
+	"github.com/lukeelten/openshift-aws/util"
 )
 
 var Verbose bool

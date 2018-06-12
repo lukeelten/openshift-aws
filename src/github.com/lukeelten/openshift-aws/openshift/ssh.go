@@ -1,10 +1,10 @@
 package openshift
 
 import (
-	"aws"
 	"os"
 	"text/template"
-	"configuration"
+	"github.com/lukeelten/openshift-aws/configuration"
+	"github.com/lukeelten/openshift-aws/aws"
 )
 
 type SshConfig struct {
