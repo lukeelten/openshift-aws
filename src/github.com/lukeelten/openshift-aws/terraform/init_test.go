@@ -3,10 +3,10 @@ package terraform
 import (
 	"testing"
 	assert2 "github.com/stretchr/testify/assert"
-	"configuration"
 	"github.com/stretchr/testify/mock"
-	"util"
 	"errors"
+	"github.com/lukeelten/openshift-aws/configuration"
+	"github.com/lukeelten/openshift-aws/util"
 )
 
 

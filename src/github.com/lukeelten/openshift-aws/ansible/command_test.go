@@ -1,12 +1,12 @@
 package ansible
 
 import (
-	"util"
 	"github.com/stretchr/testify/mock"
-	"testing"
-	"configuration"
 	"github.com/stretchr/testify/assert"
 	"errors"
+	"testing"
+	"github.com/lukeelten/openshift-aws/configuration"
+	"github.com/lukeelten/openshift-aws/util"
 )
 
 func resetCommands() {

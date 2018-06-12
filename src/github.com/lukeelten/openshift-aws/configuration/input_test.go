@@ -45,7 +45,7 @@ func TestDefaultConfig(t *testing.T) {
 		assert.Fail(t, err.Error())
 	}
 
-	defaultConfig = pwd + "/../../" + defaultConfig;
+	defaultConfig = pwd + "/../../../../../" + defaultConfig;
 
 	assert := assert.New(t)
 
@@ -167,7 +167,7 @@ func TestLoadInputVars(t *testing.T) {
 		assert.Fail(t, err.Error())
 	}
 
-	testFile := pwd + "/../../config.test.yaml"
+	testFile := pwd + "/../../../../../config.test.yaml"
 	assert := assert.New(t)
 
 	config := LoadInputVars(testFile)
