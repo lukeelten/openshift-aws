@@ -438,6 +438,8 @@ func testAwsValidation(assert *assert.Assertions) {
 	assert.Nil(config.Validate())
 	config.NodeTypes.Infra = "x1e.xlarge"
 	assert.Nil(config.Validate())
+	config.NodeTypes.Infra = "m5d.xlarge"
+	assert.Nil(config.Validate())
 
 	// Reset config
 	config = getValidInputVars()
