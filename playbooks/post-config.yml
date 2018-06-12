@@ -1,0 +1,9 @@
+---
+- name: Set cluster admin
+  hosts: masters[0]
+  become: true
+  tasks:
+    - name: Add cluster admin role to admin user
+      command: oc adm policy add-cluster-role-to-user cluster-admin admin
+
+
