@@ -1,5 +1,9 @@
 .git
-openshift-ansible
-openshift-process
-terraform
-*.sh
+
+*.test.yaml
+src
+pkg
+README.md
+LICENSE
+main.go
+

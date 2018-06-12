@@ -1,7 +1,6 @@
 #!/bin/bash
 
-GOPATH="$GOPATH:$(pwd)/openshift-process"
-cd openshift-process && go build && cd ..
-cd openshift-ansible && git submodule update --recursive && cd ..
+docker run --rm -v "$PWD":/go -w /go golang:1 go build -v -o 'openshift-aws'
+git submodule update --recursive
 
-docker build --pull -t openshift-installer .
+docker build --pull -t openshift-aws .
