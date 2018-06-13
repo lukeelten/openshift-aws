@@ -1,6 +1,6 @@
 #!/bin/bash
 
-docker run --rm -v "$PWD":/go -w /go golang:1 go build -v -o 'openshift-aws'
+docker run --rm -v "$PWD/orchestration":/app -w /app -u $UID golang:latest make
 git submodule update --recursive
 
 docker build --pull -t openshift-aws .

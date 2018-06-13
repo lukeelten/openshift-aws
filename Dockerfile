@@ -19,8 +19,10 @@ RUN curl https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_linux_
         && rm terraform.zip
 
 # Create Directories
-RUN mkdir -p /app && mkdir -p /root/.ssh && mkdir -p /root/.aws
-
-ADD . /app
+RUN mkdir -p /app && mkdir -p /root/.ssh && mkdir -p /root/.aws && mkdir -p /app/generated
 
 WORKDIR /app
+ADD orchestration/openshift-aws /app/openshift-aws
+ADD playbooks terraform templates openshift-ansible config.default.yaml /app/
+
+ENTRYPOINT [ "/app/openshift-aws" ]

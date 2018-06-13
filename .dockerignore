@@ -1,9 +1,7 @@
 .git
 
 *.test.yaml
-src
-pkg
+orchestration/cmd
+orchestration/internal
 README.md
 LICENSE
-main.go
-
