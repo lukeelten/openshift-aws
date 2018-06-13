@@ -5,3 +5,6 @@ orchestration/cmd
 orchestration/internal
 README.md
 LICENSE
+terraform/.terraform
+terraform/.idea
+.idea

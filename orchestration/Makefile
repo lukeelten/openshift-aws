@@ -1,3 +1,3 @@
 all:
 	go get -d ./...
-	go build -v ./cmd/openshift-aws
+	go build ./cmd/openshift-aws

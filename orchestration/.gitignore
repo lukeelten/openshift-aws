@@ -1,4 +1,4 @@
-openshift-aws
 vendor
 src
 
+/openshift-aws
