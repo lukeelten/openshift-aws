@@ -9,6 +9,7 @@ import (
 type Command interface {
 	Run() error
 	RunDir(string) error
+	RunDirWithArgs(string, ...string) error
 	RunWithArgs(...string) error
 	SetArgs(...string)
 	AppendArg(string)
@@ -71,4 +72,13 @@ func (cmd CommandImpl) prepareCommand() *exec.Cmd {
 	command.Dir = cmd.dir
 
 	return command
+}
+
+func (cmd CommandImpl) RunDirWithArgs(dir string, args ...string) error {
+	argsCopy := make([]string, len(cmd.args))
+	copy(argsCopy, cmd.args)
+
+	cmdCopy := cmd
+	cmdCopy.args = append(argsCopy, args...)
+	return cmdCopy.RunDir(dir)
 }

@@ -9,6 +9,7 @@ type Config struct {
 	inited bool
 
 	Dir string
+	State string
 	Vars *TerraformVars
 }
 
@@ -29,10 +30,11 @@ func init() {
 	commands.destroy = util.NewCommand("terraform", "destroy", "-auto-approve")
 }
 
-func NewConfig(dir string, pubKey string, settings *configuration.InputVars) *Config {
+func NewConfig(dir string, state string, pubKey string, settings *configuration.InputVars) *Config {
 	config := Config{}
 	config.inited = false
 	config.Dir = dir
+	config.State = "../" + state
 	config.Vars = CreateConfig(settings, pubKey)
 
 	return &config
@@ -55,12 +57,12 @@ func (config *Config) InitTerraform() error {
 
 func (config *Config) Apply() error {
 	config.checkState()
-	return commands.apply.RunDir(config.Dir)
+	return commands.apply.RunDirWithArgs(config.Dir, "-state=" + config.State)
 }
 
 func (config *Config) Plan() error {
 	config.checkState()
-	return commands.plan.RunDir(config.Dir)
+	return commands.plan.RunDirWithArgs(config.Dir, "-state=" + config.State)
 }
 
 func (config *Config) Validate() error {
@@ -70,7 +72,7 @@ func (config *Config) Validate() error {
 
 func (config *Config) Destroy() error {
 	config.checkState()
-	return commands.destroy.RunDir(config.Dir)
+	return commands.destroy.RunDirWithArgs(config.Dir, "-state=" + config.State)
 }
 
 func (config *Config) checkState() {

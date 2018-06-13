@@ -19,6 +19,7 @@ type OrchestrationConfig struct {
 	Inventory string
 	SshKeyFile string
 	SshConfigFile string
+	TerraformState string
 
 	wd string
 
@@ -26,7 +27,7 @@ type OrchestrationConfig struct {
 	config *configuration.InputVars
 }
 
-func NewOrchestration(genDir, inventory, sshKeyFile, sshConfigFile string) OrchestrationConfig {
+func NewOrchestration(genDir, inventory, sshKeyFile, sshConfigFile, terraformState string) OrchestrationConfig {
 	wd, err := os.Getwd()
 	if err != nil {
 		panic(err)
@@ -37,6 +38,7 @@ func NewOrchestration(genDir, inventory, sshKeyFile, sshConfigFile string) Orche
 		Inventory: inventory,
 		SshKeyFile: sshKeyFile,
 		SshConfigFile: sshConfigFile,
+		TerraformState: terraformState,
 		wd: wd,
 	}
 }
@@ -64,7 +66,7 @@ func (oc OrchestrationConfig) RunTerraform() {
 		agent.AddKey(key)
 
 		terraformDir := oc.wd + "/../terraform"
-		tf := terraform.NewConfig(terraformDir, key.GetPublicKey(), oc.config)
+		tf := terraform.NewConfig(terraformDir, oc.TerraformState, key.GetPublicKey(), oc.config)
 		tf.GenerateVarsFile()
 		err := tf.InitTerraform()
 		util.ExitOnError("Cannot init terraform. Is the directory correct? " + terraformDir, err)

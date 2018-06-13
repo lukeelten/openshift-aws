@@ -16,8 +16,9 @@ func TestNewConfig(t *testing.T) {
 	inputVars := configuration.InputVars{}
 	dir := "test-dir"
 	publicKey := "ssh-rsa AAA..."
+	state := "state.tfstate"
 
-	config := NewConfig(dir, publicKey, &inputVars)
+	config := NewConfig(dir, state, publicKey, &inputVars)
 
 	assert.False(config.inited)
 	assert.Equal(dir, config.Dir)
@@ -51,8 +52,9 @@ func TestConfig_InitTerraformSuccess(t *testing.T) {
 
 	inputVars := configuration.InputVars{}
 	publicKey := "ssh-rsa AAA..."
+	state := "state.tfstate"
 
-	config := NewConfig(testdir, publicKey, &inputVars)
+	config := NewConfig(testdir, state, publicKey, &inputVars)
 	ret := config.InitTerraform()
 
 	mock.AssertExpectations(t)
@@ -82,8 +84,9 @@ func TestConfig_InitTerraformFail(t *testing.T) {
 
 	inputVars := configuration.InputVars{}
 	publicKey := "ssh-rsa AAA..."
+	state := "state.tfstate"
 
-	config := NewConfig(testdir, publicKey, &inputVars)
+	config := NewConfig(testdir, state, publicKey, &inputVars)
 	ret := config.InitTerraform()
 
 	mock.AssertExpectations(t)
@@ -250,5 +253,10 @@ func (mock commandMock)	RunDir(dir string) error {
 
 func (mock commandMock) RunWithArgs(arguments ...string) error {
 	args := mock.Called(arguments)
+	return args.Error(0)
+}
+
+func (mock commandMock) RunDirWithArgs(dir string, arguments ...string) error {
+	args := mock.Called(dir, arguments)
 	return args.Error(0)
 }
