@@ -13,6 +13,8 @@ import (
 	"../openshift"
 )
 
+// Time to wait until EC2 instances are ready (in minutes)
+const WAIT_TIME = 4
 
 type OrchestrationConfig struct {
 	OutputDir string
@@ -128,7 +130,7 @@ func (oc *OrchestrationConfig) GenerateConfiguration() {
 	if !oc.cmdFlags.SkipTerraform {
 		// three minutes should be enough to init EC2 instances
 		fmt.Println("\nWaiting for instances to get ready ...")
-		time.Sleep(3 * time.Minute)
+		time.Sleep(WAIT_TIME * time.Minute)
 	}
 
 	wg.Wait() // wait for go routines to finish, should be done by now, but to be sure ...
