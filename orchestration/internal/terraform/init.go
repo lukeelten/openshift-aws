@@ -10,6 +10,7 @@ type Config struct {
 
 	Dir string
 	State string
+	VarsFile string
 	Vars *TerraformVars
 }
 
@@ -34,14 +35,15 @@ func NewConfig(dir string, state string, pubKey string, settings *configuration.
 	config := Config{}
 	config.inited = false
 	config.Dir = dir
-	config.State = "../" + state
+	config.State = state
 	config.Vars = CreateConfig(settings, pubKey)
 
 	return &config
 }
 
-func (config *Config) GenerateVarsFile() {
-	config.Vars.WriteFile(config.Dir + "/configuration.auto.tfvars")
+func (config *Config) GenerateVarsFile(filePath string) {
+	config.VarsFile = filePath
+	config.Vars.WriteFile(filePath)
 }
 
 func (config *Config) InitTerraform() error {
@@ -57,26 +59,34 @@ func (config *Config) InitTerraform() error {
 
 func (config *Config) Apply() error {
 	config.checkState()
-	return commands.apply.RunDirWithArgs(config.Dir, "-state=" + config.State)
+	return commands.apply.RunDirWithArgs(config.Dir, config.getStateArgument(), config.getVarsFileArgument())
 }
 
 func (config *Config) Plan() error {
 	config.checkState()
-	return commands.plan.RunDirWithArgs(config.Dir, "-state=" + config.State)
+	return commands.plan.RunDirWithArgs(config.Dir, config.getStateArgument(), config.getVarsFileArgument())
 }
 
 func (config *Config) Validate() error {
 	config.checkState()
-	return commands.validate.RunDir(config.Dir)
+	return commands.validate.RunDirWithArgs(config.Dir, config.getVarsFileArgument())
 }
 
 func (config *Config) Destroy() error {
 	config.checkState()
-	return commands.destroy.RunDirWithArgs(config.Dir, "-state=" + config.State)
+	return commands.destroy.RunDirWithArgs(config.Dir, config.getStateArgument(), config.getVarsFileArgument())
 }
 
 func (config *Config) checkState() {
 	if !config.inited {
 		panic("Please init terraform before destroy")
 	}
+}
+
+func (config *Config) getStateArgument() string {
+	return "-state=" + config.State
+}
+
+func (config *Config) getVarsFileArgument() string {
+	return "-var-file=" + config.VarsFile
 }

@@ -1,6 +1,9 @@
 package util
 
-import "os"
+import (
+	"os"
+	"golang.org/x/sys/unix"
+	)
 
 func FileExists(name string) bool {
 	if _, err := os.Stat(name); err != nil {
@@ -9,4 +12,8 @@ func FileExists(name string) bool {
 		}
 	}
 	return true
+}
+
+func IsWritable(path string) bool {
+	return unix.Access(path, unix.W_OK) == nil
 }

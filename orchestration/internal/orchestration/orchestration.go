@@ -15,34 +15,66 @@ import (
 
 
 type OrchestrationConfig struct {
-	GenDir string
+	OutputDir string
+	BaseDir string
+
+	terraformDir string
+	installerDir string
+	playbooksDir string
+	templatesDir string
+
 	Inventory string
 	SshKeyFile string
 	SshConfigFile string
 	TerraformState string
-
-	wd string
+	TerraformConfig string
 
 	cmdFlags configuration.CmdFlags
 	config *configuration.InputVars
 }
 
-func NewOrchestration(genDir, inventory, sshKeyFile, sshConfigFile, terraformState string) OrchestrationConfig {
-	wd, err := os.Getwd()
-	if err != nil {
-		panic(err)
-	}
+func NewOrchestration(outputDir, baseDir string) OrchestrationConfig {
+	outputDir = prettyPrint(outputDir)
+	baseDir = prettyPrint(baseDir)
 
 	return OrchestrationConfig{
-		GenDir: genDir,
-		Inventory: inventory,
-		SshKeyFile: sshKeyFile,
-		SshConfigFile: sshConfigFile,
-		TerraformState: terraformState,
-		wd: wd,
+		OutputDir: prettyPrint(outputDir),
+		BaseDir: baseDir,
+
+		terraformDir: baseDir + "terraform/",
+		installerDir: baseDir + "openshift-ansible/",
+		playbooksDir: baseDir + "playbooks/",
+		templatesDir: baseDir + "templates/",
+
+		Inventory: default_inventory,
+		SshKeyFile: default_ssh_key,
+		SshConfigFile: default_ssh_config,
+		TerraformState: default_terraform_state,
+		TerraformConfig: default_terraform_config,
 	}
 }
 
+func (oc OrchestrationConfig) Validate() {
+	if !checkTerraformDir(oc.terraformDir) {
+		panic("Invalid Terraform directory detected. Check the path: " + oc.terraformDir)
+	}
+
+	if !checkInstallerDir(oc.installerDir) {
+		panic("Invalid Installer directory detected. Check the path: " + oc.installerDir)
+	}
+
+	if  !checkOutputDir(oc.OutputDir) {
+		panic("Invalid Output directory detected. Check the path: " + oc.OutputDir)
+	}
+
+	if !checkPlaybookDir(oc.playbooksDir) {
+		panic("Invalid Playbooks directory detected. Check the path: " + oc.playbooksDir)
+	}
+
+	if !checkTemplatesDir(oc.templatesDir) {
+		panic("Invalid Templates directory detected. Check the path: " + oc.templatesDir)
+	}
+}
 
 func (oc OrchestrationConfig) HandleFlags() {
 	oc.cmdFlags = configuration.ParseFlags()
@@ -60,14 +92,14 @@ func (oc OrchestrationConfig) HandleFlags() {
 func (oc OrchestrationConfig) RunTerraform() {
 	if !oc.cmdFlags.SkipTerraform {
 		key := util.NewKeyPair()
-		key.WritePrivateKey(oc.GenDir + oc.SshKeyFile)
-		key.WritePublicPem(oc.GenDir + oc.SshKeyFile + ".pub")
+		key.WritePrivateKey(oc.OutputDir + oc.SshKeyFile)
+		key.WritePublicPem(oc.OutputDir + oc.SshKeyFile + ".pub")
 		agent := util.NewSshAgentClient()
 		agent.AddKey(key)
 
-		terraformDir := oc.wd + "/../terraform"
-		tf := terraform.NewConfig(terraformDir, oc.TerraformState, key.GetPublicKey(), oc.config)
-		tf.GenerateVarsFile()
+		terraformDir := oc.terraformDir
+		tf := terraform.NewConfig(terraformDir, oc.OutputDir + oc.TerraformState, key.GetPublicKey(), oc.config)
+		tf.GenerateVarsFile(oc.OutputDir + oc.TerraformConfig)
 		err := tf.InitTerraform()
 		util.ExitOnError("Cannot init terraform. Is the directory correct? " + terraformDir, err)
 
@@ -103,17 +135,17 @@ func (oc OrchestrationConfig) GenerateConfiguration() {
 }
 
 func (oc OrchestrationConfig) RunInstaller() {
-	installerPath := oc.wd + "/openshift-ansible"
+	installerPath := oc.installerDir
 
 	var playbook *ansible.Playbook
 	if !oc.cmdFlags.SkipPre {
-		playbook = ansible.OpenPlaybook(installerPath + "/playbooks/prerequisites.yml")
-		err := playbook.Run(oc.Inventory)
+		playbook = ansible.OpenPlaybook(installerPath + "playbooks/prerequisites.yml")
+		err := playbook.Run(oc.OutputDir + oc.Inventory)
 		util.ExitOnError("Failed to run OpenShift prerequisites.", err)
 	}
 
-	playbook = ansible.OpenPlaybook(installerPath + "/playbooks/deploy_cluster.yml")
-	err := playbook.Run(oc.Inventory)
+	playbook = ansible.OpenPlaybook(installerPath + "playbooks/deploy_cluster.yml")
+	err := playbook.Run(oc.OutputDir + oc.Inventory)
 	util.ExitOnError("Failed to run OpenShift installer.", err)
 
 	fmt.Println("\nWaiting for OpenShift to become ready ...")
@@ -121,19 +153,19 @@ func (oc OrchestrationConfig) RunInstaller() {
 }
 
 func (oc OrchestrationConfig) RunPostInstallationConfig() {
-	playbook := ansible.OpenPlaybook(oc.wd + "/playbooks/post-config.yml")
-	err := playbook.Run(oc.Inventory)
+	playbook := ansible.OpenPlaybook(oc.playbooksDir + "post-config.yml")
+	err := playbook.Run(oc.OutputDir + oc.Inventory)
 	util.ExitOnError("Failed to run post installation configuration", err)
 
 	if oc.config.Storage.EnableEfs {
-		playbook = ansible.OpenPlaybook(oc.wd + "/playbooks/efs.yml")
-		err := playbook.Run(oc.Inventory)
+		playbook = ansible.OpenPlaybook(oc.playbooksDir + "/efs.yml")
+		err := playbook.Run(oc.OutputDir + oc.Inventory)
 		util.ExitOnError("Failed to run EFS configuration", err)
 	}
 
 	if oc.config.Storage.EnableEbs {
-		playbook = ansible.OpenPlaybook(oc.wd + "/playbooks/ebs.yml")
-		err := playbook.Run(oc.Inventory)
+		playbook = ansible.OpenPlaybook(oc.playbooksDir + "/ebs.yml")
+		err := playbook.Run(oc.OutputDir + oc.Inventory)
 		util.ExitOnError("Failed to run EBS configuration", err)
 	}
 }
@@ -142,7 +174,7 @@ func generateSshConfig(oc *OrchestrationConfig, waitGroup *sync.WaitGroup) {
 	defer waitGroup.Done()
 
 	sshConfig := openshift.GenerateSshConfig(oc.config)
-	err := sshConfig.WriteConfig(oc.SshConfigFile)
+	err := sshConfig.WriteConfig(oc.OutputDir + oc.SshConfigFile)
 	util.ExitOnError("Cannot write SSH configuration file", err)
 }
 
@@ -150,7 +182,7 @@ func generatePersistenceConfig(oc *OrchestrationConfig, waitGroup *sync.WaitGrou
 	defer waitGroup.Done()
 
 	persistenceConfig := openshift.NewPersistenceConfig(oc.config)
-	err := persistenceConfig.GeneratePersistenceConfigFiles(oc.GenDir)
+	err := persistenceConfig.GeneratePersistenceConfigFiles(oc.OutputDir)
 	util.ExitOnError("Cannot write persistence storage configuration.", err)
 
 }
@@ -158,7 +190,7 @@ func generatePersistenceConfig(oc *OrchestrationConfig, waitGroup *sync.WaitGrou
 func generateInventory(oc *OrchestrationConfig, waitGroup *sync.WaitGroup) {
 	defer waitGroup.Done()
 
-	openshiftConfig := openshift.GenerateConfig(oc.SshConfigFile, oc.config)
-	err:= openshiftConfig.GenerateInventory(oc.Inventory)
+	openshiftConfig := openshift.GenerateConfig(oc.OutputDir + oc.SshConfigFile, oc.config)
+	err:= openshiftConfig.GenerateInventory(oc.OutputDir + oc.Inventory)
 	util.ExitOnError("Cannot write OpenShift inventory file.", err)
 }
