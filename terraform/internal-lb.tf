@@ -5,9 +5,7 @@ resource "aws_lb" "internal-lb" {
   load_balancer_type = "network"
 
   subnets = ["${aws_subnet.subnets-private.*.id}"]
-
   internal = true
-  enable_cross_zone_load_balancing = true
 
   count = "${var.Counts["Master"] > 1 ? 1 : 0}"
 
