@@ -22,6 +22,10 @@ RUN curl https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_linux_
 # Create Directories
 RUN mkdir -p /app/generated && mkdir -p /root/.aws
 
-WORKDIR /app
 ADD orchestration/openshift-aws /usr/bin/openshift-aws
 ADD . /app/
+
+WORKDIR /app/terraform
+RUN terraform init
+
+WORKDIR /app
