@@ -20,7 +20,7 @@ func checkOutputDir (dir string) bool {
 }
 
 func checkPlaybookDir(dir string) bool {
-	return util.FileExists(dir + "ebs.xml") && util.FileExists(dir + "post-config.yml")
+	return util.FileExists(dir + "ebs.yml") && util.FileExists(dir + "post-config.yml")
 }
 
 func checkTemplatesDir(dir string) bool {

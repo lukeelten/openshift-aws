@@ -32,6 +32,10 @@ func init() {
 }
 
 func NewConfig(dir string, state string, pubKey string, settings *configuration.InputVars) *Config {
+	if settings == nil {
+		panic("Invalid input vars")
+	}
+
 	config := Config{}
 	config.inited = false
 	config.Dir = dir

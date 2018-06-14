@@ -33,11 +33,11 @@ type OrchestrationConfig struct {
 	config *configuration.InputVars
 }
 
-func NewOrchestration(outputDir, baseDir string) OrchestrationConfig {
+func NewOrchestration(outputDir, baseDir string) *OrchestrationConfig {
 	outputDir = prettyPrint(outputDir)
 	baseDir = prettyPrint(baseDir)
 
-	return OrchestrationConfig{
+	return &OrchestrationConfig{
 		OutputDir: prettyPrint(outputDir),
 		BaseDir: baseDir,
 
@@ -54,7 +54,7 @@ func NewOrchestration(outputDir, baseDir string) OrchestrationConfig {
 	}
 }
 
-func (oc OrchestrationConfig) Validate() {
+func (oc *OrchestrationConfig) Validate() {
 	if !checkTerraformDir(oc.terraformDir) {
 		panic("Invalid Terraform directory detected. Check the path: " + oc.terraformDir)
 	}
@@ -76,7 +76,7 @@ func (oc OrchestrationConfig) Validate() {
 	}
 }
 
-func (oc OrchestrationConfig) HandleFlags() {
+func (oc *OrchestrationConfig) HandleFlags() {
 	oc.cmdFlags = configuration.ParseFlags()
 	if len(oc.cmdFlags.ConfigFile) > 0 {
 		oc.config = configuration.LoadInputVars(oc.cmdFlags.ConfigFile)
@@ -89,7 +89,7 @@ func (oc OrchestrationConfig) HandleFlags() {
 }
 
 
-func (oc OrchestrationConfig) RunTerraform() {
+func (oc *OrchestrationConfig) RunTerraform() {
 	if !oc.cmdFlags.SkipTerraform {
 		key := util.NewKeyPair()
 		key.WritePrivateKey(oc.OutputDir + oc.SshKeyFile)
@@ -114,15 +114,15 @@ func (oc OrchestrationConfig) RunTerraform() {
 	}
 }
 
-func (oc OrchestrationConfig) GenerateConfiguration() {
+func (oc *OrchestrationConfig) GenerateConfiguration() {
 	aws.InitSession(oc.config)
 
 	var wg sync.WaitGroup
 	if !oc.cmdFlags.SkipConfig {
 		wg.Add(3)
-		go generateSshConfig(&oc, &wg)
-		go generatePersistenceConfig(&oc, &wg)
-		go generateInventory(&oc, &wg)
+		go generateSshConfig(oc, &wg)
+		go generatePersistenceConfig(oc, &wg)
+		go generateInventory(oc, &wg)
 	}
 
 	if !oc.cmdFlags.SkipTerraform {
@@ -134,7 +134,7 @@ func (oc OrchestrationConfig) GenerateConfiguration() {
 	wg.Wait() // wait for go routines to finish, should be done by now, but to be sure ...
 }
 
-func (oc OrchestrationConfig) RunInstaller() {
+func (oc *OrchestrationConfig) RunInstaller() {
 	installerPath := oc.installerDir
 
 	var playbook *ansible.Playbook
@@ -152,7 +152,7 @@ func (oc OrchestrationConfig) RunInstaller() {
 	time.Sleep(2 * time.Minute)
 }
 
-func (oc OrchestrationConfig) RunPostInstallationConfig() {
+func (oc *OrchestrationConfig) RunPostInstallationConfig() {
 	playbook := ansible.OpenPlaybook(oc.playbooksDir + "post-config.yml")
 	err := playbook.Run(oc.OutputDir + oc.Inventory)
 	util.ExitOnError("Failed to run post installation configuration", err)

@@ -24,4 +24,5 @@ docker run -it --rm \
     --mount type=bind,source="$agentdir",target="$agentdir" \
     -e SSH_AUTH_SOCK="$SSH_AUTH_SOCK" \
     openshift-aws \
+    openshift-aws \
     "$@"
