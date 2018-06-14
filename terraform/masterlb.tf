@@ -5,7 +5,6 @@ resource "aws_lb" "master-lb" {
   load_balancer_type = "network"
 
   subnets = ["${aws_subnet.subnets-public.*.id}"]
-  enable_cross_zone_load_balancing = true
 
   tags {
     Name = "${var.ProjectName} - Master Load Balancer"
