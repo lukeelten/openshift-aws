@@ -1,7 +1,16 @@
 sudo: required
 
+language: go
+
 services:
   - docker
+
+go:
+  - "1.10.x"
+
+cache:
+  directories:
+    - $HOME/.go
 
 
 before_install:
@@ -18,10 +27,11 @@ script:
 # Terraform Validation
   - cd terraform && terraform validate -var-file=../terraform.test.json && cd ..
 # Run Go Unit Tests
-  - docker run --rm -v "$PWD/orchestration":/app -w /app golang:1 make test
-# Build  Docker Image
-  - ./build.sh
-
+  - docker run --rm -v "$HOME/.go":/go -v "$PWD/orchestration":/app -w /app golang:1 make test
+# Build application
+  - docker run --rm -v "$HOME/.go":/go -v "$PWD/orchestration":/app -w /app -e HOST_UID="$UID" golang:1 make
+# Build docker image
+  - docker build --pull -t openshift-aws .
 
 notifications:
   email:
