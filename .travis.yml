@@ -1,13 +1,9 @@
 sudo: required
 
-language: go
+language: bash
 
 services:
   - docker
-
-go:
-  - "1.10.x"
-
 
 env:
   global:
