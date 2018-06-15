@@ -112,11 +112,11 @@ func TestConfig_Apply(t *testing.T) {
 	resetCommands()
 
 	mock := commandMock{}
-	mock.On("RunDir", dir).Return(nil)
+	mock.On("RunDirWithArgs", dir, []string{"-state=state.test", "-var-file=vars.test"}).Return(nil)
 	commands.apply = mock
 
 	assert := assert2.New(t)
-	config := &Config{Dir:dir}
+	config := &Config{Dir:dir, State: "state.test", VarsFile: "vars.test"}
 
 	assert.False(config.inited)
 	assert.Panics(func() {config.Apply()})
@@ -128,7 +128,7 @@ func TestConfig_Apply(t *testing.T) {
 
 	err := errors.New("test123")
 	mock = commandMock{}
-	mock.On("RunDir", dir).Return(err)
+	mock.On("RunDirWithArgs", dir, []string{"-state=state.test", "-var-file=vars.test"}).Return(err)
 	commands.apply = mock
 
 	ret = config.Apply()
@@ -142,11 +142,11 @@ func TestConfig_Destroy(t *testing.T) {
 	resetCommands()
 
 	mock := commandMock{}
-	mock.On("RunDir", dir).Return(nil)
+	mock.On("RunDirWithArgs", dir, []string{"-state=state.test", "-var-file=vars.test"}).Return(nil)
 	commands.destroy = mock
 
 	assert := assert2.New(t)
-	config := &Config{Dir:dir}
+	config := &Config{Dir:dir, State: "state.test", VarsFile: "vars.test"}
 
 	assert.False(config.inited)
 	assert.Panics(func() {config.Apply()})
@@ -158,7 +158,7 @@ func TestConfig_Destroy(t *testing.T) {
 
 	err := errors.New("test123")
 	mock = commandMock{}
-	mock.On("RunDir", dir).Return(err)
+	mock.On("RunDirWithArgs", dir, []string{"-state=state.test", "-var-file=vars.test"}).Return(err)
 	commands.destroy = mock
 
 	ret = config.Destroy()
@@ -172,11 +172,11 @@ func TestConfig_Plan(t *testing.T) {
 	resetCommands()
 
 	mock := commandMock{}
-	mock.On("RunDir", dir).Return(nil)
+	mock.On("RunDirWithArgs", dir, []string{"-state=state.test", "-var-file=vars.test"}).Return(nil)
 	commands.plan = mock
 
 	assert := assert2.New(t)
-	config := &Config{Dir:dir}
+	config := &Config{Dir:dir, State: "state.test", VarsFile: "vars.test"}
 
 	assert.False(config.inited)
 	assert.Panics(func() {config.Apply()})
@@ -188,7 +188,7 @@ func TestConfig_Plan(t *testing.T) {
 
 	err := errors.New("test123")
 	mock = commandMock{}
-	mock.On("RunDir", dir).Return(err)
+	mock.On("RunDirWithArgs", dir, []string{"-state=state.test", "-var-file=vars.test"}).Return(err)
 	commands.plan = mock
 
 	ret = config.Plan()
@@ -202,11 +202,11 @@ func TestConfig_Validate(t *testing.T) {
 	resetCommands()
 
 	mock := commandMock{}
-	mock.On("RunDir", dir).Return(nil)
+	mock.On("RunDirWithArgs", dir, []string{"-var-file=vars.test"}).Return(nil)
 	commands.validate = mock
 
 	assert := assert2.New(t)
-	config := &Config{Dir:dir}
+	config := &Config{Dir:dir, VarsFile: "vars.test"}
 
 	assert.False(config.inited)
 	assert.Panics(func() {config.Apply()})
@@ -218,7 +218,7 @@ func TestConfig_Validate(t *testing.T) {
 
 	err := errors.New("test123")
 	mock = commandMock{}
-	mock.On("RunDir", dir).Return(err)
+	mock.On("RunDirWithArgs", dir, []string{"-var-file=vars.test"}).Return(err)
 	commands.validate = mock
 
 	ret = config.Validate()

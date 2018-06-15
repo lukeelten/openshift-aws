@@ -3,8 +3,10 @@ package configuration
 import (
 	"testing"
 	"github.com/stretchr/testify/assert"
-	"os"
 )
+
+const TEST_CONFIG_FILE = "../config.test.yaml"
+const DEFAULT_CONFIG_FILE = "../config.default.yaml"
 
 func getValidInputVars() *InputVars {
 	config := InputVars{
@@ -40,12 +42,7 @@ func getValidInputVars() *InputVars {
 }
 
 func TestDefaultConfig(t *testing.T) {
-	pwd, err := os.Getwd()
-	if err != nil {
-		assert.Fail(t, err.Error())
-	}
-
-	defaultConfig = pwd + "/../../../../../" + defaultConfig;
+	defaultConfig = DEFAULT_CONFIG_FILE;
 
 	assert := assert.New(t)
 
@@ -162,12 +159,7 @@ func TestInputVars_Validate(t *testing.T) {
 }
 
 func TestLoadInputVars(t *testing.T) {
-	pwd, err := os.Getwd()
-	if err != nil {
-		assert.Fail(t, err.Error())
-	}
-
-	testFile := pwd + "/../../../../../config.test.yaml"
+	testFile := TEST_CONFIG_FILE
 	assert := assert.New(t)
 
 	config := LoadInputVars(testFile)
