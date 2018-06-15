@@ -24,11 +24,11 @@ before_install:
 
 install:
   - docker pull golang:1
-  - cd terraform && terraform init && cd ..
+  - ( cd terraform && terraform init )
 
 script:
 # Terraform Validation
-  - cd terraform && terraform validate -var-file=../terraform.test.json && cd ..
+  - ( cd terraform && terraform validate -var-file=../terraform.test.json )
 # Run Go Unit Tests
   - docker run --rm -v "$HOME/.go":/go -v "$PWD/orchestration":/app -w /app golang:1 make test
 # Build application
