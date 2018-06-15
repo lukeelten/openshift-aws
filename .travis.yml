@@ -15,12 +15,14 @@ cache:
 
 before_install:
   - mkdir -p "$HOME/.cache" && mkdir -p $HOME/.go
+  - rm -f $HOME/.cache/*.tar
   - curl -fSL "https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_linux_amd64.zip" -o terraform.zip
   - sudo unzip terraform.zip -d /opt/terraform
   - sudo ln -s /opt/terraform/terraform /usr/bin/terraform
   - rm -f terraform.zip
-  - if [[ -e "$HOME/.cache/golang.tar" ]]; then docker load -i $HOME/.cache/golang.tar; fi
-  - if [[ -e "$HOME/.cache/image.tar" ]]; then docker load -i $HOME/.cache/image.tar; fi
+  - if [[ -e "$HOME/.cache/golang.tar.gz" ]]; then gunzip -c $HOME/.cache/golang.tar | docker load; fi
+  - if [[ -e "$HOME/.cache/image.tar.gz" ]]; then gunzip $HOME/.cache/image.tar.gz | docker load; fi
+  - if [[ -e "$HOME/.cache/centos.tar.gz" ]]; then gunzip $HOME/.cache/image.tar.gz | docker load; fi
 
 install:
   - docker pull golang:1
@@ -37,8 +39,10 @@ script:
   - docker build --pull -t openshift-aws .
 
 before_cache:
-  - docker save golang:1 > $HOME/.cache/golang.tar
-  - docker save openshift-aws > $HOME/.cache/image.tar
+  - docker save golang:1 | gzip > $HOME/.cache/golang.tar.gz
+  - docker save openshift-aws | gzip > $HOME/.cache/image.tar.gz
+  - docker save centos:7 | gzip > $HOME/.cache/centos.tar.gz
+
 
 notifications:
   email:
