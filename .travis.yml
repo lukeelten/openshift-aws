@@ -11,13 +11,16 @@ go:
 cache:
   directories:
     - $HOME/.go
-
+    - $HOME/.cache
 
 before_install:
+  - mkdir -p "$HOME/.cache" && mkdir -p $HOME/.go
   - curl -fSL "https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_linux_amd64.zip" -o terraform.zip
   - sudo unzip terraform.zip -d /opt/terraform
   - sudo ln -s /opt/terraform/terraform /usr/bin/terraform
   - rm -f terraform.zip
+  - if [[ -e "$HOME/.cache/golang.tar" ]]; then docker load -i $HOME/.cache/golang.tar; fi
+  - if [[ -e "$HOME/.cache/image.tar" ]]; then docker load -i $HOME/.cache/image.tar; fi
 
 install:
   - docker pull golang:1
@@ -32,6 +35,10 @@ script:
   - docker run --rm -v "$HOME/.go":/go -v "$PWD/orchestration":/app -w /app -e HOST_UID="$UID" golang:1 make
 # Build docker image
   - docker build --pull -t openshift-aws .
+
+after_success:
+  - docker save golang:1 > $HOME/.cache/golang.tar
+  - docker save openshift-aws > $HOME/.cache/image.tar
 
 notifications:
   email:
