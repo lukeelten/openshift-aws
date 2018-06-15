@@ -12,6 +12,7 @@ before_install:
 
 install:
   - docker pull golang:1
+  - cd terraform && terraform init
 
 script:
 # Terraform Validation
