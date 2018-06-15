@@ -1,0 +1,31 @@
+sudo: required
+
+language: go
+
+services:
+  - docker
+
+
+go:
+  - "1.10.x"
+  - master
+
+
+install:
+  - go get -d -t ./orchestration/...
+
+script:
+# Go Unit tests
+  - go test orchestration/...
+# Terraform Validation
+  - cd terraform && terraform validate -var-file=../terraform.test.json
+# Build Go Application
+  - go build orchestration/cmd/openshift-aws
+# Build  Docker Image
+  - ./build.sh
+
+
+notifications:
+  email:
+    on_success: never
+    on_failure: change

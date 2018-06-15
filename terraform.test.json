@@ -1,0 +1,22 @@
+{
+  "ProjectName":"Test Project",
+  "ProjectId":"test-project",
+  "PublicKey":"ssh-rsa AAAA...",
+  "Zone":"cc-openshift.de",
+  "Region":"eu-central-1",
+  "Counts":{
+    "Master":3,
+    "Infra":3,
+    "App":6
+  },
+  "Types":{
+    "Bastion":"t2.nano",
+    "Master":"m5.xlarge",
+    "Infra":"m5.large",
+    "App":"m5.large"
+  },
+  "EnableEfs":true,
+  "EncryptEfs":true,
+  "RegistryS3":true,
+  "ClusterId":"1"
+}
