@@ -25,9 +25,9 @@ before_install:
   - sudo unzip terraform.zip -d /opt/terraform
   - sudo ln -s /opt/terraform/terraform /usr/bin/terraform
   - rm -f terraform.zip
-  - if [[ -e "$GOLANG" ]]; then gunzip -c "$GOLANG | docker load; fi
-  - if [[ -e "$CENTOS" ]]; then gunzip -c "$CENTOS | docker load; fi
-  - if [[ -e "$IMAGE" ]]; then gunzip -c "$IMAGE | docker load; fi
+  - if [[ -e "$GOLANG" ]]; then gunzip -c "$GOLANG" | docker load; fi
+  - if [[ -e "$CENTOS" ]]; then gunzip -c "$CENTOS" | docker load; fi
+  - if [[ -e "$IMAGE" ]]; then gunzip -c "$IMAGE" | docker load; fi
 
 install:
   - docker pull golang:1
