@@ -26,7 +26,6 @@ before_install:
   - rm -f terraform.zip
   - if [[ -e "$GOLANG" ]]; then gunzip -c "$GOLANG" | docker load; fi
   - if [[ -e "$CENTOS" ]]; then gunzip -c "$CENTOS" | docker load; fi
-  - if [[ -e "$IMAGE" ]]; then gunzip -c "$IMAGE" | docker load; fi
 
 install:
   - docker pull golang:1
@@ -45,7 +44,6 @@ script:
 before_cache:
   - docker save golang:1 | gzip > "$GOLANG"
   - docker save centos:7 | gzip > "$CENTOS"
-  - docker save $DOCKER_TAG | gzip > "$IMAGE"
 
 notifications:
   email:
