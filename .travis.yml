@@ -1,26 +1,23 @@
 sudo: required
 
-language: go
-
 services:
   - docker
 
 
-go:
-  - "1.10.x"
-  - master
-
+before_install:
+  - curl -fSL "https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_linux_amd64.zip -o terraform.zip
+  - sudo unzip terraform.zip -d /opt/terraform
+  - sudo ln -s /opt/terraform/terraform /usr/bin/terraform
+  - rm -f terraform.zip
 
 install:
-  - go get -d -t ./orchestration/...
+  - docker pull golang:1
 
 script:
-# Go Unit tests
-  - go test orchestration/...
 # Terraform Validation
   - cd terraform && terraform validate -var-file=../terraform.test.json
-# Build Go Application
-  - go build orchestration/cmd/openshift-aws
+# Run Go Unit Tests
+  - docker run --rm -v "$PWD/orchestration":/app -w /app golang:1 make test
 # Build  Docker Image
   - ./build.sh
 
