@@ -8,24 +8,17 @@ services:
 env:
   global:
     - GO_CACHE=$HOME/.go
-    - DOCKER_CACHE=$HOME/.docker
-    - GOLANG=$DOCKER_CACHE/golang.tar.gz
-    - IMAGE=$DOCKER_CACHE/image.tar.gz
-    - CENTOS=$DOCKER_CACHE/centos.tar.gz
     - DOCKER_TAG=lukeelten/openshift-aws
 
 cache:
   directories:
     - $GO_CACHE
-    - $DOCKER_CACHE
 
 before_install:
   - curl -fSL "https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_linux_amd64.zip" -o terraform.zip
   - sudo unzip terraform.zip -d /opt/terraform
   - sudo ln -s /opt/terraform/terraform /usr/bin/terraform
   - rm -f terraform.zip
-  - if [[ -e "$GOLANG" ]]; then gunzip -c "$GOLANG" | docker load; fi
-  - if [[ -e "$CENTOS" ]]; then gunzip -c "$CENTOS" | docker load; fi
 
 install:
   - docker pull golang:1
@@ -40,10 +33,6 @@ script:
   - docker run --rm -v "$GO_CACHE":/go -v "$PWD/orchestration":/app -w /app -e HOST_UID="$UID" golang:1 make
 # Build docker image
   - docker build --pull -t $DOCKER_TAG .
-
-before_cache:
-  - docker save golang:1 | gzip > "$GOLANG"
-  - docker save centos:7 | gzip > "$CENTOS"
 
 notifications:
   email:
