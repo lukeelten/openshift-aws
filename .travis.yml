@@ -9,16 +9,16 @@ env:
   global:
     - GO_CACHE=$HOME/.go
     - DOCKER_TAG=lukeelten/openshift-aws
+    - TERRAFORM_DIR=/opt/terraform
 
 cache:
   directories:
     - $GO_CACHE
+    - $TERRAFORM_DIR
 
 before_install:
-  - curl -fSL "https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_linux_amd64.zip" -o terraform.zip
-  - sudo unzip terraform.zip -d /opt/terraform
+  - if [[ ! -d $TERRAFORM_DIR || ! -f $TERRAFORM_DIR/terraform ]]; then curl -fSL "https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_linux_amd64.zip" -o terraform.zip && sudo unzip terraform.zip -d $TERRAFORM_DIR; fi
   - sudo ln -s /opt/terraform/terraform /usr/bin/terraform
-  - rm -f terraform.zip
 
 install:
   - docker pull golang:1
@@ -26,7 +26,7 @@ install:
 
 script:
 # Terraform Validation
-  - ( cd terraform && terraform validate -var-file=../terraform.test.json )
+  - ( cd terraform && terraform validate -var-file=terraform.test.json )
 # Run Go Unit Tests
   - docker run --rm -v "$GO_CACHE":/go -v "$PWD/orchestration":/app -w /app golang:1 make test
 # Build application
