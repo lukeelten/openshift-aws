@@ -17,7 +17,7 @@ cache:
     - $TERRAFORM_DIR
 
 before_install:
-  - if [[ ! -d $TERRAFORM_DIR || ! -f $TERRAFORM_DIR/terraform ]]; then curl -fSL "https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_linux_amd64.zip" -o terraform.zip && sudo unzip terraform.zip -d $TERRAFORM_DIR; fi
+  - if [[ ! -f $TERRAFORM_DIR/terraform ]]; then curl -fSL "https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_linux_amd64.zip" -o terraform.zip && sudo unzip terraform.zip -d $TERRAFORM_DIR; fi
   - sudo ln -s /opt/terraform/terraform /usr/bin/terraform
 
 install:
