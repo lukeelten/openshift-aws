@@ -33,4 +33,8 @@ docker run -it --rm \
     terraform \
     destroy \
     -state=/app/generated/terraform.tfstate \
-    -var-file=/app/generated/configuration.tfvars
+    -var-file=/app/generated/configuration.tfvars \
+    || exit 1
+
+# Delete old infrastructure parts
+rm -f "$output/terraform.tfstate" "$output/terraform.tfstate.backup" "$output/ssh.key" "$output/ssh.key.pub"

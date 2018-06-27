@@ -3,10 +3,14 @@
 
 
 
-# Prerequisites
+## Prerequisites
 * Docker service
-* SSH Agent
 
+### Supported OS
+* Linux
+* MacOS
+
+Windows is currently not supported because the communication with SSH Agent relies on Unix pipes.
 
 
 # Quick Start
@@ -73,3 +77,4 @@ If you want to delete a previously created cluster, simply run
 It is important that the files generated during creation are still available.
 At least the Terraform state (terraform.tfstate) and the Terraform configuration (configuration.tfvars) must be available.
 
+__Attention:__ After a successful destruction the terraform state and the old SSH key will be removed automatically.
