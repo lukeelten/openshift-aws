@@ -1,8 +1,6 @@
 .git
 
 *.test.yaml
-orchestration/*
-!orchestration/openshift-aws
 LICENSE
 terraform/.terraform
 .idea
@@ -16,3 +14,4 @@ run.sh
 openshift-ansible/docs
 openshift-ansible/examples
 openshift-ansible/test
+orchestration/openshift-aws

@@ -1,3 +1,16 @@
+FROM golang:1 AS build-env
+
+COPY orchestration /app
+WORKDIR /app
+
+
+RUN go get -d ./...
+RUN go build ./cmd/openshift-aws
+
+
+# -----------------------------------------------------------------------------------
+
+
 FROM centos:7
 
 USER root
@@ -19,13 +32,20 @@ RUN curl https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_linux_
         && chmod 755 /usr/bin/terraform \
         && rm terraform.zip
 
+COPY dockerentry.sh /usr/bin/
+COPY --from=build-env /app/openshift-aws /usr/bin/
+
 # Create Directories
 RUN mkdir -p /app/generated && mkdir -p /root/.aws
 
-COPY orchestration/openshift-aws dockerentry.sh /usr/bin/
-COPY . /app/
+COPY openshift-ansible /app/openshift-ansible
+
+COPY terraform /app/terraform
 
 WORKDIR /app/terraform
-RUN terraform init && chmod 755 /usr/bin/openshift-aws
+RUN terraform init && chmod 755 /usr/bin/openshift-aws /usr/bin/dockerentry.sh
 
 WORKDIR /app
+COPY templates /app/templates
+COPY playbooks /app/playbooks
+COPY config.yaml /app/config.yaml

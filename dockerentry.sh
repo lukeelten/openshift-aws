@@ -14,7 +14,7 @@ if [ -z "$SSH_AUTH_SOCK" ]; then
     exit 1
 fi
 
-if [[  -f "$generated/ssh.key" ]]; then
+if [  -f "$generated/ssh.key" ]; then
     # Add existing key pair to ssh agent
     ssh-add "$generated/ssh.key"
 fi
