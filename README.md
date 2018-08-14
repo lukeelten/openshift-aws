@@ -4,13 +4,13 @@
 
 
 ## Prerequisites
-* Docker service
+* Docker Container Engine (__Version: >= 17.09__)
 
 ### Supported OS
 * Linux
 * MacOS
 
-Windows is currently not supported because the communication with SSH Agent relies on Unix pipes.
+It should work properly with Docker for Windows, nevertheless it is not supported or tested.
 
 
 # Quick Start
