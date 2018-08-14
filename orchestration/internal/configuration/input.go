@@ -69,12 +69,16 @@ func init() {
 	defaultConfig = "config.default.yaml"
 }
 
-func LoadInputVars(filename string) *InputVars {
+func LoadConfigFromFile(filename string) *InputVars {
 	content, err := ioutil.ReadFile(filename)
 	util.ExitOnError("Cannot Open configuration file", err)
 
+	return ParseInputVars(content)
+}
+
+func ParseInputVars (config []byte) *InputVars {
 	vars := InputVars{}
-	yaml.Unmarshal(content, &vars)
+	yaml.Unmarshal(config, &vars)
 
 	if len(vars.ProjectName) >= NAME_MIN_LENGTH && len(vars.ProjectId) < NAME_MIN_LENGTH {
 		vars.ProjectId = util.EncodeProjectId(vars.ProjectName)
@@ -86,7 +90,7 @@ func LoadInputVars(filename string) *InputVars {
 }
 
 func DefaultConfig() *InputVars {
-	config := LoadInputVars(defaultConfig)
+	config := LoadConfigFromFile(defaultConfig)
 	return config
 }
 

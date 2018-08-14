@@ -162,7 +162,7 @@ func TestLoadInputVars(t *testing.T) {
 	testFile := TEST_CONFIG_FILE
 	assert := assert.New(t)
 
-	config := LoadInputVars(testFile)
+	config := LoadConfigFromFile(testFile)
 	assert.NotNil(config)
 
 	assert.Equal("TestProject", config.ProjectName)

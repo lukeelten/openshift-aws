@@ -80,8 +80,9 @@ func (oc *OrchestrationConfig) Validate() {
 
 func (oc *OrchestrationConfig) HandleFlags() {
 	oc.cmdFlags = configuration.ParseFlags()
+
 	if len(oc.cmdFlags.ConfigFile) > 0 {
-		oc.config = configuration.LoadInputVars(oc.cmdFlags.ConfigFile)
+		oc.config = configuration.LoadConfigFromFile(oc.cmdFlags.ConfigFile)
 	} else {
 		oc.config = configuration.DefaultConfig()
 	}
