@@ -4,7 +4,8 @@ COPY orchestration /app
 WORKDIR /app
 
 
-RUN go get -d ./...
+RUN go get -t -d ./...
+RUN go test ./...
 RUN go build ./cmd/openshift-aws
 
 
@@ -26,17 +27,17 @@ RUN yum -y install epel-release && yum -y install ansible unzip python-passlib p
 RUN yum -y install java-1.8.0-openjdk-headless && rm -rf /var/cache/yum
 
 # Install terraform
-RUN curl https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_linux_amd64.zip -o terraform.zip \
+RUN curl https://releases.hashicorp.com/terraform/0.11.8/terraform_0.11.8_linux_amd64.zip -o terraform.zip \
         && unzip terraform.zip \
         && mv terraform /usr/bin \
         && chmod 755 /usr/bin/terraform \
         && rm terraform.zip
 
-COPY dockerentry.sh /usr/bin/
-COPY --from=build-env /app/openshift-aws /usr/bin/
-
 # Create Directories
 RUN mkdir -p /app/generated && mkdir -p /root/.aws
+
+COPY dockerentry.sh /usr/bin/
+COPY --from=build-env /app/openshift-aws /usr/bin/
 
 COPY openshift-ansible /app/openshift-ansible
 
