@@ -3,5 +3,5 @@ provider "aws" {
   access_key = "${var.KeyId}"
   secret_key = "${var.SecretKey}"
 
-  version = "1.23"
+  version = "1.32"
 }
