@@ -1,9 +1,9 @@
 ---
 # Name of the Project
-ProjectName: ''
+ProjectName: 'QSC DevOps'
 
 # Project Id, only alphanumerical characters allowed.
-ProjectId: ''
+ProjectId: 'qsc'
 
 # Domain to use for OpenShift. Must have an existing Route53 hosted zone
 Domain: 'cc-openshift.de'
@@ -28,10 +28,10 @@ Storage:
 
 # Enable aggregated logging. Automatically installs ElasticSearch, FluentD and Kibana
 # See: https://docs.openshift.org/latest/install_config/aggregate_logging.html
-AggregatedLogging: true
+AggregatedLogging: false
 
 # Enable cluster metrics collection
-# See: https://docs.openshift.org/latest/install_config/cluster_metrics.html
+# See: https://docs.openshif./t.org/latest/install_config/cluster_metrics.html
 ClusterMetrics: true
 
 # Configure Docker to storage container registry in S3 bucket. Bucket will be automatically generated
@@ -42,9 +42,9 @@ RegistryToS3: true
 # Warning: The number of nodes has significant influence on costs
 NodeCounts:
   # Number of Master Nodes
-  Master: 3
+  Master: 1
   # Number of Infrastructure Nodes
-  Infra: 3
+  Infra: 1
   # Number of Application Nodes
   App: 6
 
@@ -52,9 +52,9 @@ NodeCounts:
 # Warning: Node Types have significant influence on costs
 # See: https://aws.amazon.com/en/ec2/instance-types/
 NodeTypes:
-  Bastion: t2.nano
+  Bastion: t3.nano
   Master: m5.xlarge
-  Infra: m5.large
+  Infra: m5.xlarge
   App: m5.large
 
 # AWS configuration options
