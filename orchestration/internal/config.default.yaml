@@ -52,9 +52,9 @@ NodeCounts:
 # Warning: Node Types have significant influence on costs
 # See: https://aws.amazon.com/en/ec2/instance-types/
 NodeTypes:
-  Bastion: t2.nano
-  Master: m5.xlarge
-  Infra: m5.large
+  Bastion: t3.micro
+  Master: m5.large
+  Infra: m5.xlarge
   App: m5.large
 
 # AWS configuration options
